@@ -15,9 +15,12 @@
 #include <string.h>
 #include <stdio.h>
 
+#define PACKET_SIZE 512
+
 int main(int argc, char **argv)
 {
         int sockfd;
+		FILE * filefd;
         struct sockaddr_in server, client;
         char message[512];
 
@@ -60,6 +63,25 @@ int main(int argc, char **argv)
                                              sizeof(message) - 1, 0,
                                              (struct sockaddr *) &client,
                                              &len);
+
+						char* path = "../data/";
+						char* filename = &message[2];
+						char* name_with_path;
+						name_with_path = malloc(strlen(path) + 1 + strlen(filename)); 
+						strcpy(name_with_path, path);
+						strcat(name_with_path, filename);
+						
+						if((filefd = fopen(name_with_path, "r")) == NULL ) {
+							fprintf(stderr, "Could not open destination file, using stdout.\n");
+						}
+						else {
+							printf("Preparing to start reading file '%s'\n", filename );
+							// þurfum að búa til buffer til að senda í stað message
+							
+							sendto(sockfd, message, (size_t) n, 0,
+                               (struct sockaddr *) &client,
+                               (socklen_t) sizeof(client));
+						}
                         /* Send the message back. */
                         sendto(sockfd, message, (size_t) n, 0,
                                (struct sockaddr *) &client,
