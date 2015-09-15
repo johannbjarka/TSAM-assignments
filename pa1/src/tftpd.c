@@ -103,7 +103,16 @@ int main(int argc, char **argv)
 							
 							filedesc = open(name_with_path, O_RDONLY);
 							if (filedesc < 0) {
-								printf("Error: failed to open %s\n", filename);
+								errpack.opcode = htons(5);
+								errpack.errorcode = htons(1);
+								sprintf(errpack.errormsg, "File not found.");
+								int n = strlen("File not found.");
+								errpack.errormsg[n] = '\0';
+								int errpacksize = n + 5;
+								sendto(sockfd, &errpack, (size_t)errpacksize, 0,
+								   (struct sockaddr *) &client,
+								   (socklen_t) sizeof(client));
+								continue;
 							}
 							else {
 								isOpen = 1;
@@ -124,6 +133,19 @@ int main(int argc, char **argv)
 								   (socklen_t) sizeof(client));
 								continue;
 							}
+						}
+						else if(message[1] == 2 || message[1] == 3) {
+							// Send error pack as the server only accepts RRQ.
+							errpack.opcode = htons(5);
+							errpack.errorcode = htons(0);
+							sprintf(errpack.errormsg, "This server only accepts read requests.");
+							int n = strlen("This server only accepts read requests.");
+							errpack.errormsg[n] = '\0';
+							int errpacksize = n + 5;
+							sendto(sockfd, &errpack, (size_t)errpacksize, 0,
+							   (struct sockaddr *) &client,
+							   (socklen_t) sizeof(client));
+							continue;
 						}
 						else {
 							continue;
