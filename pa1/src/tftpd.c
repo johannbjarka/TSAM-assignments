@@ -23,10 +23,18 @@
 int main(int argc, char **argv)
 {
         int sockfd;
-		FILE * filefd;
+		uint16_t blocknum = 0;
         struct sockaddr_in server, client;
         char message[512];
 		char buf[PACKET_SIZE];
+		int filedesc;
+		struct packet {
+			uint16_t opcode;
+			uint16_t blocknum;
+			char* payload;
+		};
+		
+		struct packet pack;
 
         /* Create and bind a UDP socket */
         sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -67,29 +75,71 @@ int main(int argc, char **argv)
                                              sizeof(message) - 1, 0,
                                              (struct sockaddr *) &client,
                                              &len);
-
-						char* path = "../data/";
-						char* filename = &message[2];
-						char* name_with_path;
-						name_with_path = malloc(strlen(path) + 1 + strlen(filename)); 
-						strcpy(name_with_path, path);
-						strcat(name_with_path, filename);
 						
-						int filedesc = open(name_with_path, O_RDONLY);
-						if (filedesc < 0) {
-							printf("error");
+						if(message[1] == 1) {
+							printf("okidoki");
+							char* path = "../data/";
+							char* filename = &message[2];
+							char* name_with_path;
+							name_with_path = malloc(strlen(path) + 1 + strlen(filename)); 
+							strcpy(name_with_path, path);
+							strcat(name_with_path, filename);
+							
+							filedesc = open(name_with_path, O_RDONLY);
+							if (filedesc < 0) {
+								printf("error");
+							}
 						}
-						if(read(filedesc, buf, 512) < 0) {
+						else if(message[1] == 4) {
+							printf("YOLO");
+						}
+						else {
+							printf("NEIIII");
+							continue;
+						}
+						/*int i = 0;
+						for(; i < 50; i++) {
+							if(message[i] == '\0') {
+								printf(" ");
+							}
+							else {
+								printf("%c", message[i]);
+							}
+						}*/
+						
+						ssize_t packsize;
+						if((packsize = read(filedesc, buf, PACKET_SIZE)) < 0) {
 							printf("error2");
 						}
-						if(write(filedesc, buf, 512)) {
+						/*if(write(filedesc, buf, PACKET_SIZE) != PACKET_SIZE) {
 							printf("error3");
+						}*/
+						else {
+							blocknum++;
 						}
+						pack.opcode = htons(3);
+						pack.blocknum = htons(blocknum);
+						pack.payload = buf;
+						packsize += 4;
+						/*char bla[516];
+						short opc = 3;
+						bla[0] = opc;
+						bla[2] = blocknum;
+						bla[4] = *buf;*/
+						
+						sendto(sockfd, &pack, (size_t)packsize, 0,
+                               (struct sockaddr *) &client,
+                               (socklen_t) sizeof(client));
+							  
+						printf("%d\n", pack.opcode);
+						printf("%d\n", pack.blocknum);
 						int i = 0;
 						for(; i < 512; i++) {
-							printf("%c", buf[i]);
+							printf("%c", pack.payload[i]);
 						}
-						
+						/*if(close(filedesc)) {
+							printf("error4");
+						}*/
                         /* Send the message back. */
                         /*sendto(sockfd, message, (size_t) n, 0,
                                (struct sockaddr *) &client,
