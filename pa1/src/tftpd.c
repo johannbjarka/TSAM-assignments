@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 		struct packet {
 			uint16_t opcode;
 			uint16_t blocknum;
-			char* payload;
+			char payload[512];
 		};
 		
 		struct packet pack;
@@ -77,7 +77,6 @@ int main(int argc, char **argv)
                                              &len);
 						
 						if(message[1] == 1) {
-							printf("okidoki");
 							char* path = "../data/";
 							char* filename = &message[2];
 							char* name_with_path;
@@ -91,41 +90,25 @@ int main(int argc, char **argv)
 							}
 						}
 						else if(message[1] == 4) {
-							printf("YOLO");
+							// do nothing
 						}
 						else {
 							printf("NEIIII");
 							continue;
 						}
-						/*int i = 0;
-						for(; i < 50; i++) {
-							if(message[i] == '\0') {
-								printf(" ");
-							}
-							else {
-								printf("%c", message[i]);
-							}
-						}*/
 						
 						ssize_t packsize;
 						if((packsize = read(filedesc, buf, PACKET_SIZE)) < 0) {
 							printf("error2");
 						}
-						/*if(write(filedesc, buf, PACKET_SIZE) != PACKET_SIZE) {
-							printf("error3");
-						}*/
 						else {
 							blocknum++;
 						}
+						
 						pack.opcode = htons(3);
 						pack.blocknum = htons(blocknum);
-						pack.payload = buf;
+						memcpy(pack.payload, buf, packsize);
 						packsize += 4;
-						/*char bla[516];
-						short opc = 3;
-						bla[0] = opc;
-						bla[2] = blocknum;
-						bla[4] = *buf;*/
 						
 						sendto(sockfd, &pack, (size_t)packsize, 0,
                                (struct sockaddr *) &client,
@@ -140,17 +123,6 @@ int main(int argc, char **argv)
 						/*if(close(filedesc)) {
 							printf("error4");
 						}*/
-                        /* Send the message back. */
-                        /*sendto(sockfd, message, (size_t) n, 0,
-                               (struct sockaddr *) &client,
-                               (socklen_t) sizeof(client));*/
-                        /* Zero terminate the message, otherwise
-                           printf may access memory outside of the
-                           string. */
-                        //message[n] = '\0';
-                        /* Print the message to stdout and flush. */
-                        /*fprintf(stdout, "Received:\n%s\n", message);
-                        fflush(stdout);*/
                 } else {
                         fprintf(stdout, "No message in five seconds.\n");
                         fflush(stdout);
