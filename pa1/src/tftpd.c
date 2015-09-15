@@ -14,6 +14,9 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 #define PACKET_SIZE 512
 
@@ -23,6 +26,7 @@ int main(int argc, char **argv)
 		FILE * filefd;
         struct sockaddr_in server, client;
         char message[512];
+		char buf[PACKET_SIZE];
 
         /* Create and bind a UDP socket */
         sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -71,28 +75,32 @@ int main(int argc, char **argv)
 						strcpy(name_with_path, path);
 						strcat(name_with_path, filename);
 						
-						if((filefd = fopen(name_with_path, "r")) == NULL ) {
-							fprintf(stderr, "Could not open destination file, using stdout.\n");
+						int filedesc = open(name_with_path, O_RDONLY);
+						if (filedesc < 0) {
+							printf("error");
 						}
-						else {
-							printf("Preparing to start reading file '%s'\n", filename );
-							// þurfum að búa til buffer til að senda í stað message
-							
-							sendto(sockfd, message, (size_t) n, 0,
-                               (struct sockaddr *) &client,
-                               (socklen_t) sizeof(client));
+						if(read(filedesc, buf, 512) < 0) {
+							printf("error2");
 						}
+						if(write(filedesc, buf, 512)) {
+							printf("error3");
+						}
+						int i = 0;
+						for(; i < 512; i++) {
+							printf("%c", buf[i]);
+						}
+						
                         /* Send the message back. */
-                        sendto(sockfd, message, (size_t) n, 0,
+                        /*sendto(sockfd, message, (size_t) n, 0,
                                (struct sockaddr *) &client,
-                               (socklen_t) sizeof(client));
+                               (socklen_t) sizeof(client));*/
                         /* Zero terminate the message, otherwise
                            printf may access memory outside of the
                            string. */
-                        message[n] = '\0';
+                        //message[n] = '\0';
                         /* Print the message to stdout and flush. */
-                        fprintf(stdout, "Received:\n%s\n", message);
-                        fflush(stdout);
+                        /*fprintf(stdout, "Received:\n%s\n", message);
+                        fflush(stdout);*/
                 } else {
                         fprintf(stdout, "No message in five seconds.\n");
                         fflush(stdout);
