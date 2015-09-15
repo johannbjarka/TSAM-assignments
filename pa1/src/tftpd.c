@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <stdlib.h> 
 
 #define PACKET_SIZE 512
 
@@ -25,16 +26,22 @@ int main(int argc, char **argv)
         int sockfd;
 		uint16_t blocknum = 0;
         struct sockaddr_in server, client;
-        char message[512];
+        char message[PACKET_SIZE];
 		char buf[PACKET_SIZE];
+		char* filename;
 		int filedesc;
 		struct packet {
 			uint16_t opcode;
 			uint16_t blocknum;
-			char payload[512];
+			char payload[PACKET_SIZE];
 		};
 		
 		struct packet pack;
+		
+		if(argc < 2) {
+			printf("You must supply a port number to run the server");
+			exit(0);
+		}
 
         /* Create and bind a UDP socket */
         sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -43,7 +50,7 @@ int main(int argc, char **argv)
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(35651);
+        server.sin_port = htons(atoi(argv[1]));
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
         for (;;) {
@@ -78,7 +85,7 @@ int main(int argc, char **argv)
 						
 						if(message[1] == 1) {
 							char* path = "../data/";
-							char* filename = &message[2];
+							filename = &message[2];
 							char* name_with_path;
 							name_with_path = malloc(strlen(path) + 1 + strlen(filename)); 
 							strcpy(name_with_path, path);
@@ -86,43 +93,31 @@ int main(int argc, char **argv)
 							
 							filedesc = open(name_with_path, O_RDONLY);
 							if (filedesc < 0) {
-								printf("error");
+								printf("Error: failed to open %s\n", filename);
 							}
 						}
 						else if(message[1] == 4) {
 							// do nothing
 						}
 						else {
-							printf("NEIIII");
 							continue;
 						}
 						
 						ssize_t packsize;
 						if((packsize = read(filedesc, buf, PACKET_SIZE)) < 0) {
-							printf("error2");
+							printf("Error: failed to read %s\n", filename);
 						}
 						else {
 							blocknum++;
+							pack.opcode = htons(3);
+							pack.blocknum = htons(blocknum);
+							memcpy(pack.payload, buf, packsize);
+							packsize += 4;
+							
+							sendto(sockfd, &pack, (size_t)packsize, 0,
+								   (struct sockaddr *) &client,
+								   (socklen_t) sizeof(client));
 						}
-						
-						pack.opcode = htons(3);
-						pack.blocknum = htons(blocknum);
-						memcpy(pack.payload, buf, packsize);
-						packsize += 4;
-						
-						sendto(sockfd, &pack, (size_t)packsize, 0,
-                               (struct sockaddr *) &client,
-                               (socklen_t) sizeof(client));
-							  
-						printf("%d\n", pack.opcode);
-						printf("%d\n", pack.blocknum);
-						int i = 0;
-						for(; i < 512; i++) {
-							printf("%c", pack.payload[i]);
-						}
-						/*if(close(filedesc)) {
-							printf("error4");
-						}*/
                 } else {
                         fprintf(stdout, "No message in five seconds.\n");
                         fflush(stdout);
