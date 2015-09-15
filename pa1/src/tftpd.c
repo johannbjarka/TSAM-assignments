@@ -25,18 +25,26 @@ int main(int argc, char **argv)
 {
         int sockfd;
 		uint16_t blocknum = 0;
-        struct sockaddr_in server, client;
+        struct sockaddr_in server, client, clientcheck;
         char message[PACKET_SIZE];
 		char buf[PACKET_SIZE];
 		char* filename;
-		int filedesc;
+		int filedesc = 0;
+		int isOpen = 0; // Checks if filedesc is closed
 		struct packet {
 			uint16_t opcode;
 			uint16_t blocknum;
 			char payload[PACKET_SIZE];
 		};
 		
+		struct errorpacket {
+			uint16_t opcode;
+			uint16_t errorcode;
+			char errormsg[PACKET_SIZE];
+		};
+		
 		struct packet pack;
+		struct errorpacket errpack;
 		
 		if(argc < 2) {
 			printf("You must supply a port number to run the server");
@@ -78,12 +86,14 @@ int main(int argc, char **argv)
                         /* Receive one byte less than declared,
                            because it will be zero-termianted
                            below. */
-                        ssize_t n = recvfrom(sockfd, message,
-                                             sizeof(message) - 1, 0,
-                                             (struct sockaddr *) &client,
-                                             &len);
+                        recvfrom(sockfd, message,
+                                 sizeof(message) - 1, 0,
+                                 (struct sockaddr *) &client,
+                                 &len);
 						
 						if(message[1] == 1) {
+							clientcheck.sin_port = client.sin_port;
+							clientcheck.sin_addr = client.sin_addr;
 							char* path = "../data/";
 							filename = &message[2];
 							char* name_with_path;
@@ -95,9 +105,25 @@ int main(int argc, char **argv)
 							if (filedesc < 0) {
 								printf("Error: failed to open %s\n", filename);
 							}
+							else {
+								isOpen = 1;
+							}
 						}
 						else if(message[1] == 4) {
-							// do nothing
+							// Check if the client is the same one that made the RRQ.
+							if(client.sin_addr.s_addr != clientcheck.sin_addr.s_addr 
+								|| client.sin_port != clientcheck.sin_port) {
+								errpack.opcode = htons(5);
+								errpack.errorcode = htons(2);
+								sprintf(errpack.errormsg, "Access violation.");
+								int n = strlen("Access violation.");
+								errpack.errormsg[n] = '\0';
+								int errpacksize = n + 5;
+								sendto(sockfd, &errpack, (size_t)errpacksize, 0,
+								   (struct sockaddr *) &client,
+								   (socklen_t) sizeof(client));
+								continue;
+							}
 						}
 						else {
 							continue;
@@ -105,7 +131,9 @@ int main(int argc, char **argv)
 						
 						ssize_t packsize;
 						if((packsize = read(filedesc, buf, PACKET_SIZE)) < 0) {
-							printf("Error: failed to read %s\n", filename);
+							if(isOpen) {
+								printf("Error: failed to read %s\n", filename);
+							}
 						}
 						else {
 							blocknum++;
@@ -117,6 +145,16 @@ int main(int argc, char **argv)
 							sendto(sockfd, &pack, (size_t)packsize, 0,
 								   (struct sockaddr *) &client,
 								   (socklen_t) sizeof(client));
+							
+							if(packsize < 516) {
+								if(close(filedesc) < 0) {
+									printf("Error closing file descriptor");
+								}
+								else {
+									isOpen = 0;
+									blocknum = 0;
+								}							
+							}
 						}
                 } else {
                         fprintf(stdout, "No message in five seconds.\n");
