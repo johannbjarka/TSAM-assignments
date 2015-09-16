@@ -46,8 +46,8 @@ int main(int argc, char **argv)
 		struct packet pack;
 		struct errorpacket errpack;
 		
-		if(argc < 2) {
-			printf("You must supply a port number to run the server");
+		if(argc < 3) {
+			printf("You must supply a port number and a file directory to run the server");
 			exit(0);
 		}
 
@@ -94,11 +94,22 @@ int main(int argc, char **argv)
 						if(message[1] == 1) {
 							clientcheck.sin_port = client.sin_port;
 							clientcheck.sin_addr = client.sin_addr;
-							char* path = "../data/";
+							
+							// Set the path
+							char* path = "../";
+							char* dir = argv[2];
+							char* dir_with_path = malloc(strlen(path) + 2 + strlen(dir)); 
+							strcpy(dir_with_path, path);
+							strcat(dir_with_path, dir);
+							size_t len = strlen(dir_with_path);
+							dir_with_path[len] = '/';
+							dir_with_path[len + 1] = '\0';
+							
+							// Add the filename to the path
 							filename = &message[2];
 							char* name_with_path;
-							name_with_path = malloc(strlen(path) + 1 + strlen(filename)); 
-							strcpy(name_with_path, path);
+							name_with_path = malloc(strlen(dir_with_path) + 1 + strlen(filename)); 
+							strcpy(name_with_path, dir_with_path);
 							strcat(name_with_path, filename);
 							
 							filedesc = open(name_with_path, O_RDONLY);
