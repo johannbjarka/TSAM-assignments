@@ -96,20 +96,18 @@ int main(int argc, char **argv)
 							clientcheck.sin_addr = client.sin_addr;
 							
 							// Set the path
-							char* path = "../";
-							char* dir = argv[2];
-							char* dir_with_path = malloc(strlen(path) + 2 + strlen(dir)); 
-							strcpy(dir_with_path, path);
-							strcat(dir_with_path, dir);
-							size_t len = strlen(dir_with_path);
-							dir_with_path[len] = '/';
-							dir_with_path[len + 1] = '\0';
+							char* dir = argv[2];				
+							size_t len = strlen(dir);
+							char* path = malloc(strlen(dir) + 1);
+							strcpy(path, dir);
+							path[len] = '/';
+							path[len + 1] = '\0';
 							
 							// Add the filename to the path
 							filename = &message[2];
 							char* name_with_path;
-							name_with_path = malloc(strlen(dir_with_path) + 1 + strlen(filename)); 
-							strcpy(name_with_path, dir_with_path);
+							name_with_path = malloc(strlen(path) + 1 + strlen(filename)); 
+							strcpy(name_with_path, path);
 							strcat(name_with_path, filename);
 							
 							filedesc = open(name_with_path, O_RDONLY);
