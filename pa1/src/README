@@ -1,8 +1,8 @@
-TFTP Server
+#TFTP Server
 
-- This TFTP server allowes downloading files from a severside
-  directory for TFTP clients. It will only accept read requests
+* This TFTP server allowes downloading files from a serverside
+  directory for TFTP clients. It will only accept read requests.
 
-- it requires a portnumber to use as its only parameter  
+* It requires a portnumber to use as its only parameter  
 
-- it naturally follows the TFTP protocol https://tools.ietf.org/html/rfc1350
+* It naturally follows the TFTP protocol https://tools.ietf.org/html/rfc1350
