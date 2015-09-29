@@ -3,6 +3,7 @@
 * This TFTP server allowes downloading files from a serverside
   directory for TFTP clients. It will only accept read requests.
 
-* It requires a portnumber to use as its only parameter  
+* It requires a portnumber and a directory as its parameters
+  For example: ./src/tftpd 12345 data 
 
 * It naturally follows the TFTP protocol https://tools.ietf.org/html/rfc1350
