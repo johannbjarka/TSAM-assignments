@@ -21,7 +21,7 @@ GString* respondToGET(gchar *value);
 GString* respondToColorQuery(gchar *color);
 GString* respondToPOST();
 GString* respondToHEAD();
-GString* respondToGetWithArgs();
+GString* respondToGetWithArgs(gchar *args, gchar *host);
 
 int main(int argc, char **argv)
 {
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(35651);
+        server.sin_port = htons(7316);
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 						//printf("%s\n", request->str);
 
 						GString *query = g_string_new(strtok(NULL, " /?"));
-						printf("%s\n", query->str);
+						printf("QUERY: %s\n", query->str);
 
 						GString *reply;
 						
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 							}
 						}
 						else {
-							reply = respondToGetWithArgs();
+							reply = respondToGetWithArgs(query->str, g_hash_table_lookup(dict, "Host"));
 						}
 
                         /* Send the message back. */
@@ -211,7 +211,20 @@ GString* respondToHEAD() {
 	return header;
 }
 
-GString* respondToGetWithArgs() {
-	GString* html = g_string_new("whatever");
+GString* respondToGetWithArgs(gchar *args, gchar *host) {
+	GString *html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\nhttp://localhost/");
+	g_string_append(html, args);
+	g_string_append(html, "<br>\n");
+	g_string_append(html, host);
+	g_string_append(html, "\n");
+	gchar *token = strtok(args, "&");
+	while(token != NULL) {
+		g_string_append(html, token);
+		g_string_append(html, "<br>\n");
+		token = strtok(NULL, "&");
+	}
+	g_string_append(html, "</p>");
+	g_string_append(html, "\n</body>\n</html>\n");
+	
 	return html;
 }
