@@ -17,9 +17,9 @@
 #include <stdio.h>
 #include <glib.h> 
 
-GString* respondToGET(gchar *value);
+GString* respondToGET(gchar *host);
 GString* respondToColorQuery(gchar *color);
-GString* respondToPOST();
+GString* respondToPOST(gchar *host, gchar *payload);
 GString* respondToHEAD();
 GString* respondToGetWithArgs();
 
@@ -136,13 +136,12 @@ int main(int argc, char **argv)
 							reply = respondToColorQuery(color);
 						}
 						else if(strcmp(query->str, "HTTP") == 0) {
+							gchar *host = (gchar *)g_hash_table_lookup(dict, "Host");
 							if(strcmp(request->str, "GET") == 0) {
-								gchar *gc = (gchar *)g_hash_table_lookup(dict, "Host");
-								reply = respondToGET(gc);
-								printf("REPLY IS: %s\n", reply->str);
+								reply = respondToGET(host);
 							}
 							else if(strcmp(request->str, "POST") == 0) {
-								reply = respondToPOST();
+								reply = respondToPOST(host, payload->str);
 							}
 							else if(strcmp(request->str, "HEAD") == 0) {
 								reply = respondToHEAD();
@@ -174,26 +173,26 @@ int main(int argc, char **argv)
         }
 }
 
-GString* respondToGET(gchar *value) {
-	printf("VALUE:%s\n", value);
+GString* respondToGET(gchar *host) {
 	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
-	g_string_append(html, value);
+	g_string_append(html, host);
 	g_string_append(html, "\n</p>\n</body>\n</html>\n");
-	printf("HTML: %s\n", html->str);
 	return html;
 }
 
 GString* respondToColorQuery(gchar *color) {
-	printf("%s\n", color);
 	GString *html = g_string_new("<!DOCTYPE html>\n<html>\n<body style=\"background-color:");
 	g_string_append(html, color);
 	g_string_append(html, "\">\n</body>\n</html>\n");
-	printf("%s\n", html->str);
 	return html;
 }
 
-GString* respondToPOST() {
-	GString* html = g_string_new("whatever");
+GString* respondToPOST(gchar *host, gchar *payload) {
+	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
+	g_string_append(html, host);
+	g_string_append(html, "\n</p>\n<p>\n");
+	g_string_append(html, payload);
+	g_string_append(html, "\n</p>\n</body>\n</html>\n");
 	return html;
 }
 
