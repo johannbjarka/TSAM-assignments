@@ -21,6 +21,7 @@ GString* respondToGET(gchar *value);
 GString* respondToColorQuery(gchar *color);
 GString* respondToPOST();
 GString* respondToHEAD();
+GString* respondToGetWithArgs();
 
 int main(int argc, char **argv)
 {
@@ -35,7 +36,7 @@ int main(int argc, char **argv)
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(7316);
+        server.sin_port = htons(35651);
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
@@ -88,10 +89,7 @@ int main(int argc, char **argv)
 						
 						GSList *list;
 						char *pch = strtok(NULL, "\n");
-						int j = 0;
 						while(pch != NULL) {
-							j++;
-							printf("%d - %d\n", j, pch[1]);
 							if(pch[0] == '\r') {
 								break;
 							}
@@ -103,17 +101,14 @@ int main(int argc, char **argv)
 						//printf("THIS IS THE PAYLOAD %s\n", payload->str);
 						
 						while(list != NULL) {
-							//printf("%s\n", list->data);
-							//char *key = strtok(list->data, ": ");
 							GString *key = g_string_new(strtok(list->data, ": "));
-							//GString *key = g_string_new("Host");
 							GString *value = g_string_new(strtok(NULL, "\n"));
 							printf("%s - %s\n", key->str, value->str);
 							g_hash_table_insert(dict, key->str, value->str);
 							list = g_slist_next(list);
 						}
 						
-						GHashTableIter iter;
+						/*GHashTableIter iter;
 						gpointer key, value;
 						
 						g_hash_table_iter_init(&iter, dict);
@@ -123,11 +118,11 @@ int main(int argc, char **argv)
 							printf("%d\n", i);
 							printf("key: %s\n", key);
 							printf("%s\n", value);
-						}
+						}*/
 						
 						GString *request = g_string_new(strtok(firstLine->str, " /"));
 						
-						printf("%s\n", request->str);
+						//printf("%s\n", request->str);
 
 						GString *query = g_string_new(strtok(NULL, " /?"));
 						printf("%s\n", query->str);
@@ -136,23 +131,25 @@ int main(int argc, char **argv)
 						
 						if(strcmp(query->str, "color") == 0) {
 							GString *bg = g_string_new(strtok(NULL, "="));
-							//GString *color = g_string_new(strtok(NULL, " "));
 							gchar* color = strtok(NULL, " ");
 							
 							reply = respondToColorQuery(color);
 						}
-						
-						else if(strcmp(request->str, "GET") == 0) {
-							gchar *gc = (gchar *)g_hash_table_lookup(dict, "Host");
-							reply = respondToGET(gc);
-							printf("REPLY IS: %s\n", reply->str);
+						else if(strcmp(query->str, "HTTP") == 0) {
+							if(strcmp(request->str, "GET") == 0) {
+								gchar *gc = (gchar *)g_hash_table_lookup(dict, "Host");
+								reply = respondToGET(gc);
+								printf("REPLY IS: %s\n", reply->str);
+							}
+							else if(strcmp(request->str, "POST") == 0) {
+								reply = respondToPOST();
+							}
+							else if(strcmp(request->str, "HEAD") == 0) {
+								reply = respondToHEAD();
+							}
 						}
-						else if(strcmp(request->str, "POST") == 0) {
-							reply = respondToPOST();
-						}
-						else if(strcmp(request->str, "HEAD") == 0) {
-							printf("wut\n");
-							reply = respondToHEAD();
+						else {
+							reply = respondToGetWithArgs();
 						}
 
                         /* Send the message back. */
@@ -179,9 +176,9 @@ int main(int argc, char **argv)
 
 GString* respondToGET(gchar *value) {
 	printf("VALUE:%s\n", value);
-	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n");
+	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
 	g_string_append(html, value);
-	g_string_append(html, "<p>");
+	g_string_append(html, "\n</p>\n</body>\n</html>\n");
 	printf("HTML: %s\n", html->str);
 	return html;
 }
@@ -212,4 +209,9 @@ GString* respondToHEAD() {
 	g_string_append(header, date);
 	g_string_append(header, "\nServer: ReallyAwesomeServer 2.0\nContent-Type: text/html\n");
 	return header;
+}
+
+GString* respondToGetWithArgs() {
+	GString* html = g_string_new("whatever");
+	return html;
 }
