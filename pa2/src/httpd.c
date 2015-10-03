@@ -202,11 +202,15 @@ GString* respondToPOST() {
 }
 
 GString* respondToHEAD() {
-	printf("kominn í fallið\n");
-	GString* header = g_string_new("HTTP/1.1 200 OK\n\rDate:");
-	/*char *date;
-	struct tm *tm = ;
-	strftime(date, 50, "%F", tm);
-	printf("%s\n", date);*/
+	GString* header = g_string_new("HTTP/1.1 200 OK\nDate: ");
+	char date[30];
+	time_t now;
+	time(&now);
+	struct tm *tm;
+	tm = localtime(&now);
+	strftime(date, 30, "%a, %d %b %Y %H:%M:%S %Z", tm);
+	date[30] = '\0';
+	g_string_append(header, date);
+	g_string_append(header, "\nServer: ReallyAwesomeServer 2.0\nContent-Type: text/html\n");
 	return header;
 }
