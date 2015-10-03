@@ -15,6 +15,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <glib.h> 
+
+void respondToGET();
+GString* respondToColorQuery(gchar *color);
+void respondToPOST();
+void respondToHEADER();
 
 int main(int argc, char **argv)
 {
@@ -22,14 +28,14 @@ int main(int argc, char **argv)
         struct sockaddr_in server, client;
         char message[512];
 
-        /* Create and bind a UDP socket */
+        /* Create and bind a TCP socket */
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
         memset(&server, 0, sizeof(server));
         server.sin_family = AF_INET;
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(32000);
+        server.sin_port = htons(35651);
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
@@ -69,9 +75,42 @@ int main(int argc, char **argv)
                            because it will be zero-termianted
                            below. */
                         ssize_t n = read(connfd, message, sizeof(message) - 1);
+						
+						fprintf(stdout, "Received:\n%s\n", message);
+                        fflush(stdout);
+						
+						//TODO parse message
+						
+						GString *request = g_string_new(strtok(message, " /?"));
+						
+						printf("%s\n", request->str);
+						
+						GString *query = g_string_new(strtok(NULL, " /?"));
+						
+						printf("%s\n", query->str);
+						
+						GString *reply;
+
+						if(strcmp(query->str, "color") == 0) {
+							GString *bg = g_string_new(strtok(NULL, "="));
+							//GString *color = g_string_new(strtok(NULL, " "));
+							gchar* color = strtok(NULL, " ");
+							
+							reply = respondToColorQuery(color);
+						}
+						
+						else if(strcmp(request->str, "GET") == 0) {
+							respondToGET();
+						}
+						else if(strcmp(request->str, "POST") == 0) {
+							respondToPOST();
+						}
+						else if(strcmp(request->str, "HEADER") == 0) {
+							respondToHEADER();
+						}
 
                         /* Send the message back. */
-                        write(connfd, message, (size_t) n);
+                        write(connfd, reply->str, reply->len);
 
                         /* We should close the connection. */
                         shutdown(connfd, SHUT_RDWR);
@@ -89,4 +128,25 @@ int main(int argc, char **argv)
                         fflush(stdout);
                 }
         }
+}
+
+void respondToGET() {
+	printf("YOLO");
+}
+
+GString* respondToColorQuery(gchar *color) {
+	printf("%s\n", color);
+	GString *html = g_string_new("<!DOCTYPE html>\n<html>\n<body style=\"background-color:");
+	g_string_append(html, color);
+	g_string_append(html, "\">\n</body>\n</html>\n");
+	printf("%s\n", html->str);
+	return html;
+}
+
+void respondToPOST() {
+	printf("SWAG");
+}
+
+void respondToHEADER() {
+	
 }
