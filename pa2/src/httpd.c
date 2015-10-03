@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 						GString *firstLine = g_string_new(strtok(message, "\n"));
 						printf("%s\n", firstLine->str);
 						
-						GHashTable *dict = g_hash_table_new(NULL, g_str_equal);
+						GHashTable *dict = g_hash_table_new(g_str_hash, g_str_equal);
 						
 						GSList *list;
 						char *pch = strtok(NULL, "\n");
@@ -104,7 +104,9 @@ int main(int argc, char **argv)
 						
 						while(list != NULL) {
 							//printf("%s\n", list->data);
+							//char *key = strtok(list->data, ": ");
 							GString *key = g_string_new(strtok(list->data, ": "));
+							//GString *key = g_string_new("Host");
 							GString *value = g_string_new(strtok(NULL, "\n"));
 							printf("%s - %s\n", key->str, value->str);
 							g_hash_table_insert(dict, key->str, value->str);
@@ -119,22 +121,27 @@ int main(int argc, char **argv)
 						while(g_hash_table_iter_next(&iter, &key, &value)) {
 							i++;
 							printf("%d\n", i);
-							printf("%s\n", key);
+							printf("key: %s\n", key);
 							printf("%s\n", value);
 						}
 						
-						/*GString *request = g_string_new(strtok(message, " /"));
+						if(g_hash_table_lookup(dict, "Host") != NULL) {
+							printf("SWAG BITCHES RATATATA\n");
+						}
+						else {
+							printf("sad face\n");
+						}
+						
+						GString *request = g_string_new(strtok(firstLine->str, " /"));
 						
 						printf("%s\n", request->str);
 
 						GString *query = g_string_new(strtok(NULL, " /?"));
 						printf("%s\n", query->str);
 
-						GString *reply;*/
+						GString *reply;
 						
-						
-
-						/*if(strcmp(query->str, "color") == 0) {
+						if(strcmp(query->str, "color") == 0) {
 							GString *bg = g_string_new(strtok(NULL, "="));
 							//GString *color = g_string_new(strtok(NULL, " "));
 							gchar* color = strtok(NULL, " ");
@@ -149,12 +156,13 @@ int main(int argc, char **argv)
 							reply = respondToPOST();
 						}
 						else if(strcmp(request->str, "HEAD") == 0) {
+							printf("wut\n");
 							reply = respondToHEAD();
-						}*/
+						}
 
                         /* Send the message back. */
-						write(connfd, message, n);
-                        //write(connfd, reply->str, reply->len);
+						//write(connfd, message, n);
+                        write(connfd, reply->str, reply->len);
 
                         /* We should close the connection. */
                         shutdown(connfd, SHUT_RDWR);
@@ -194,8 +202,11 @@ GString* respondToPOST() {
 }
 
 GString* respondToHEAD() {
+	printf("kominn í fallið\n");
 	GString* header = g_string_new("HTTP/1.1 200 OK\n\rDate:");
-	//char *date;
-	//strftime(date, )
+	/*char *date;
+	struct tm *tm = ;
+	strftime(date, 50, "%F", tm);
+	printf("%s\n", date);*/
 	return header;
 }
