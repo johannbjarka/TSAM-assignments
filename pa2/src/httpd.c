@@ -17,10 +17,10 @@
 #include <stdio.h>
 #include <glib.h> 
 
-void respondToGET();
+GString* respondToGET();
 GString* respondToColorQuery(gchar *color);
-void respondToPOST();
-void respondToHEADER();
+GString* respondToPOST();
+GString* respondToHEADER();
 
 int main(int argc, char **argv)
 {
@@ -84,11 +84,10 @@ int main(int argc, char **argv)
 						GString *request = g_string_new(strtok(message, " /?"));
 						
 						printf("%s\n", request->str);
-						
+
 						GString *query = g_string_new(strtok(NULL, " /?"));
-						
 						printf("%s\n", query->str);
-						
+
 						GString *reply;
 
 						if(strcmp(query->str, "color") == 0) {
@@ -100,13 +99,13 @@ int main(int argc, char **argv)
 						}
 						
 						else if(strcmp(request->str, "GET") == 0) {
-							respondToGET();
+							reply = respondToGET();
 						}
 						else if(strcmp(request->str, "POST") == 0) {
-							respondToPOST();
+							reply = respondToPOST();
 						}
-						else if(strcmp(request->str, "HEADER") == 0) {
-							respondToHEADER();
+						else if(strcmp(request->str, "HEAD") == 0) {
+							reply = respondToHEADER();
 						}
 
                         /* Send the message back. */
@@ -130,8 +129,9 @@ int main(int argc, char **argv)
         }
 }
 
-void respondToGET() {
-	printf("YOLO");
+GString* respondToGET() {
+	GString* html = g_string_new("whatever");
+	return html;
 }
 
 GString* respondToColorQuery(gchar *color) {
@@ -143,10 +143,12 @@ GString* respondToColorQuery(gchar *color) {
 	return html;
 }
 
-void respondToPOST() {
-	printf("SWAG");
+GString* respondToPOST() {
+	GString* html = g_string_new("whatever");
+	return html;
 }
 
-void respondToHEADER() {
-	
+GString* respondToHEADER() {
+	GString* header = g_string_new("whatever");
+	return header;
 }
