@@ -20,7 +20,7 @@
 GString* respondToGET();
 GString* respondToColorQuery(gchar *color);
 GString* respondToPOST();
-GString* respondToHEADER();
+GString* respondToHEAD();
 
 int main(int argc, char **argv)
 {
@@ -81,16 +81,60 @@ int main(int argc, char **argv)
 						
 						//TODO parse message
 						
-						GString *request = g_string_new(strtok(message, " /?"));
+						GString *firstLine = g_string_new(strtok(message, "\n"));
+						printf("%s\n", firstLine->str);
+						
+						GHashTable *dict = g_hash_table_new(NULL, g_str_equal);
+						
+						GSList *list;
+						char *pch = strtok(NULL, "\n");
+						int j = 0;
+						while(pch != NULL) {
+							j++;
+							printf("%d - %d\n", j, pch[1]);
+							if(pch[0] == '\r') {
+								break;
+							}
+							list = g_slist_append(list, pch);
+							pch = strtok(NULL, "\n");
+						}
+						
+						GString *payload = g_string_new(strtok(NULL, "\n"));
+						//printf("THIS IS THE PAYLOAD %s\n", payload->str);
+						
+						while(list != NULL) {
+							//printf("%s\n", list->data);
+							GString *key = g_string_new(strtok(list->data, ": "));
+							GString *value = g_string_new(strtok(NULL, "\n"));
+							printf("%s - %s\n", key->str, value->str);
+							g_hash_table_insert(dict, key->str, value->str);
+							list = g_slist_next(list);
+						}
+						
+						GHashTableIter iter;
+						gpointer key, value;
+						
+						g_hash_table_iter_init(&iter, dict);
+						int i = 0;
+						while(g_hash_table_iter_next(&iter, &key, &value)) {
+							i++;
+							printf("%d\n", i);
+							printf("%s\n", key);
+							printf("%s\n", value);
+						}
+						
+						/*GString *request = g_string_new(strtok(message, " /"));
 						
 						printf("%s\n", request->str);
 
 						GString *query = g_string_new(strtok(NULL, " /?"));
 						printf("%s\n", query->str);
 
-						GString *reply;
+						GString *reply;*/
+						
+						
 
-						if(strcmp(query->str, "color") == 0) {
+						/*if(strcmp(query->str, "color") == 0) {
 							GString *bg = g_string_new(strtok(NULL, "="));
 							//GString *color = g_string_new(strtok(NULL, " "));
 							gchar* color = strtok(NULL, " ");
@@ -105,11 +149,12 @@ int main(int argc, char **argv)
 							reply = respondToPOST();
 						}
 						else if(strcmp(request->str, "HEAD") == 0) {
-							reply = respondToHEADER();
-						}
+							reply = respondToHEAD();
+						}*/
 
                         /* Send the message back. */
-                        write(connfd, reply->str, reply->len);
+						write(connfd, message, n);
+                        //write(connfd, reply->str, reply->len);
 
                         /* We should close the connection. */
                         shutdown(connfd, SHUT_RDWR);
@@ -148,7 +193,9 @@ GString* respondToPOST() {
 	return html;
 }
 
-GString* respondToHEADER() {
-	GString* header = g_string_new("whatever");
+GString* respondToHEAD() {
+	GString* header = g_string_new("HTTP/1.1 200 OK\n\rDate:");
+	//char *date;
+	//strftime(date, )
 	return header;
 }
