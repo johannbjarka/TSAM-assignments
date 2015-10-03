@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <glib.h> 
 
-GString* respondToGET();
+GString* respondToGET(gchar *value);
 GString* respondToColorQuery(gchar *color);
 GString* respondToPOST();
 GString* respondToHEAD();
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(35651);
+        server.sin_port = htons(7316);
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
@@ -125,13 +125,6 @@ int main(int argc, char **argv)
 							printf("%s\n", value);
 						}
 						
-						if(g_hash_table_lookup(dict, "Host") != NULL) {
-							printf("SWAG BITCHES RATATATA\n");
-						}
-						else {
-							printf("sad face\n");
-						}
-						
 						GString *request = g_string_new(strtok(firstLine->str, " /"));
 						
 						printf("%s\n", request->str);
@@ -150,7 +143,9 @@ int main(int argc, char **argv)
 						}
 						
 						else if(strcmp(request->str, "GET") == 0) {
-							reply = respondToGET();
+							gchar *gc = (gchar *)g_hash_table_lookup(dict, "Host");
+							reply = respondToGET(gc);
+							printf("REPLY IS: %s\n", reply->str);
 						}
 						else if(strcmp(request->str, "POST") == 0) {
 							reply = respondToPOST();
@@ -182,8 +177,12 @@ int main(int argc, char **argv)
         }
 }
 
-GString* respondToGET() {
-	GString* html = g_string_new("whatever");
+GString* respondToGET(gchar *value) {
+	printf("VALUE:%s\n", value);
+	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n");
+	g_string_append(html, value);
+	g_string_append(html, "<p>");
+	printf("HTML: %s\n", html->str);
 	return html;
 }
 
