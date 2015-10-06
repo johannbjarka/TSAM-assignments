@@ -23,7 +23,7 @@ GString* respondToPOST(gchar *host, gchar *payload, GString* header);
 GString* buildHeader();
 
 GString* respondToHEAD();
-GString* respondToGetWithArgs(gchar *args, gchar *host, GString* header);
+GString* respondToGetWithArgs(gchar *args, gchar *query, gchar *host, GString* header);
 char* cookieColor;
 int isColorSet = 0;
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(35651);
+        server.sin_port = htons(7316);
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
@@ -87,6 +87,7 @@ int main(int argc, char **argv)
 						//TODO parse message
 						
 						GString *firstLine = g_string_new(strtok(message, "\n"));
+						
 						printf("%s\n", firstLine->str);
 						
 						GHashTable *dict = g_hash_table_new(g_str_hash, g_str_equal);
@@ -126,7 +127,7 @@ int main(int argc, char **argv)
 						
 						GString *request = g_string_new(strtok(firstLine->str, " /"));
 						
-						//printf("%s\n", request->str);
+						printf("REQUEST: %s\n", request->str);
 
 						GString *query = g_string_new(strtok(NULL, " /?"));
 						printf("QUERY: %s\n", query->str);
@@ -161,7 +162,9 @@ int main(int argc, char **argv)
 						}
 						else {
 							reply = buildHeader();
-							reply = respondToGetWithArgs(query->str, g_hash_table_lookup(dict, "Host"), reply);
+							GString *args = g_string_new(strtok(NULL, " "));
+							printf("ARGS: %s\n", args->str);
+							reply = respondToGetWithArgs(args->str, query->str, g_hash_table_lookup(dict, "Host"), reply);
 						}
 
                         /* Send the message back. */
@@ -223,14 +226,19 @@ GString* buildHeader() {
 	return header;
 }
 
-GString* respondToGetWithArgs(gchar *args, gchar *host, GString* header) {
-	g_string_append(header, "\n<!DOCTYPE html>\n<html>\n<body>\n<p>\nhttp://localhost/");
+GString* respondToGetWithArgs(gchar *args, gchar *query, gchar *host, GString* header) {
+	g_string_append(header, "\n<!DOCTYPE html>\n<html>\n<body>\n<p>\n URI: http://localhost/");
+	g_string_append(header, query);
+	g_string_append(header, "/");
 	g_string_append(header, args);
-	g_string_append(header, "<br>\n");
+	g_string_append(header, "<br>\n Host:");
 	g_string_append(header, host);
 	g_string_append(header, "\n");
-	gchar *token = strtok(args, "&");
+	
+	gchar *token = strtok(args, "?");
+	token = strtok(token, "&");
 	while(token != NULL) {
+		g_string_append(header, " ");
 		g_string_append(header, token);
 		g_string_append(header, "<br>\n");
 		token = strtok(NULL, "&");
