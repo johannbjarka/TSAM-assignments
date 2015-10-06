@@ -24,6 +24,7 @@ GString* respondToPOST(gchar *host, gchar *payload, GString* header);
 GString* buildHeader();
 GString* respondToGetWithArgs(gchar *args, gchar *query, gchar *host, GString* header);
 GString* buildHeaderWithCookie(gchar* color);
+void logRequest(gchar *host, gchar *request, gchar *message, gchar *reply);
 
 int main(int argc, char **argv)
 {
@@ -86,6 +87,7 @@ int main(int argc, char **argv)
                            below. */
                         ssize_t n = read(connfd, message, sizeof(message) - 1);
 						
+						GString *messageCopy = g_string_new(message);
 						fprintf(stdout, "Received:\n%s\n", message);
                         fflush(stdout);
 						
@@ -105,7 +107,7 @@ int main(int argc, char **argv)
 							pch = strtok(NULL, "\n");
 						}
 						
-						GString *payload = g_string_new(strtok(NULL, "\n"));
+						GString *payload = g_string_new(strtok(NULL, "\0"));
 						
 						while(list != NULL) {
 							GString *key = g_string_new(strtok(list->data, ": "));
@@ -141,6 +143,7 @@ int main(int argc, char **argv)
 						printf("QUERY: %s\n", query->str);
 
 						GString *reply;
+						gchar *host = (gchar *)g_hash_table_lookup(dict, "Host");
 						
 						if(strcmp(query->str, "color") == 0) {
 							GString *bg = g_string_new(strtok(NULL, "="));
@@ -164,7 +167,6 @@ int main(int argc, char **argv)
 							}
 						}
 						else if(strcmp(query->str, "HTTP") == 0) {
-							gchar *host = (gchar *)g_hash_table_lookup(dict, "Host");
 							if(strcmp(request->str, "GET") == 0) {
 								reply = buildHeader();
 								reply = respondToGET(host, reply);
@@ -185,8 +187,10 @@ int main(int argc, char **argv)
 							reply = respondToGetWithArgs(args->str, query->str, g_hash_table_lookup(dict, "Host"), reply);
 						}
 
+						/* Log the request and response*/
+						logRequest(host, request->str, messageCopy->str, reply->str);
+						
                         /* Send the message back. */
-						//write(connfd, message, n);
                         write(connfd, reply->str, reply->len);
 						
 						g_string_free(reply, TRUE);
@@ -282,4 +286,52 @@ GString* respondToGetWithArgs(gchar *args, gchar *query, gchar *host, GString* h
 	g_string_append(header, "\n</body>\n</html>\n");
 	
 	return header;
+}
+
+void logRequest(gchar *host, gchar *request, gchar *message, gchar *reply) {
+	GString *temp = g_string_new(strtok(message, " "));
+	GString *url = g_string_new("http://localhost"); 
+	g_string_append(url, strtok(NULL, " "));
+	gchar date[26];
+	time_t now;
+	time(&now);
+	struct tm *tm;
+	tm = localtime(&now);
+	strftime(date, 26, "%FT%H:%M:%S %z", tm);
+	date[26] = '\0';
+	FILE * logFile;
+	/* g_string_append kept overwriting the beginning of the
+	 * string for some reason so we were forced to write into
+	 * the log file in small chunks.
+	 */
+	logFile = fopen ("httpd.log","a+");
+	if (logFile!=NULL)
+	{
+		fputs (date, logFile);
+	}
+	GString* logEntry1 = g_string_new(" :");
+	g_string_append(logEntry1, host);
+	if (logFile!=NULL)
+	{
+		fputs (logEntry1->str, logFile);
+	}
+	GString* logEntry2 = g_string_new(" ");
+	g_string_append(logEntry2, request);
+	if (logFile!=NULL)
+	{
+		fputs (logEntry2->str, logFile);
+	}
+	GString* logEntry3 = g_string_new(" ");
+	g_string_append(logEntry3, url->str);
+	if (logFile!=NULL)
+	{
+		fputs (logEntry3->str, logFile);
+	}
+	GString* logEntry4 = g_string_new(" : ");
+	g_string_append(logEntry4, reply);
+	if (logFile!=NULL)
+	{
+		fputs (logEntry4->str, logFile);
+		fclose (logFile);
+	}
 }
