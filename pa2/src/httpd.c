@@ -20,8 +20,10 @@
 GString* respondToGET(gchar *host);
 GString* respondToColorQuery(gchar *color);
 GString* respondToPOST(gchar *host, gchar *payload);
-GString* respondToHEAD();
+GString* buildHeader();
 GString* respondToGetWithArgs();
+char* cookieColor;
+int isColorSet = 0;
 
 int main(int argc, char **argv)
 {
@@ -132,19 +134,26 @@ int main(int argc, char **argv)
 						if(strcmp(query->str, "color") == 0) {
 							GString *bg = g_string_new(strtok(NULL, "="));
 							gchar* color = strtok(NULL, " ");
-							
-							reply = respondToColorQuery(color);
+							if(color != NULL) {
+								gchar *cookie = (gchar *)g_hash_table_lookup(dict, "Cookie");
+							}
+							if(color == NULL && isColorSet) {
+								color = cookieColor;
+							}
+							reply = buildHeader();
+							reply = respondToColorQuery(color, reply);
 						}
 						else if(strcmp(query->str, "HTTP") == 0) {
 							gchar *host = (gchar *)g_hash_table_lookup(dict, "Host");
 							if(strcmp(request->str, "GET") == 0) {
-								reply = respondToGET(host);
+								reply = buildHeader();
+								reply = respondToGET(host, reply);
 							}
 							else if(strcmp(request->str, "POST") == 0) {
-								reply = respondToPOST(host, payload->str);
+								reply = respondToPOST(host, payload->str, reply);
 							}
 							else if(strcmp(request->str, "HEAD") == 0) {
-								reply = respondToHEAD();
+								reply = buildHeader();
 							}
 						}
 						else {
@@ -196,7 +205,7 @@ GString* respondToPOST(gchar *host, gchar *payload) {
 	return html;
 }
 
-GString* respondToHEAD() {
+GString* buildHeader() {
 	GString* header = g_string_new("HTTP/1.1 200 OK\nDate: ");
 	char date[30];
 	time_t now;
