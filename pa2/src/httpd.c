@@ -87,8 +87,6 @@ int main(int argc, char **argv)
 						fprintf(stdout, "Received:\n%s\n", message);
                         fflush(stdout);
 						
-						//TODO parse message
-						
 						GString *firstLine = g_string_new(strtok(message, "\n"));
 						printf("%s\n", firstLine->str);
 						
@@ -105,7 +103,6 @@ int main(int argc, char **argv)
 						}
 						
 						GString *payload = g_string_new(strtok(NULL, "\n"));
-						//printf("THIS IS THE PAYLOAD %s\n", payload->str);
 						
 						while(list != NULL) {
 							GString *key = g_string_new(strtok(list->data, ": "));
@@ -113,6 +110,12 @@ int main(int argc, char **argv)
 							printf("%s - %s\n", key->str, value->str);
 							g_hash_table_insert(dict, key->str, value->str);
 							list = g_slist_next(list);
+						}
+											
+						gchar *payloadLen = g_hash_table_lookup(dict, "Content-Length");
+						if(payloadLen != NULL) {
+							len = atoi(payloadLen);
+							g_string_truncate(payload, len);
 						}
 						
 						/*GHashTableIter iter;
@@ -166,6 +169,7 @@ int main(int argc, char **argv)
 							else if(strcmp(request->str, "POST") == 0) {
 								reply = buildHeader();
 								reply = respondToPOST(host, payload->str, reply);
+								g_string_free(payload, TRUE);
 							}
 							else if(strcmp(request->str, "HEAD") == 0) {
 								reply = buildHeader();
@@ -179,6 +183,8 @@ int main(int argc, char **argv)
                         /* Send the message back. */
 						//write(connfd, message, n);
                         write(connfd, reply->str, reply->len);
+						
+						g_string_free(reply, TRUE);
 
                         /* We should close the connection. */
                         shutdown(connfd, SHUT_RDWR);
