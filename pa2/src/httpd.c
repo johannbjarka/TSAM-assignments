@@ -16,22 +16,25 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <glib.h> 
+#include <stdlib.h> 
 
 GString* respondToGET(gchar *host, GString* header);
 GString* respondToColorQuery(gchar *color, GString* header);
 GString* respondToPOST(gchar *host, gchar *payload, GString* header);
 GString* buildHeader();
-
-GString* respondToHEAD();
+GString* buildHeaderWithCookie(gchar* color);
 GString* respondToGetWithArgs(gchar *args, gchar *host, GString* header);
-char* cookieColor;
-int isColorSet = 0;
 
 int main(int argc, char **argv)
 {
         int sockfd;
         struct sockaddr_in server, client;
         char message[512];
+		
+		if(argc < 2) {
+			printf("You must supply a port number to run the server");
+			exit(0);
+		}
 
         /* Create and bind a TCP socket */
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -40,7 +43,7 @@ int main(int argc, char **argv)
         /* Network functions need arguments in network byte order instead of
            host byte order. The macros htonl, htons convert the values, */
         server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(35651);
+        server.sin_port = htons(atoi(argv[1]));
         bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
@@ -136,14 +139,23 @@ int main(int argc, char **argv)
 						if(strcmp(query->str, "color") == 0) {
 							GString *bg = g_string_new(strtok(NULL, "="));
 							gchar* color = strtok(NULL, " ");
-							if(color != NULL) {
+							if(color == NULL) {
+								gchar *cookieColor;
 								gchar *cookie = (gchar *)g_hash_table_lookup(dict, "Cookie");
+								cookieColor = strtok(cookie,"=");
+								cookieColor = strtok(NULL,"=");
+								if(cookieColor != NULL){
+									reply = buildHeader();
+									reply = respondToColorQuery(cookieColor, reply);
+								}
+								else{
+									//TODO call get...
+								}
 							}
-							if(color == NULL && isColorSet) {
-								color = cookieColor;
+							else {
+								reply = buildHeaderWithCookie(color);
+								reply = respondToColorQuery(color, reply);
 							}
-							reply = buildHeader();
-							reply = respondToColorQuery(color, reply);
 						}
 						else if(strcmp(query->str, "HTTP") == 0) {
 							gchar *host = (gchar *)g_hash_table_lookup(dict, "Host");
@@ -220,6 +232,23 @@ GString* buildHeader() {
 	date[30] = '\0';
 	g_string_append(header, date);
 	g_string_append(header, "\nServer: ReallyAwesomeServer 2.0\nContent-Type: text/html\n");
+	return header;
+}
+
+GString* buildHeaderWithCookie(gchar* color) {
+	GString* header = g_string_new("HTTP/1.1 200 OK\nDate: ");
+	char date[30];
+	time_t now;
+	time(&now);
+	struct tm *tm;
+	tm = localtime(&now);
+	strftime(date, 30, "%a, %d %b %Y %H:%M:%S %Z", tm);
+	date[30] = '\0';
+	g_string_append(header, date);
+	g_string_append(header, "\nServer: ReallyAwesomeServer 2.0\nContent-Type: text/html\n");
+	g_string_append(header, "Set-Cookie: Color=");
+	g_string_append(header, color);
+	g_string_append(header, "\n");
 	return header;
 }
 
