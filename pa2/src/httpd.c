@@ -17,11 +17,13 @@
 #include <stdio.h>
 #include <glib.h> 
 
-GString* respondToGET(gchar *host);
-GString* respondToColorQuery(gchar *color);
-GString* respondToPOST(gchar *host, gchar *payload);
+GString* respondToGET(gchar *host, GString* header);
+GString* respondToColorQuery(gchar *color, GString* header);
+GString* respondToPOST(gchar *host, gchar *payload, GString* header);
 GString* buildHeader();
-GString* respondToGetWithArgs();
+
+GString* respondToHEAD();
+GString* respondToGetWithArgs(gchar *args, gchar *host, GString* header);
 char* cookieColor;
 int isColorSet = 0;
 
@@ -127,7 +129,7 @@ int main(int argc, char **argv)
 						//printf("%s\n", request->str);
 
 						GString *query = g_string_new(strtok(NULL, " /?"));
-						printf("%s\n", query->str);
+						printf("QUERY: %s\n", query->str);
 
 						GString *reply;
 						
@@ -150,6 +152,7 @@ int main(int argc, char **argv)
 								reply = respondToGET(host, reply);
 							}
 							else if(strcmp(request->str, "POST") == 0) {
+								reply = buildHeader();
 								reply = respondToPOST(host, payload->str, reply);
 							}
 							else if(strcmp(request->str, "HEAD") == 0) {
@@ -157,7 +160,8 @@ int main(int argc, char **argv)
 							}
 						}
 						else {
-							reply = respondToGetWithArgs();
+							reply = buildHeader();
+							reply = respondToGetWithArgs(query->str, g_hash_table_lookup(dict, "Host"), reply);
 						}
 
                         /* Send the message back. */
@@ -182,27 +186,27 @@ int main(int argc, char **argv)
         }
 }
 
-GString* respondToGET(gchar *host) {
-	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
-	g_string_append(html, host);
-	g_string_append(html, "\n</p>\n</body>\n</html>\n");
-	return html;
+GString* respondToGET(gchar *host, GString* header) {
+	g_string_append(header, "\n<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
+	g_string_append(header, host);
+	g_string_append(header, "\n</p>\n</body>\n</html>\n");
+	return header;
 }
 
-GString* respondToColorQuery(gchar *color) {
-	GString *html = g_string_new("<!DOCTYPE html>\n<html>\n<body style=\"background-color:");
-	g_string_append(html, color);
-	g_string_append(html, "\">\n</body>\n</html>\n");
-	return html;
+GString* respondToColorQuery(gchar *color, GString* header) {
+	g_string_append(header, "\n<!DOCTYPE html>\n<html>\n<body style=\"background-color:");
+	g_string_append(header, color);
+	g_string_append(header, "\">\n</body>\n</html>\n");
+	return header;
 }
 
-GString* respondToPOST(gchar *host, gchar *payload) {
-	GString* html = g_string_new("<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
-	g_string_append(html, host);
-	g_string_append(html, "\n</p>\n<p>\n");
-	g_string_append(html, payload);
-	g_string_append(html, "\n</p>\n</body>\n</html>\n");
-	return html;
+GString* respondToPOST(gchar *host, gchar *payload, GString* header) {
+	g_string_append(header, "\n<!DOCTYPE html>\n<html>\n<body>\n<p>\n http://localhost<br>\n");
+	g_string_append(header, host);
+	g_string_append(header, "\n</p>\n<p>\n");
+	g_string_append(header, payload);
+	g_string_append(header, "\n</p>\n</body>\n</html>\n");
+	return header;
 }
 
 GString* buildHeader() {
@@ -219,7 +223,20 @@ GString* buildHeader() {
 	return header;
 }
 
-GString* respondToGetWithArgs() {
-	GString* html = g_string_new("whatever");
-	return html;
+GString* respondToGetWithArgs(gchar *args, gchar *host, GString* header) {
+	g_string_append(header, "\n<!DOCTYPE html>\n<html>\n<body>\n<p>\nhttp://localhost/");
+	g_string_append(header, args);
+	g_string_append(header, "<br>\n");
+	g_string_append(header, host);
+	g_string_append(header, "\n");
+	gchar *token = strtok(args, "&");
+	while(token != NULL) {
+		g_string_append(header, token);
+		g_string_append(header, "<br>\n");
+		token = strtok(NULL, "&");
+	}
+	g_string_append(header, "</p>");
+	g_string_append(header, "\n</body>\n</html>\n");
+	
+	return header;
 }
