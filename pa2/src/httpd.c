@@ -157,8 +157,10 @@ int main(int argc, char **argv)
 									reply = buildHeader();
 									reply = respondToColorQuery(cookieColor, reply);
 								}
+								/* No cookie is found so we return a normal GET */
 								else{
-									//TODO call get...
+									reply = buildHeader();
+									reply = respondToGET(host, reply);
 								}
 							}
 							else {
@@ -191,6 +193,7 @@ int main(int argc, char **argv)
 						logRequest(host, request->str, messageCopy->str, reply->str);
 						
                         /* Send the message back. */
+						//write(connfd, messageCopy->str, messageCopy->len);
                         write(connfd, reply->str, reply->len);
 						
 						g_string_free(reply, TRUE);
@@ -238,7 +241,7 @@ GString* respondToPOST(gchar *host, gchar *payload, GString* header) {
 
 GString* buildHeader() {
 	GString* header = g_string_new("HTTP/1.1 200 OK\nDate: ");
-	char date[30];
+	gchar date[30];
 	time_t now;
 	time(&now);
 	struct tm *tm;
@@ -252,17 +255,32 @@ GString* buildHeader() {
 
 GString* buildHeaderWithCookie(gchar* color) {
 	GString* header = g_string_new("HTTP/1.1 200 OK\nDate: ");
-	char date[30];
+	gchar date[30];
 	time_t now;
 	time(&now);
 	struct tm *tm;
 	tm = localtime(&now);
 	strftime(date, 30, "%a, %d %b %Y %H:%M:%S %Z", tm);
 	date[30] = '\0';
+	
+	/* Make the cookie expire 10 minutes from when it is set */
+	if(tm->tm_min < 50) {
+		tm->tm_min += 10;
+	} else {
+		tm->tm_hour += 1;
+		tm->tm_min -= 50;
+	}
+		
+	gchar expirationDate[30];
+	strftime(expirationDate, 30, "%a, %d %b %Y %H:%M:%S %Z", tm);
+	expirationDate[30] = '\0';
+	
 	g_string_append(header, date);
 	g_string_append(header, "\nServer: ReallyAwesomeServer 2.0\nContent-Type: text/html\n");
 	g_string_append(header, "Set-Cookie: Color=");
 	g_string_append(header, color);
+	g_string_append(header, "; expires=");
+	g_string_append(header, expirationDate);
 	g_string_append(header, "\n");
 	return header;
 }
