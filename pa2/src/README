@@ -1,0 +1,8 @@
+#HTTP Server
+
+* This is a simple HTTP server that conforms to the HTTP/1.1 protocol. It accepts GET, POST and HEAD requests.
+* It supports persistent and parallel connections.
+
+* It requires a portnumber as a parameter.
+  For example: ./src/httpd $(/labs/tsam15/my_port)
+  Or:          ./src/httpd 12345
