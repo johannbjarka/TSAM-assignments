@@ -1,0 +1,83 @@
+2015-10-09T00:14:00 +0000 : 130.208.243.61:56981 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2015 00:14:00 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 396
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56981
+</p>
+<p>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0<br>Connection: keep-alive<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br>Accept-Language: en-US,en;q=0.5<br>Host: localhost:8080<br>Accept-Encoding: gzip, deflate<br>
+</p>
+</body>
+</html>
+2015-10-09T00:14:03 +0000 : 130.208.243.61:56981 GET http://localhost/color?bg=pink : HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2015 00:14:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=pink; expires=Fri, 09 Oct 2015 00:24:03 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-09T00:14:06 +0000 : 130.208.243.61:56981 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2015 00:14:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-09T00:14:12 +0000 : 130.208.243.61:56987 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2015 00:14:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:lime">
+</body>
+</html>
+2015-10-09T00:14:12 +0000 : 130.208.243.61:56987 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2015 00:14:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 513
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56987<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-09T00:14:26 +0000 : 127.0.0.1:57052 HEAD http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2015 00:14:26 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Fri, 09 Oct 2015 00:24:26 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>

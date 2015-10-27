@@ -1,0 +1,4929 @@
+2015-10-08T00:40:23 +0000 :127.0.0.1:52288 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 00:40:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52288
+</p>
+</body>
+</html>
+2015-10-08T00:41:09 +0000 :127.0.0.1:52306 GET http://localhost/bleh?arg=golf : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 00:41:09 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 121
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=golf<br>
+ Host:127.0.0.1:52306
+ arg=golf<br>
+</p>
+</body>
+</html>
+2015-10-08T00:43:28 +0000 :127.0.0.1:52337 GET http://localhost/bleh?arg=gfrolf : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 00:43:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 119
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=gfrolf<br>
+127.0.0.1:52337
+ arg=gfrolf<br>
+</p>
+</body>
+</html>
+2015-10-08T00:46:31 +0000 :127.0.0.1:52363 GET http://localhost/bleh?arg=gfrolf : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 00:46:31 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 123
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=gfrolf<br>
+127.0.0.1:52363<br>
+ arg=gfrolf<br>
+</p>
+</body>
+</html>
+2015-10-08T00:55:13 +0000 : 127.0.0.1:52391 GET http://localhost/bleh?arg=gfrolf : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 00:55:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 123
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=gfrolf<br>
+127.0.0.1:52391<br>
+ arg=gfrolf<br>
+</p>
+</body>
+</html>
+2015-10-08T00:56:11 +0000 : 127.0.0.1:52399 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 00:56:11 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52399
+</p>
+</body>
+</html>
+2015-10-08T01:14:53 +0000 : 127.0.0.1:52468 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:14:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52468
+</p>
+</body>
+</html>
+2015-10-08T01:15:58 +0000 : 127.0.0.1:52487 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:15:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52487
+</p>
+</body>
+</html>
+2015-10-08T01:16:03 +0000 : 127.0.0.1:52489 HEAD http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:16:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52489
+</p>
+</body>
+</html>
+2015-10-08T01:16:18 +0000 : 127.0.0.1:52491 HEAD http://localhost/hjfdhfk : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:16:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 121
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+127.0.0.1:52491<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:25:46 +0000 : 127.0.0.1:52546 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:25:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52546<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T01:26:07 +0000 : 130.208.243.61:52488 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:07 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:52488
+</p>
+</body>
+</html>
+2015-10-08T01:26:07 +0000 : 130.208.243.61:52488 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:07 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52488<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:26:12 +0000 : 130.208.243.61:52488 GET http://localhost/color?bg=pink : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=pink; expires=Thu, 08 Oct 2015 01:36:12 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-08T01:26:13 +0000 : 130.208.243.61:52488 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52488<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:26:21 +0000 : 130.208.243.61:52492 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-08T01:26:21 +0000 : 130.208.243.61:52492 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52492<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:26:49 +0000 : 130.208.243.61:52503 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:49 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T01:26:55 +0000 : 130.208.243.61:52503 GET http://localhost/color?bg=skyblue : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:26:55 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=skyblue; expires=Thu, 08 Oct 2015 01:36:55 GMT
+Content-Length: 79
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:skyblue">
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:02 +0000 : 130.208.243.61:52508 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52508<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:11 +0000 : 130.208.243.61:52508 GET http://localhost/color?bg=blue : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:11 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=blue; expires=Thu, 08 Oct 2015 01:37:11 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:blue">
+</body>
+</html>
+2015-10-08T01:27:20 +0000 : 130.208.243.61:52512 GET http://localhost/color?bg=indigo : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=indigo; expires=Thu, 08 Oct 2015 01:37:20 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T01:27:20 +0000 : 130.208.243.61:52512 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52512<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T01:27:55 +0000 : 130.208.243.61:52512 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:27:55 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:52512
+</p>
+</body>
+</html>
+2015-10-08T01:33:19 +0000 : 127.0.0.1:52617 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:33:19 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:52617
+</p>
+</body>
+</html>
+2015-10-08T01:33:28 +0000 : 130.208.243.61:52555 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:33:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:52555
+</p>
+</body>
+</html>
+2015-10-08T01:33:38 +0000 : 130.208.243.61:52559 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:33:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:52559
+</p>
+</body>
+</html>
+2015-10-08T01:33:38 +0000 : 130.208.243.61:52559 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 01:33:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:52559<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T02:48:21 +0000 : 127.0.0.1:55722 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 02:48:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:55722
+</p>
+</body>
+</html>
+2015-10-08T02:48:39 +0000 : 127.0.0.1:55725 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 02:48:39 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:55725<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T02:56:19 +0000 : 127.0.0.1:55784 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 02:56:19 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:55784<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T02:56:24 +0000 : 127.0.0.1:55789 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 02:56:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:55789
+</p>
+</body>
+</html>
+2015-10-08T03:06:54 +0000 : 127.0.0.1:55863 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:06:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:55863
+</p>
+</body>
+</html>
+2015-10-08T03:06:58 +0000 : 127.0.0.1:55865 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:06:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:55865<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:07:10 +0000 : 130.208.243.61:55806 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:07:10 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:55806
+</p>
+</body>
+</html>
+2015-10-08T03:07:11 +0000 : 130.208.243.61:55806 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:07:11 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:55806<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:07:17 +0000 : 130.208.243.61:55806 GET http://localhost/color?bg=indigo : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:07:17 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=indigo; expires=Thu, 08 Oct 2015 03:17:17 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T03:07:18 +0000 : 130.208.243.61:55806 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:07:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:55806<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:07:22 +0000 : 130.208.243.61:55808 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:07:22 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 79
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T03:07:22 +0000 : 130.208.243.61:55808 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:07:22 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:55808<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:12:19 +0000 : 127.0.0.1:56189 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:12:19 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56189
+</p>
+</body>
+</html>
+2015-10-08T03:15:33 +0000 : 127.0.0.1:56209 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:15:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56209
+</p>
+</body>
+</html>
+2015-10-08T03:16:43 +0000 : 127.0.0.1:56219 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:16:43 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56219
+</p>
+</body>
+</html>
+2015-10-08T03:16:59 +0000 : 127.0.0.1:56221 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:16:59 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56221
+</p>
+</body>
+</html>
+2015-10-08T03:22:37 +0000 : 127.0.0.1:56267 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:22:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56267
+</p>
+</body>
+</html>
+2015-10-08T03:22:46 +0000 : 127.0.0.1:56269 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:22:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56269
+</p>
+</body>
+</html>
+2015-10-08T03:32:23 +0000 : 127.0.0.1:56313 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56313
+</p>
+</body>
+</html>
+2015-10-08T03:32:26 +0000 : 127.0.0.1:56315 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:26 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56315
+</p>
+</body>
+</html>
+2015-10-08T03:32:30 +0000 : 127.0.0.1:56317 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:30 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56317
+</p>
+</body>
+</html>
+2015-10-08T03:32:40 +0000 : 127.0.0.1:56319 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:40 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56319<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:32:52 +0000 : 130.208.243.61:56260 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:52 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56260
+</p>
+</body>
+</html>
+2015-10-08T03:32:53 +0000 : 130.208.243.61:56260 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56260<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:32:57 +0000 : 130.208.243.61:56260 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:57 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56260
+</p>
+</body>
+</html>
+2015-10-08T03:32:58 +0000 : 130.208.243.61:56260 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:32:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56260<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:35:41 +0000 : 130.208.243.61:56288 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:35:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56288
+</p>
+</body>
+</html>
+2015-10-08T03:35:41 +0000 : 130.208.243.61:56288 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:35:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56288<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:35:46 +0000 : 130.208.243.61:56288 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:35:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56288
+</p>
+</body>
+</html>
+2015-10-08T03:35:46 +0000 : 130.208.243.61:56288 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:35:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56288<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:36:01 +0000 : 130.208.243.61:56289 GET http://localhost/color?bg=cyan : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:36:01 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=cyan; expires=Thu, 08 Oct 2015 03:46:01 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:cyan">
+</body>
+</html>
+2015-10-08T03:36:02 +0000 : 130.208.243.61:56289 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:36:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56289<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:36:06 +0000 : 130.208.243.61:56290 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:36:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56290
+</p>
+</body>
+</html>
+2015-10-08T03:36:12 +0000 : 130.208.243.61:56290 GET http://localhost/color?bg=lime : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:36:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=lime; expires=Thu, 08 Oct 2015 03:46:12 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:lime">
+</body>
+</html>
+2015-10-08T03:36:38 +0000 : 130.208.243.61:56290 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:36:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56290
+</p>
+</body>
+</html>
+2015-10-08T03:37:10 +0000 : 130.208.243.61:56290 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:37:10 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56290
+</p>
+</body>
+</html>
+2015-10-08T03:37:27 +0000 : 130.208.243.61:56290 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:37:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:cyan">
+</body>
+</html>
+2015-10-08T03:38:03 +0000 : 130.208.243.61:56290 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:38:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:cyan">
+</body>
+</html>
+2015-10-08T03:38:21 +0000 : 130.208.243.61:56290 GET http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:38:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 03:48:21 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T03:38:54 +0000 : 130.208.243.61:56290 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:38:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56290
+</p>
+</body>
+</html>
+2015-10-08T03:38:54 +0000 : 130.208.243.61:56290 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:38:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56290<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:39:06 +0000 : 130.208.243.61:56290 GET http://localhost/color?bg=blue : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:39:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=blue; expires=Thu, 08 Oct 2015 03:49:06 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:blue">
+</body>
+</html>
+2015-10-08T03:39:06 +0000 : 130.208.243.61:56290 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:39:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56290<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:39:13 +0000 : 130.208.243.61:56290 GET http://localhost/color?bg=indigo : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:39:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=indigo; expires=Thu, 08 Oct 2015 03:49:13 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T03:39:13 +0000 : 130.208.243.61:56290 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:39:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56290<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:40:33 +0000 : 130.208.243.61:56308 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:40:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 79
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T03:40:33 +0000 : 130.208.243.61:56308 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:40:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56308<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:41:27 +0000 : 127.0.0.1:56378 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56378<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:41:29 +0000 : 127.0.0.1:56381 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:29 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56381<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:41:32 +0000 : 127.0.0.1:56384 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:32 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56384<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:41:38 +0000 : 127.0.0.1:56386 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56386<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:41:45 +0000 : 130.208.243.61:56325 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:45 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 122
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56325<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:41:45 +0000 : 130.208.243.61:56325 GET http://localhost/color?bg=blue : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:45 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=blue; expires=Thu, 08 Oct 2015 03:51:45 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:blue">
+</body>
+</html>
+2015-10-08T03:41:45 +0000 : 130.208.243.61:56325 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:45 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56325<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:41:58 +0000 : 130.208.243.61:56326 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 03:51:58 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T03:41:58 +0000 : 130.208.243.61:56326 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:41:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56326<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:42:25 +0000 : 127.0.0.1:56393 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:42:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56393<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:44:12 +0000 : 127.0.0.1:56399 POST http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:44:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 117
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56399<br>
+</p>
+<p>
+LOLOLOLOLO
+</p>
+</body>
+</html>
+2015-10-08T03:44:55 +0000 : 127.0.0.1:56405 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:44:55 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56405
+</p>
+</body>
+</html>
+2015-10-08T03:45:07 +0000 : 130.208.243.61:56344 GET http://localhost/color?bg=yellow : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:45:07 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=yellow; expires=Thu, 08 Oct 2015 03:55:07 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:yellow">
+</body>
+</html>
+2015-10-08T03:45:07 +0000 : 130.208.243.61:56344 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:45:07 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56344<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:45:16 +0000 : 127.0.0.1:56411 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:45:16 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56411
+</p>
+</body>
+</html>
+2015-10-08T03:45:35 +0000 : 127.0.0.1:56413 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:45:35 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56413
+</p>
+</body>
+</html>
+2015-10-08T03:46:03 +0000 : 130.208.243.61:56356 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56356
+</p>
+</body>
+</html>
+2015-10-08T03:46:03 +0000 : 130.208.243.61:56356 GET http://localhost/color?bg=gold : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=gold; expires=Thu, 08 Oct 2015 03:56:03 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:gold">
+</body>
+</html>
+2015-10-08T03:46:03 +0000 : 130.208.243.61:56356 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56356<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:46:09 +0000 : 130.208.243.61:56356 GET http://localhost/color?bg=silver : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:09 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=silver; expires=Thu, 08 Oct 2015 03:56:09 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:silver">
+</body>
+</html>
+2015-10-08T03:46:09 +0000 : 130.208.243.61:56356 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:09 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56356<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:46:15 +0000 : 130.208.243.61:56357 GET http://localhost/color?bg=vapor : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=vapor; expires=Thu, 08 Oct 2015 03:56:15 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:vapor">
+</body>
+</html>
+2015-10-08T03:46:16 +0000 : 130.208.243.61:56357 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:16 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56357<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:46:22 +0000 : 130.208.243.61:56357 GET http://localhost/color?bg=grey : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:22 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=grey; expires=Thu, 08 Oct 2015 03:56:22 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:grey">
+</body>
+</html>
+2015-10-08T03:46:22 +0000 : 130.208.243.61:56357 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:22 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56357<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:46:42 +0000 : 130.208.243.61:56361 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:42 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:grey">
+</body>
+</html>
+2015-10-08T03:46:42 +0000 : 130.208.243.61:56361 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:42 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56361<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:46:49 +0000 : 130.208.243.61:56361 GET http://localhost/color?bg=indigo : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:49 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=indigo; expires=Thu, 08 Oct 2015 03:56:49 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T03:46:49 +0000 : 130.208.243.61:56361 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:46:49 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56361<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:47:06 +0000 : 127.0.0.1:56429 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:47:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56429
+</p>
+</body>
+</html>
+2015-10-08T03:47:16 +0000 : 127.0.0.1:56431 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:47:16 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56431
+</p>
+</body>
+</html>
+2015-10-08T03:49:53 +0000 : 127.0.0.1:56450 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:49:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56450
+</p>
+</body>
+</html>
+2015-10-08T03:50:39 +0000 : 127.0.0.1:56469 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:39 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56469
+</p>
+</body>
+</html>
+2015-10-08T03:50:42 +0000 : 127.0.0.1:56473 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:42 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56473
+</p>
+</body>
+</html>
+2015-10-08T03:50:44 +0000 : 127.0.0.1:56477 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:44 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56477
+</p>
+</body>
+</html>
+2015-10-08T03:50:48 +0000 : 130.208.243.61:56416 GET http://localhost/color?bg=indigo : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:48 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=indigo; expires=Thu, 08 Oct 2015 04:00:48 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T03:50:48 +0000 : 130.208.243.61:56416 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:48 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56416<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:50:54 +0000 : 130.208.243.61:56416 GET http://localhost/color?bg=grey : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=grey; expires=Thu, 08 Oct 2015 04:00:54 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:grey">
+</body>
+</html>
+2015-10-08T03:50:54 +0000 : 130.208.243.61:56416 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:50:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:56416<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T03:51:03 +0000 : 130.208.243.61:56422 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:51:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56422
+</p>
+</body>
+</html>
+2015-10-08T03:51:06 +0000 : 130.208.243.61:56422 GET http://localhost/color?bg=lime : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:51:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=lime; expires=Thu, 08 Oct 2015 04:01:06 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:lime">
+</body>
+</html>
+2015-10-08T03:51:15 +0000 : 127.0.0.1:56491 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:51:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56491
+</p>
+</body>
+</html>
+2015-10-08T03:55:05 +0000 : 130.208.243.61:56462 GET http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:55:05 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 04:05:05 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T03:55:18 +0000 : 130.208.243.61:56462 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:55:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56462
+</p>
+</body>
+</html>
+2015-10-08T03:55:41 +0000 : 127.0.0.1:56528 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 03:55:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56528
+</p>
+</body>
+</html>
+2015-10-08T04:02:10 +0000 : 127.0.0.1:56547 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:10 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56547
+</p>
+</body>
+</html>
+2015-10-08T04:02:13 +0000 : 127.0.0.1:56549 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56549
+</p>
+</body>
+</html>
+2015-10-08T04:02:17 +0000 : 127.0.0.1:56551 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:17 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56551
+</p>
+</body>
+</html>
+2015-10-08T04:02:22 +0000 : 130.208.243.61:56489 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:22 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56489
+</p>
+</body>
+</html>
+2015-10-08T04:02:33 +0000 : 130.208.243.61:56489 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56489
+</p>
+</body>
+</html>
+2015-10-08T04:02:41 +0000 : 130.208.243.61:56489 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56489
+</p>
+</body>
+</html>
+2015-10-08T04:02:49 +0000 : 130.208.243.61:56489 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:02:49 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56489
+</p>
+</body>
+</html>
+2015-10-08T04:04:15 +0000 : 130.208.243.61:56499 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:04:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56499
+</p>
+</body>
+</html>
+2015-10-08T04:04:25 +0000 : 130.208.243.61:56499 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:04:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56499
+</p>
+</body>
+</html>
+2015-10-08T04:04:33 +0000 : 130.208.243.61:56499 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:04:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56499
+</p>
+</body>
+</html>
+2015-10-08T04:04:46 +0000 : 130.208.243.61:56499 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:04:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56499
+</p>
+</body>
+</html>
+2015-10-08T04:04:57 +0000 : 130.208.243.61:56499 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:04:57 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56499
+</p>
+</body>
+</html>
+2015-10-08T04:06:26 +0000 : 130.208.243.61:56504 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:06:26 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56504
+</p>
+</body>
+</html>
+2015-10-08T04:06:34 +0000 : 127.0.0.1:56569 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:06:34 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56569
+</p>
+</body>
+</html>
+2015-10-08T04:06:53 +0000 : 127.0.0.1:56571 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:06:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:56571
+</p>
+</body>
+</html>
+2015-10-08T04:07:12 +0000 : 130.208.243.61:56511 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 04:07:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:56511
+</p>
+</body>
+</html>
+2015-10-08T19:00:13 +0000 : 127.0.0.1:40042 HEAD http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:00:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:40042
+</p>
+</body>
+</html>
+2015-10-08T19:00:21 +0000 : 127.0.0.1:40044 HEAD http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:00:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:40044
+</p>
+</body>
+</html>
+2015-10-08T19:01:30 +0000 : 127.0.0.1:40060 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:01:30 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:11:30 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:02:03 +0000 : 127.0.0.1:40067 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:02:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:12:03 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:04:33 +0000 : 127.0.0.1:40136 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:04:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:14:33 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:05:27 +0000 : 127.0.0.1:40141 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:05:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:15:27 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:06:10 +0000 : 130.208.243.61:40098 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:06:10 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40098
+</p>
+</body>
+</html>
+2015-10-08T19:06:27 +0000 : 130.208.243.61:40098 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:06:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40098
+</p>
+</body>
+</html>
+2015-10-08T19:06:38 +0000 : 130.208.243.61:40098 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:06:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40098
+</p>
+</body>
+</html>
+2015-10-08T19:08:24 +0000 : 130.208.243.61:40217 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:08:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40217
+</p>
+</body>
+</html>
+2015-10-08T19:08:24 +0000 : 130.208.243.61:40217 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:08:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:40217<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T19:08:28 +0000 : 127.0.0.1:40306 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:08:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:18:28 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:14:59 +0000 : 127.0.0.1:40490 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:14:59 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:24:59 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:15:08 +0000 : 127.0.0.1:40496 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:15:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:25:08 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:15:18 +0000 : 130.208.243.61:40438 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:15:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40438
+</p>
+</body>
+</html>
+2015-10-08T19:15:18 +0000 : 130.208.243.61:40438 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:15:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:40438<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T19:15:27 +0000 : 127.0.0.1:40503 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:15:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:25:27 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:15:46 +0000 : 127.0.0.1:40507 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:15:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:25:46 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:27:08 +0000 : 127.0.0.1:40938 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:27:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:37:08 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:27:13 +0000 : 127.0.0.1:40942 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:27:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:37:13 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:27:21 +0000 : 130.208.243.61:40882 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:27:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40882
+</p>
+</body>
+</html>
+2015-10-08T19:27:21 +0000 : 130.208.243.61:40882 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:27:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:40882<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T19:27:27 +0000 : 127.0.0.1:40947 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:27:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:37:27 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:27:42 +0000 : 127.0.0.1:40971 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:27:42 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:37:42 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:28:49 +0000 : 130.208.243.61:40968 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:28:49 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40968
+</p>
+</body>
+</html>
+2015-10-08T19:28:59 +0000 : 130.208.243.61:40968 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:28:59 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40968
+</p>
+</body>
+</html>
+2015-10-08T19:29:05 +0000 : 130.208.243.61:40968 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:29:05 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40968
+</p>
+</body>
+</html>
+2015-10-08T19:29:15 +0000 : 130.208.243.61:40968 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:29:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40968
+</p>
+</body>
+</html>
+2015-10-08T19:29:38 +0000 : 130.208.243.61:40982 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:29:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:40982
+</p>
+</body>
+</html>
+2015-10-08T19:29:44 +0000 : 127.0.0.1:41047 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:29:44 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:39:44 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:31:17 +0000 : 130.208.243.61:41026 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:31:17 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41026
+</p>
+</body>
+</html>
+2015-10-08T19:31:21 +0000 : 127.0.0.1:41097 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:31:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:41:21 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:31:26 +0000 : 127.0.0.1:41097 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:31:26 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:41097
+</p>
+</body>
+</html>
+2015-10-08T19:31:37 +0000 : 127.0.0.1:41097 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:31:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:41097
+</p>
+</body>
+</html>
+2015-10-08T19:37:28 +0000 : 130.208.243.61:41214 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:37:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41214
+</p>
+</body>
+</html>
+2015-10-08T19:37:33 +0000 : 127.0.0.1:41281 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:37:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:47:33 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:37:43 +0000 : 127.0.0.1:41293 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:37:43 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:47:43 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:38:33 +0000 : 130.208.243.61:41254 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:38:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41254
+</p>
+</body>
+</html>
+2015-10-08T19:38:37 +0000 : 130.208.243.61:41254 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:38:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41254
+</p>
+</body>
+</html>
+2015-10-08T19:38:40 +0000 : 130.208.243.61:41254 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:38:40 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41254
+</p>
+</body>
+</html>
+2015-10-08T19:38:44 +0000 : 130.208.243.61:41254 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:38:44 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41254
+</p>
+</body>
+</html>
+2015-10-08T19:38:49 +0000 : 130.208.243.61:41254 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:38:49 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41254
+</p>
+</body>
+</html>
+2015-10-08T19:38:54 +0000 : 130.208.243.61:41254 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:38:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41254
+</p>
+</body>
+</html>
+2015-10-08T19:39:18 +0000 : 130.208.243.61:41277 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41277
+</p>
+</body>
+</html>
+2015-10-08T19:39:21 +0000 : 130.208.243.61:41277 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41277
+</p>
+</body>
+</html>
+2015-10-08T19:39:25 +0000 : 130.208.243.61:41280 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41280
+</p>
+</body>
+</html>
+2015-10-08T19:39:25 +0000 : 130.208.243.61:41280 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:41280<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T19:39:25 +0000 : 130.208.243.61:41280 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:41280<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T19:39:34 +0000 : 130.208.243.61:41280 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:34 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41280
+</p>
+</body>
+</html>
+2015-10-08T19:39:42 +0000 : 130.208.243.61:41280 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:39:42 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41280
+</p>
+</body>
+</html>
+2015-10-08T19:43:01 +0000 : 127.0.0.1:41402 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:43:01 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:53:01 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:43:05 +0000 : 127.0.0.1:41404 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:43:05 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:53:05 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:43:25 +0000 : 127.0.0.1:41408 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:43:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 19:53:25 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:43:30 +0000 : 130.208.243.61:41350 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:43:30 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41350
+</p>
+</body>
+</html>
+2015-10-08T19:43:38 +0000 : 130.208.243.61:41350 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:43:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41350
+</p>
+</body>
+</html>
+2015-10-08T19:43:47 +0000 : 130.208.243.61:41350 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:43:47 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41350
+</p>
+</body>
+</html>
+2015-10-08T19:59:18 +0000 : 127.0.0.1:41938 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:59:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:09:18 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T19:59:28 +0000 : 127.0.0.1:41944 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 19:59:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:09:28 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:01:36 +0000 : 130.208.243.61:41966 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:01:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41966
+</p>
+</body>
+</html>
+2015-10-08T20:01:41 +0000 : 130.208.243.61:41966 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:01:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:41966
+</p>
+</body>
+</html>
+2015-10-08T20:04:05 +0000 : 130.208.243.61:42039 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:04:05 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42039
+</p>
+</body>
+</html>
+2015-10-08T20:04:10 +0000 : 130.208.243.61:42039 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:04:10 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42039
+</p>
+</body>
+</html>
+2015-10-08T20:04:14 +0000 : 130.208.243.61:42039 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:04:14 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42039
+</p>
+</body>
+</html>
+2015-10-08T20:06:12 +0000 : 130.208.243.61:42102 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:06:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42102
+</p>
+</body>
+</html>
+2015-10-08T20:06:20 +0000 : 130.208.243.61:42102 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:06:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42102
+</p>
+</body>
+</html>
+2015-10-08T20:13:33 +0000 : 130.208.243.61:42376 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:13:33 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42376
+</p>
+</body>
+</html>
+2015-10-08T20:13:38 +0000 : 127.0.0.1:42441 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:13:38 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:23:38 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:13:45 +0000 : 127.0.0.1:42445 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:13:45 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:23:45 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:17:46 +0000 : 130.208.243.61:42519 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:17:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42519
+</p>
+</body>
+</html>
+2015-10-08T20:17:57 +0000 : 130.208.243.61:42519 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:17:57 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42519
+</p>
+</body>
+</html>
+2015-10-08T20:18:13 +0000 : 127.0.0.1:42595 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:18:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:28:13 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:20:39 +0000 : 130.208.243.61:42604 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:20:39 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42604
+</p>
+</body>
+</html>
+2015-10-08T20:20:48 +0000 : 127.0.0.1:42672 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:20:48 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:30:48 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:21:06 +0000 : 127.0.0.1:42681 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:21:06 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:31:06 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:22:40 +0000 : 130.208.243.61:42664 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:22:40 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42664
+</p>
+</body>
+</html>
+2015-10-08T20:23:01 +0000 : 130.208.243.61:42664 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:23:01 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:42664
+</p>
+</body>
+</html>
+2015-10-08T20:23:05 +0000 : 130.208.243.61:42683 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:23:05 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:33:05 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:23:15 +0000 : 130.208.243.61:42683 GET http://localhost/color?bg=skyblue : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:23:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=skyblue; expires=Thu, 08 Oct 2015 20:33:15 GMT
+Content-Length: 79
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:skyblue">
+</body>
+</html>
+2015-10-08T20:23:36 +0000 : 130.208.243.61:42683 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:23:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 80
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:skyblue">
+</body>
+</html>
+2015-10-08T20:23:54 +0000 : 127.0.0.1:42805 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:23:54 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:33:54 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:24:18 +0000 : 127.0.0.1:42805 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:24:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 20:34:18 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T20:24:37 +0000 : 127.0.0.1:42845 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:24:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:34:37 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:45:09 +0000 : 127.0.0.1:43947 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:45:09 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:55:09 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:46:25 +0000 : 127.0.0.1:44006 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:46:25 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 20:56:25 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:46:39 +0000 : 130.208.243.61:43956 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:46:39 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:43956
+</p>
+</body>
+</html>
+2015-10-08T20:47:45 +0000 : 130.208.243.61:44031 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:47:45 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44031
+</p>
+</body>
+</html>
+2015-10-08T20:48:02 +0000 : 130.208.243.61:44031 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:48:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44031
+</p>
+</body>
+</html>
+2015-10-08T20:51:26 +0000 : 127.0.0.1:44188 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:51:26 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:01:26 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T20:51:37 +0000 : 130.208.243.61:44133 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:51:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44133
+</p>
+</body>
+</html>
+2015-10-08T20:57:18 +0000 : 130.208.243.61:44307 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 20:57:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44307
+</p>
+</body>
+</html>
+2015-10-08T21:06:18 +0000 : 130.208.243.61:44497 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:06:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44497
+</p>
+</body>
+</html>
+2015-10-08T21:09:46 +0000 : 127.0.0.1:44621 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:09:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:19:46 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:09:51 +0000 : 130.208.243.61:44559 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:09:51 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44559
+</p>
+</body>
+</html>
+2015-10-08T21:09:57 +0000 : 127.0.0.1:44627 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:09:57 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:19:57 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:10:10 +0000 : 127.0.0.1:44631 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:10:10 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:20:10 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:10:12 +0000 : 127.0.0.1:44633 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:10:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:20:12 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:11:03 +0000 : 130.208.243.61:44591 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:11:03 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44591
+</p>
+</body>
+</html>
+2015-10-08T21:11:09 +0000 : 127.0.0.1:44666 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:11:09 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:21:09 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:11:20 +0000 : 127.0.0.1:44681 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:11:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:21:20 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:11:29 +0000 : 127.0.0.1:44693 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:11:29 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:21:29 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:11:36 +0000 : 127.0.0.1:44702 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:11:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:21:36 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:16:09 +0000 : 130.208.243.61:44820 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:16:09 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44820
+</p>
+</body>
+</html>
+2015-10-08T21:16:13 +0000 : 130.208.243.61:44824 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:16:13 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 21:26:13 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T21:16:36 +0000 : 130.208.243.61:44824 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:16:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44824
+</p>
+</body>
+</html>
+2015-10-08T21:16:51 +0000 : 130.208.243.61:44844 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:16:51 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 21:26:51 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T21:16:59 +0000 : 130.208.243.61:44844 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:16:59 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 21:26:59 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T21:17:15 +0000 : 130.208.243.61:44861 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:17:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44861
+</p>
+</body>
+</html>
+2015-10-08T21:17:15 +0000 : 130.208.243.61:44861 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:17:15 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:44861<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:17:36 +0000 : 130.208.243.61:44869 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:17:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 21:27:36 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T21:17:40 +0000 : 130.208.243.61:44872 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:17:40 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:44872
+</p>
+</body>
+</html>
+2015-10-08T21:17:40 +0000 : 130.208.243.61:44872 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:17:40 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:44872<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:17:48 +0000 : 127.0.0.1:44944 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:17:48 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 21:27:48 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:39:36 +0000 : 130.208.243.61:45544 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:39:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:45544
+</p>
+</body>
+</html>
+2015-10-08T21:39:37 +0000 : 130.208.243.61:45544 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:39:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:45544<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:08 +0000 : 130.208.243.61:46001  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:08 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46001<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:27 +0000 : 130.208.243.61:46034 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46034
+</p>
+</body>
+</html>
+2015-10-08T21:52:27 +0000 : 130.208.243.61:46034  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46034<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:27 +0000 : 130.208.243.61:46034  http://localhost : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:27 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 102
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/<br>
+130.208.243.61:46034<br>
+</p>
+</body>
+</html>
+2015-10-08T21:52:56 +0000 : 130.208.243.61:46058 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:56 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46058
+</p>
+</body>
+</html>
+2015-10-08T21:52:56 +0000 : 130.208.243.61:46058 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:56 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46058
+</p>
+</body>
+</html>
+2015-10-08T21:52:56 +0000 : 130.208.243.61:46059 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:56 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46059
+</p>
+</body>
+</html>
+2015-10-08T21:52:56 +0000 : 130.208.243.61:46060 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:52:56 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46060
+</p>
+</body>
+</html>
+2015-10-08T21:54:46 +0000 : 130.208.243.61:46088 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:54:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46088
+</p>
+</body>
+</html>
+2015-10-08T21:54:46 +0000 : 130.208.243.61:46088 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:54:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46088
+</p>
+</body>
+</html>
+2015-10-08T21:54:46 +0000 : 130.208.243.61:46091 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:54:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46091
+</p>
+</body>
+</html>
+2015-10-08T21:54:46 +0000 : 130.208.243.61:46091 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:54:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46091
+</p>
+</body>
+</html>
+2015-10-08T21:55:41 +0000 : 130.208.243.61:46129 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46129
+</p>
+</body>
+</html>
+2015-10-08T21:55:41 +0000 : 130.208.243.61:46129 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:41 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:46129<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:55:47 +0000 : 130.208.243.61:46129 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:47 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46129
+</p>
+</body>
+</html>
+2015-10-08T21:55:48 +0000 : 130.208.243.61:46129 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:48 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:46129<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:55:53 +0000 : 130.208.243.61:46129 GET http://localhost/color?bg=indigo : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=indigo; expires=Thu, 08 Oct 2015 22:05:53 GMT
+Content-Length: 78
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:indigo">
+</body>
+</html>
+2015-10-08T21:55:53 +0000 : 130.208.243.61:46129 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:46129<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:55:58 +0000 : 130.208.243.61:46136 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:55:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46136
+</p>
+</body>
+</html>
+2015-10-08T21:56:16 +0000 : 127.0.0.1:46210 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:16 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 22:06:16 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:56:20 +0000 : 127.0.0.1:46212 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 22:06:20 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:56:35 +0000 : 130.208.243.61:46159 HEAD http://localhost/color?bg=green : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:35 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=green; expires=Thu, 08 Oct 2015 22:06:35 GMT
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:green">
+</body>
+</html>
+2015-10-08T21:56:35 +0000 : 130.208.243.61:46160 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:35 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 98
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:46160
+</p>
+</body>
+</html>
+2015-10-08T21:56:36 +0000 : 130.208.243.61:46160 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:36 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:46160<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T21:56:46 +0000 : 130.208.243.61:46160 GET http://localhost/color?bg=pink : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=pink; expires=Thu, 08 Oct 2015 22:06:46 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-08T21:56:46 +0000 : 130.208.243.61:46160 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 21:56:46 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:46160<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T22:48:02 +0000 : 127.0.0.1:48626 HEAD http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 22:48:02 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:48626
+</p>
+</body>
+</html>
+2015-10-08T22:55:53 +0000 : 127.0.0.1:48916 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 22:55:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:48916
+</p>
+</body>
+</html>
+2015-10-08T23:00:53 +0000 : 127.0.0.1:49432 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:00:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 93
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:49432
+</p>
+</body>
+</html>
+2015-10-08T23:09:39 +0000 : 127.0.0.1:49866 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:09:39 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 161
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:49866
+</p>
+<p>
+User-Agent: curl/7.29.0Accept: */*Host: localhost:35651
+</p>
+</body>
+</html>
+2015-10-08T23:10:31 +0000 : 130.208.243.61:49823 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:10:31 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 493
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:49823
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8Host: localhost:8080User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36Connection: keep-aliveAccept-Language: en-US,en;q=0.8,is;q=0.6Upgrade-Insecure-Requests: 1Accept-Encoding: gzip, deflate, sdchX-Forwarded-For: 12.13.14.15
+</p>
+</body>
+</html>
+2015-10-08T23:10:32 +0000 : 130.208.243.61:49823 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:10:32 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:49823<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:12:20 +0000 : 130.208.243.61:49924 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:12:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 527
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:49924
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Host: localhost:8080
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36
+Connection: keep-alive
+Accept-Language: en-US,en;q=0.8,is;q=0.6
+Upgrade-Insecure-Requests: 1
+Accept-Encoding: gzip, deflate, sdch
+X-Forwarded-For: 12.13.14.15
+Cache-Control: max-age=0
+
+</p>
+</body>
+</html>
+2015-10-08T23:12:20 +0000 : 130.208.243.61:49924 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:12:20 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:49924<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:18:19 +0000 : 127.0.0.1:50208 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:18:19 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 164
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:50208
+</p>
+<p>
+User-Agent: curl/7.29.0
+Accept: */*
+Host: localhost:35651
+
+</p>
+</body>
+</html>
+2015-10-08T23:18:58 +0000 : 127.0.0.1:50223 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:18:58 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 164
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+127.0.0.1:50223
+</p>
+<p>
+User-Agent: curl/7.29.0
+Accept: */*
+Host: localhost:35651
+
+</p>
+</body>
+</html>
+2015-10-08T23:19:23 +0000 : 130.208.243.61:50171 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:19:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 527
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:50171
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Host: localhost:8080
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36
+Connection: keep-alive
+Accept-Language: en-US,en;q=0.8,is;q=0.6
+Upgrade-Insecure-Requests: 1
+Accept-Encoding: gzip, deflate, sdch
+X-Forwarded-For: 12.13.14.15
+Cache-Control: max-age=0
+
+</p>
+</body>
+</html>
+2015-10-08T23:19:23 +0000 : 130.208.243.61:50171 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:19:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50171<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:20:24 +0000 : 130.208.243.61:50187 GET http://localhost/ : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:20:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 554
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:50187
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br>Cache-Control: max-age=0<br>
+</p>
+</body>
+</html>
+2015-10-08T23:20:24 +0000 : 130.208.243.61:50187 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:20:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 126
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50187<br>
+ HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:32:28 +0000 : 130.208.243.61:50548 GET http://localhost/bleh?arg=djfkdj : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:32:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 555
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=djfkdj<br>
+130.208.243.61:50548<br>
+
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> arg=djfkdj<br>
+</p>
+</body>
+</html>
+2015-10-08T23:32:28 +0000 : 130.208.243.61:50548 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:32:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 500
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50548<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/bleh?arg=djfkdj<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:12 +0000 : 130.208.243.61:50762 GET http://localhost/bleh?arg=djfkdj : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 584
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=djfkdj<br>
+130.208.243.61:50762<br>
+
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br>Cache-Control: max-age=0<br> arg=djfkdj<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:12 +0000 : 130.208.243.61:50762 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:12 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 500
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50762<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/bleh?arg=djfkdj<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:19 +0000 : 130.208.243.61:50762 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:19 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 525
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:50762
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:19 +0000 : 130.208.243.61:50762 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:19 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 490
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50762<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:24 +0000 : 130.208.243.61:50762 GET http://localhost/color?bg=blue : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=blue; expires=Thu, 08 Oct 2015 23:48:24 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:blue">
+</body>
+</html>
+2015-10-08T23:38:24 +0000 : 130.208.243.61:50762 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:24 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 521
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50762<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=blue<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color?bg=blue<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:31 +0000 : 130.208.243.61:50762 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:31 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:blue">
+</body>
+</html>
+2015-10-08T23:38:31 +0000 : 130.208.243.61:50762 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:31 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 513
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50762<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=blue<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:38:37 +0000 : 130.208.243.61:50768 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:38:37 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 396
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:50768
+</p>
+<p>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0<br>Connection: keep-alive<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br>Accept-Language: en-US,en;q=0.5<br>Host: localhost:8080<br>Accept-Encoding: gzip, deflate<br>
+</p>
+</body>
+</html>
+2015-10-08T23:39:40 +0000 : 130.208.243.61:50790 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:39:40 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 396
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:50790
+</p>
+<p>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0<br>Connection: keep-alive<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br>Accept-Language: en-US,en;q=0.5<br>Host: localhost:8080<br>Accept-Encoding: gzip, deflate<br>
+</p>
+</body>
+</html>
+2015-10-08T23:39:42 +0000 : 130.208.243.61:50790 GET http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:39:42 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 23:49:42 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T23:39:45 +0000 : 130.208.243.61:50790 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:39:45 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T23:39:53 +0000 : 130.208.243.61:50803 GET http://localhost/bleh?arg=djfkdj : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:39:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 607
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=djfkdj<br>
+130.208.243.61:50803<br>
+
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>Cookie: Color=blue<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br>Cache-Control: max-age=0<br> arg=djfkdj<br>
+</p>
+</body>
+</html>
+2015-10-08T23:39:53 +0000 : 130.208.243.61:50803 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:39:53 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 523
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50803<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=blue<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/bleh?arg=djfkdj<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:40:00 +0000 : 130.208.243.61:50803 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:40:00 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:blue">
+</body>
+</html>
+2015-10-08T23:40:00 +0000 : 130.208.243.61:50803 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:40:00 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 513
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50803<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=blue<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:40:07 +0000 : 130.208.243.61:50808 GET http://localhost/color?bg=lime : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:40:07 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=lime; expires=Thu, 08 Oct 2015 23:50:07 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:lime">
+</body>
+</html>
+2015-10-08T23:40:07 +0000 : 130.208.243.61:50808 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:40:07 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 521
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:50808<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color?bg=lime<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:55:18 +0000 : 130.208.243.61:51239 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:55:18 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 396
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+ http://localhost<br>
+130.208.243.61:51239
+</p>
+<p>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0<br>Connection: keep-alive<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br>Accept-Language: en-US,en;q=0.5<br>Host: localhost:8080<br>Accept-Encoding: gzip, deflate<br>
+</p>
+</body>
+</html>
+2015-10-08T23:55:23 +0000 : 130.208.243.61:51239 GET http://localhost/color?bg=pink : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:55:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=pink; expires=Thu, 08 Oct 2015 24:05:23 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-08T23:55:28 +0000 : 130.208.243.61:51239 GET http://localhost/color : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:55:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 77
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:pink">
+</body>
+</html>
+2015-10-08T23:55:57 +0000 : 127.0.0.1:51325 HEAD http://localhost/color?bg=red : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:55:57 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=red; expires=Thu, 08 Oct 2015 24:05:57 GMT
+Content-Length: 75
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:red">
+</body>
+</html>
+2015-10-08T23:56:21 +0000 : 130.208.243.61:51367 GET http://localhost/color?bg=lime : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:56:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Set-Cookie: Color=lime; expires=Thu, 08 Oct 2015 24:06:21 GMT
+Content-Length: 76
+
+<!DOCTYPE html>
+<html>
+<body style="background-color:lime">
+</body>
+</html>
+2015-10-08T23:56:21 +0000 : 130.208.243.61:51367 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:56:21 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 521
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:51367<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/color?bg=lime<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:56:23 +0000 : 130.208.243.61:51367 GET http://localhost/bleh?arg=djfkdj : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:56:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 607
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=djfkdj<br>
+130.208.243.61:51367<br>
+
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br>Cache-Control: max-age=0<br> arg=djfkdj<br>
+</p>
+</body>
+</html>
+2015-10-08T23:56:23 +0000 : 130.208.243.61:51367 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:56:23 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 523
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:51367<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/bleh?arg=djfkdj<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
+2015-10-08T23:56:28 +0000 : 130.208.243.61:51367 GET http://localhost/bleh?arg=djf : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:56:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 572
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/arg=djf<br>
+130.208.243.61:51367<br>
+
+</p>
+<p>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Upgrade-Insecure-Requests: 1<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> arg=djf<br>
+</p>
+</body>
+</html>
+2015-10-08T23:56:28 +0000 : 130.208.243.61:51367 GET http://localhost/favicon.ico : HTTP/1.1 200 OK
+Date: Thu, 08 Oct 2015 23:56:28 GMT
+Server: ReallyAwesomeServer 2.0
+Content-Type: text/html
+Content-Length: 520
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>
+http://localhost/HTTP/1.1<br>
+130.208.243.61:51367<br>
+
+</p>
+<p>
+Accept: */*<br>Host: localhost:8080<br>Cookie: Color=lime<br>User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36<br>Connection: keep-alive<br>Accept-Language: en-US,en;q=0.8,is;q=0.6<br>Referer: http://localhost:8080/bleh?arg=djf<br>Accept-Encoding: gzip, deflate, sdch<br>X-Forwarded-For: 12.13.14.15<br> HTTP/1.1<br>
+</p>
+</body>
+</html>
