@@ -49,19 +49,19 @@ int sockaddr_in_cmp(const void *addr1, const void *addr2)
 
 int main(int argc, char **argv)
 {
-        int sockfd;
-        struct sockaddr_in server, client;
-        char message[512];
+	int sockfd;
+	struct sockaddr_in server, client;
+	char message[512];
 
-        /* Create and bind a TCP socket */
-        sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        memset(&server, 0, sizeof(server));
-        server.sin_family = AF_INET;
-        /* Network functions need arguments in network byte order instead of
-           host byte order. The macros htonl, htons convert the values, */
-        server.sin_addr.s_addr = htonl(INADDR_ANY);
-        server.sin_port = htons(32000);
-        bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
+	/* Create and bind a TCP socket */
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	memset(&server, 0, sizeof(server));
+	server.sin_family = AF_INET;
+	/* Network functions need arguments in network byte order instead of
+	   host byte order. The macros htonl, htons convert the values, */
+	server.sin_addr.s_addr = htonl(INADDR_ANY);
+	server.sin_port = htons(32000);
+	bind(sockfd, (struct sockaddr *) &server, (socklen_t) sizeof(server));
 
 	/* Before we can accept messages, we have to listen to the port. We allow one
 	 * 1 connection to queue for simplicity.
