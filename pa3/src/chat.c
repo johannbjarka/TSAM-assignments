@@ -262,7 +262,16 @@ int main(int argc, char **argv)
 	 * a server side key data base can be used to authenticate the
 	 * client.
 	 */
+	
+	printf("YOLO \n");
+	int result = SSL_CTX_use_certificate_file(ssl_ctx, "cert.pem", SSL_FILETYPE_PEM);
+	printf("SWAG \n");
+	printf("certificate result %d\n", result);
 
+	SSL_CTX_use_PrivateKey_file(ssl_ctx,"key.pem", SSL_FILETYPE_PEM);
+
+	result = printf("private key result %d\n", result);
+	
 	server_ssl = SSL_new(ssl_ctx);
 
 	/* Create and set up a listening socket. The sockets you
