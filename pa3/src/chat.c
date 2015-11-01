@@ -223,10 +223,13 @@ void readline_callback(char *line) {
 		return;
 	}
 	/* Sent the buffer to the server. */
-	char buffer[256];
+	/*char buffer[256];
 	snprintf(buffer, 255, "Message: %s\n", line);
 	write(STDOUT_FILENO, buffer, strlen(buffer));
-	fsync(STDOUT_FILENO);
+	fsync(STDOUT_FILENO);*/
+	//char *msg = "Message to server";
+	/* Send data to the SSL server */
+	SSL_write(server_ssl, line, strlen(line));
 }
 
 int main(int argc, char **argv) {
@@ -314,43 +317,46 @@ int main(int argc, char **argv) {
 	/* Set up secure connection to the chatd server. */
 
 	/* Read characters from the keyboard while waiting for input. */
-	//prompt = strdup("> ");
-	//rl_callback_handler_install(prompt, (rl_vcpfunc_t*) &readline_callback);
+	prompt = strdup("> ");
+	rl_callback_handler_install(prompt, (rl_vcpfunc_t*) &readline_callback);
 	while(active) {
 		fd_set rfds;
 		struct timeval timeout;
 
 		FD_ZERO(&rfds);
 		FD_SET(STDIN_FILENO, &rfds);
+		FD_SET(server_fd, &rfds);
 		timeout.tv_sec = 5;
 		timeout.tv_usec = 0;
 	
-		int r = select(STDIN_FILENO + 1, &rfds, NULL, NULL, &timeout);
+		int r = select(server_fd + 1, &rfds, NULL, NULL, &timeout);
 		if(r < 0) {
 			if (errno == EINTR) {
-				/* This should either retry the call or
+				/*This should either retry the call or
 				   exit the loop, depending on whether we
-				   received a SIGTERM. */
+				   received a SIGTERM.*/
 				continue;
 			}
-			/* Not interrupted, maybe nothing we can do? */
+			// Not interrupted, maybe nothing we can do? 
 			perror("select()");
 			break;
 		}
 		if(r == 0) {
 			//write(STDOUT_FILENO, "No message?\n", 12);
 			//fsync(STDOUT_FILENO);
-			/* Whenever you print out a message, call this
-			   to reprint the current input line. */
-			//rl_redisplay();
+			/*Whenever you print out a message, call this
+			   to reprint the current input line.*/ 
+			rl_redisplay();
+			//char *msg = "Message to server";
+			/* Send data to the SSL server */
+			//err = SSL_write(server_ssl, msg, strlen(msg));
 			continue;
 		}
 		if(FD_ISSET(STDIN_FILENO, &rfds)) {
+			//printf("YOLO \n");
 			rl_callback_read_char();
+			continue;
 		}
-		char *msg = "Message to server";
-		/* Send data to the SSL server */
-		err = SSL_write(server_ssl, msg, strlen(msg));
 
 		RETURN_SSL(err);
 
