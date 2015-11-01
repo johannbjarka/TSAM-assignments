@@ -67,14 +67,13 @@ void closeCon(int fd, fd_set* master) {
 }
 
 
-
 int main(int argc, char **argv) {
 	int i, listener, newfd, nbytes, err, yes = 1;
 	fd_set master, read_fds;
 	struct sockaddr_in serveraddr, clientaddr;
 	char message[512];
 	
-	FD_ZERO(&master);
+
 	FD_ZERO(&read_fds);
 	
 	if(argc < 2) {
@@ -96,6 +95,8 @@ int main(int argc, char **argv) {
 	printf("certificate result %d\n", result);
 
 	SSL_CTX_use_PrivateKey_file(ssl_ctx,"keyd.pem", SSL_FILETYPE_PEM);
+
+	result = printf("private key result %d\n", result);
 
 	/* Check if the server certificate and private-key matches */
     if(!SSL_CTX_check_private_key(ssl_ctx)) {
@@ -197,7 +198,7 @@ int main(int argc, char **argv) {
 						/* Receive data from the SSL client */
 						err = SSL_read(client_ssl, message, sizeof(message) - 1);
 						RETURN_SSL(err);
-						
+
 						message[err] = '\0';
 						printf ("Received %d chars:'%s'\n", err, message);
 						
@@ -223,6 +224,27 @@ int main(int argc, char **argv) {
 
 									// Send the message back. 
 
+			//---------
+						err = SSL_write(client_ssl, "This message is from the SSL server", 
+										strlen("This message is from the SSL server"));
+						RETURN_SSL(err);
+						
+						/*if((nbytes = recv(i, message, sizeof(message), 0)) <= 0) {
+							// Got error or connection closed by client
+							if(nbytes < 0) {
+								perror("recv()");
+							}							
+							fdmax -= 1;
+							shutdown(i, SHUT_RDWR);
+							close(i);
+							FD_CLR(i, &master);
+							gchar *key1 = g_strdup_printf("%i", i);
+							g_hash_table_remove(connections, key1);
+						}
+						else {
+							GString *messageCopy = g_string_new(message);
+							printf("%s\n", message);
+				//430b77850a4c5ef1fd14c506e372d8574f02b88e
 							if(FD_ISSET(i, &master)) {
 								if(i != listener) {
 									time_t now;
@@ -235,7 +257,7 @@ int main(int argc, char **argv) {
 									
 									// Send the message back.
 									write(i, message, (size_t) nbytes);
-								
+
 							}
 						}*/
 					}
@@ -271,6 +293,7 @@ int main(int argc, char **argv) {
 					err = SSL_shutdown(client_ssl);
 					RETURN_SSL(err);
 					/* Terminate communication on a socket */
+
 					err = close(GPOINTER_TO_INT(key));
 					RETURN_ERR(err, "close");
 					/* Free the SSL structure */

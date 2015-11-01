@@ -254,10 +254,52 @@ int main(int argc, char **argv)
 	 */
 	
 	int result = SSL_CTX_use_certificate_file(ssl_ctx, "cert.pem", SSL_FILETYPE_PEM);
+
 	SSL_CTX_use_PrivateKey_file(ssl_ctx, "key.pem", SSL_FILETYPE_PEM);
-	
+
 	printf("certificate result %d\n", result);
 
+	/* Check if the client certificate and private-key matches */
+	if (!SSL_CTX_check_private_key(ssl_ctx)) {
+		fprintf(stderr,"Private key does not match the certificate public key\n");
+		exit(1);
+	}
+	
+	/* Load the RSA CA certificate into the SSL_CTX structure
+     * This will allow this client to verify the server's     
+     * certificate.                                           
+	 */
+    if (!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
+        ERR_print_errors_fp(stderr);
+        exit(1);
+    }
+	
+	/* Set flag in context to require peer (server) certificate verification */
+
+    SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+
+    SSL_CTX_set_verify_depth(ssl_ctx, 1);
+	
+    /* Set up a TCP socket */
+	
+	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    RETURN_ERR(server_fd, "socket");
+
+    memset(&server_addr, '\0', sizeof(server_addr));
+    server_addr.sin_family      = AF_INET;
+	server_addr.sin_addr.s_addr = inet_addr(argv[1]);   /* Server IP */
+	server_addr.sin_port        = htons(argv[2]);       /* Server Port number */
+   
+
+    /* Establish a TCP/IP connection to the SSL client */
+
+    err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
+
+    RETURN_ERR(err, "connect");
+
+    /* An SSL structure is created */
+	
 	/* Check if the client certificate and private-key matches */
 	if (!SSL_CTX_check_private_key(ssl_ctx)) {
 		fprintf(stderr,"Private key does not match the certificate public key\n");
@@ -360,10 +402,11 @@ int main(int argc, char **argv)
 
 		RETURN_SSL(err);
 		buf[err] = '\0';
-		printf("Received %d chars:'%s'\n", err, buf);
+
+		printf ("Received %d chars:'%s'\n", err, buf);
 	}
-	
     /* Shut down the client side of the SSL connection */
+
     err = SSL_shutdown(server_ssl);
     RETURN_SSL(err);
 
