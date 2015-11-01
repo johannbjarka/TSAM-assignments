@@ -28,6 +28,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#define RETURN_NULL(x) if ((x)==NULL) exit (1)
+#define RETURN_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
+#define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
 
 /* This variable is 1 while the client is active and becomes 0 after
    a quit command to terminate the client and to clean up the 
@@ -231,6 +234,11 @@ void readline_callback(char *line) {
 
 int main(int argc, char **argv)
 {
+	int err;
+	char buf[4096];
+	char *str;
+	struct sockaddr_in server_addr;
+	
 	/* Initialize OpenSSL */
 	SSL_library_init();
 	SSL_load_error_strings();
@@ -246,22 +254,65 @@ int main(int argc, char **argv)
 	 */
 	
 	int result = SSL_CTX_use_certificate_file(ssl_ctx, "cert.pem", SSL_FILETYPE_PEM);
-
-	printf("certificate result %d\n", result);
-	//SSL_CTX_use_PrivateKey_file(ssl_ctx, "key.pem", SSL_FILETYPE_PEM);
+	SSL_CTX_use_PrivateKey_file(ssl_ctx, "key.pem", SSL_FILETYPE_PEM);
 	
-	//server_ssl = SSL_new(ssl_ctx);
+	printf("certificate result %d\n", result);
 
-	/* Create and set up a listening socket. The sockets you
-	 * create here can be used in select calls, so do not forget
-	 * them.
+	/* Check if the client certificate and private-key matches */
+	if (!SSL_CTX_check_private_key(ssl_ctx)) {
+		fprintf(stderr,"Private key does not match the certificate public key\n");
+		exit(1);
+	}
+	
+	/* Load the RSA CA certificate into the SSL_CTX structure
+     * This will allow this client to verify the server's     
+     * certificate.                                           
 	 */
+    if (!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
+        ERR_print_errors_fp(stderr);
+        exit(1);
+    }
+	
+	/* Set flag in context to require peer (server) certificate verification */
+
+    SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+
+    SSL_CTX_set_verify_depth(ssl_ctx, 1);
+	
+    /* Set up a TCP socket */
+	
+	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    RETURN_ERR(server_fd, "socket");
+
+    memset(&server_addr, '\0', sizeof(server_addr));
+    server_addr.sin_family      = AF_INET;
+	server_addr.sin_addr.s_addr = inet_addr(argv[1]);   /* Server IP */
+	server_addr.sin_port        = htons(argv[2]);       /* Server Port number */
+   
+
+    /* Establish a TCP/IP connection to the SSL client */
+
+    err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
+
+    RETURN_ERR(err, "connect");
+
+    /* An SSL structure is created */
+	
+	server_ssl = SSL_new(ssl_ctx);
+
+	RETURN_NULL(server_ssl);
 
 	/* Use the socket for the SSL connection. */
-	//SSL_set_fd(server_ssl, server_fd);
+	SSL_set_fd(server_ssl, server_fd);
+	
+	/* Perform SSL Handshake on the SSL client */
+    err = SSL_connect(server_ssl);
+	
+	RETURN_SSL(err);
 
-	/* Now we can create BIOs and use them instead of the socket.
-	 * The BIO is responsible for maintaining the state of the
+	/* Now we can create SSL and use them instead of the socket.
+	 * The SSL is responsible for maintaining the state of the
 	 * encrypted connection and the actual encryption. Reads and
 	 * writes to sock_fd will insert unencrypted data into the
 	 * stream, which even may crash the server. */
@@ -305,7 +356,25 @@ int main(int argc, char **argv)
 		}
 
 		/* Handle messages from the server here! */
+		err = SSL_read(server_ssl, buf, sizeof(buf)-1);
+
+		RETURN_SSL(err);
+		buf[err] = '\0';
+		printf("Received %d chars:'%s'\n", err, buf);
 	}
-	/* replace by code to shutdown the connection and exit
-	   the program. */
+	
+    /* Shut down the client side of the SSL connection */
+    err = SSL_shutdown(server_ssl);
+    RETURN_SSL(err);
+
+    /* Terminate communication on a socket */
+    err = close(server_fd);
+
+    RETURN_ERR(err, "close");
+
+    /* Free the SSL structure */
+    SSL_free(server_ssl);
+
+    /* Free the SSL_CTX structure */
+    SSL_CTX_free(ssl_ctx);
 }
