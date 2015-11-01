@@ -270,15 +270,15 @@ int main(int argc, char **argv) {
      * This will allow this client to verify the server's     
      * certificate.                                           
 	 */
-    if (!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
+    /*if (!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
         ERR_print_errors_fp(stderr);
         exit(1);
-    }
+    }*/
 	
 	/* Set flag in context to require peer (server) certificate verification */
-    SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+    //SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
-    SSL_CTX_set_verify_depth(ssl_ctx, 1);
+    //SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
     /* Set up a TCP socket */	
 	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); /* Check if correct file descriptor*/
@@ -299,14 +299,12 @@ int main(int argc, char **argv) {
 	RETURN_NULL(server_ssl);
 	
 	/* Use the socket for the SSL connection. */
-	int derp = SSL_set_fd(server_ssl, server_fd);
+	SSL_set_fd(server_ssl, server_fd);
 	
 	/* Perform SSL Handshake on the SSL client */
     err = SSL_connect(server_ssl);
-	
-	printf("shite %d\n", err);
 	RETURN_SSL(err);
-
+	
 	/* Now we can create SSL and use them instead of the socket.
 	 * The SSL is responsible for maintaining the state of the
 	 * encrypted connection and the actual encryption. Reads and
