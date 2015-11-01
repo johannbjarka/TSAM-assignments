@@ -315,8 +315,8 @@ int main(int argc, char **argv) {
 	/* Set up secure connection to the chatd server. */
 
 	/* Read characters from the keyboard while waiting for input. */
-	prompt = strdup("> ");
-	rl_callback_handler_install(prompt, (rl_vcpfunc_t*) &readline_callback);
+	//prompt = strdup("> ");
+	//rl_callback_handler_install(prompt, (rl_vcpfunc_t*) &readline_callback);
 	while(active) {
 		fd_set rfds;
 		struct timeval timeout;
@@ -343,12 +343,17 @@ int main(int argc, char **argv) {
 			//fsync(STDOUT_FILENO);
 			/* Whenever you print out a message, call this
 			   to reprint the current input line. */
-			rl_redisplay();
+			//rl_redisplay();
 			continue;
 		}
 		if(FD_ISSET(STDIN_FILENO, &rfds)) {
 			rl_callback_read_char();
 		}
+		char *msg = "Message to server";
+		/* Send data to the SSL server */
+		err = SSL_write(server_ssl, msg, strlen(msg));
+
+		RETURN_SSL(err);
 
 		/* Handle messages from the server here! */
 		err = SSL_read(server_ssl, buf, sizeof(buf)-1);
