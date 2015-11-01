@@ -1,9 +1,6 @@
-/* A UDP echo server with timeouts.
- *
- * Note that you will not need to use select and the timeout for a
- * tftp server. However, select is also useful if you want to receive
- * from multiple sockets at the same time. Read the documentation for
- * select on how to do this (Hint: Iterate with FD_ISSET()).
+/* 
+ * server pass phrase: golf
+ * client pass phrase: arse
  */
 
 #include <assert.h>
@@ -239,6 +236,11 @@ int main(int argc, char **argv)
 	char *str;
 	struct sockaddr_in server_addr;
 	
+	if(argc < 3) {
+		printf("You must supply an address and port number to run the client");
+		exit(0);
+	}
+	
 	/* Initialize OpenSSL */
 	SSL_library_init();
 	SSL_load_error_strings();
@@ -282,7 +284,7 @@ int main(int argc, char **argv)
 	
     /* Set up a TCP socket */
 	
-	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); /* Check if correct file descriptor*/
 
     RETURN_ERR(server_fd, "socket");
 
@@ -294,7 +296,7 @@ int main(int argc, char **argv)
 
     /* Establish a TCP/IP connection to the SSL client */
 
-    err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
+    err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr)); /* This results in error */
 
     RETURN_ERR(err, "connect");
 
