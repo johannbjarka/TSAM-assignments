@@ -65,7 +65,6 @@ void closeCon(int fd, fd_set* master) {
 	FD_CLR(fd, master);
 }
 
-
 int main(int argc, char **argv) {
 	int i, listener, newfd, nbytes, err, yes = 1;
 	fd_set master, read_fds;
@@ -95,8 +94,6 @@ int main(int argc, char **argv) {
 	printf("certificate result %d\n", result);
 
 	SSL_CTX_use_PrivateKey_file(ssl_ctx,"keyd.pem", SSL_FILETYPE_PEM);
-
-	result = printf("private key result %d\n", result);
 
 	/* Check if the server certificate and private-key matches */
     if(!SSL_CTX_check_private_key(ssl_ctx)) {
@@ -154,7 +151,6 @@ int main(int argc, char **argv) {
 
 	FD_SET(listener, &master);
 	fdmax = listener;
-	printf("%d\n", listener);
 	for (;;) {
 		read_fds = master;
 		struct timeval tv;
@@ -171,7 +167,6 @@ int main(int argc, char **argv) {
 			exit(1);
 		} else if(retval > 0) {
 			for(i = 0; i <= fdmax; i++) {
-			
 				if(FD_ISSET(i, &read_fds)) {
 					/* A file descriptor is active */
 					if(i == listener) {
@@ -181,7 +176,8 @@ int main(int argc, char **argv) {
 							perror("Server-accept()");
 						}
 						else {
-							printf("%s %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+							printf("%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+
 							FD_SET(newfd, &master); /* Add to master set */
 							if(newfd > fdmax) { /* Keep track of the maximum */
 								fdmax = newfd;
@@ -198,15 +194,20 @@ int main(int argc, char **argv) {
 							/* Perform SSL Handshake on the SSL server */
 							err = SSL_accept(client_ssl);
 							RETURN_SSL(err);
+							printf("asdf\n");
 						}
 					}
 					else {						
 						/* Receive data from the SSL client */
 						err = SSL_read(client_ssl, message, sizeof(message) - 1);
 						RETURN_SSL(err);
-
+						
+						if(err == 0) {
+							continue;
+						}
+						
 						message[err] = '\0';
-						printf ("Received %d chars:'%s'\n", err, message);
+						printf("Received %d chars:'%s'\n", err, message);
 						
 						switch(message[0]) {
 						case WHO:
@@ -255,12 +256,12 @@ int main(int argc, char **argv) {
 
 									// Send the message back. 
 
-			//---------
+				//---------
 						err = SSL_write(client_ssl, "This message is from the SSL server", 
 										strlen("This message is from the SSL server"));
 						RETURN_SSL(err);
 						
-						/*if((nbytes = recv(i, message, sizeof(message), 0)) <= 0) {
+						if((nbytes = recv(i, message, sizeof(message), 0)) <= 0) {
 							// Got error or connection closed by client
 							if(nbytes < 0) {
 								perror("recv()");
@@ -306,7 +307,7 @@ int main(int argc, char **argv) {
 							RETURN_ERR(err, "close");
 							/* Free the SSL structure */
 							SSL_free(client_ssl);
-
+							printf("%s : %s:%d disconnected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 							closeCon(i, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
 						}
@@ -329,6 +330,7 @@ int main(int argc, char **argv) {
 					RETURN_ERR(err, "close");
 					/* Free the SSL structure */
 					SSL_free(client_ssl);
+					printf("%s : %d:%d disconnected\n", timeF, userdata->addr, userdata->port);
 					
 					closeCon(GPOINTER_TO_INT(key), &master);
 					g_hash_table_iter_remove(&iter);

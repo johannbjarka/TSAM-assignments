@@ -88,7 +88,6 @@ void getpasswd(const char *prompt, char *passwd, size_t size) {
    select with this error. */
 void sigint_handler(int signum) {
 	active = 0;
-	
 	write(STDOUT_FILENO, "Terminated.\n", 12);
 	fsync(STDOUT_FILENO);
 }
