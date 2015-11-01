@@ -59,7 +59,6 @@ int sockaddr_in_cmp(const void *addr1, const void *addr2) {
 	return 0;
 }
 
-
 void closeCon(int fd, fd_set* master) {
 	printf("disconnected\n");
 	fdmax--;
@@ -72,8 +71,9 @@ int main(int argc, char **argv) {
 	fd_set master, read_fds;
 	struct sockaddr_in serveraddr, clientaddr;
 	char message[512];
+	time_t now;
+	char timeF[sizeof "2011-10-08T07:07:09Z"];
 	
-
 	FD_ZERO(&read_fds);
 	
 	if(argc < 2) {
@@ -143,21 +143,27 @@ int main(int argc, char **argv) {
 	}
 
 	/* Create dictionary to keep of track of the time passed for each connection */
+	GHashTable *authTable = g_hash_table_new(g_str_hash, g_str_equal);
+	g_hash_table_insert(authTable, "siggi", "asdf1");
+	g_hash_table_insert(authTable, "derp", "asdf2");
+	g_hash_table_insert(authTable, "joi", "asdf3");
+	
 	GHashTable *connections = g_hash_table_new(g_direct_hash, g_direct_equal);
 	//GTree *nonUsers = g_tree_new(sockaddr_in_cmp);
 	//GTree *authUsers = g_tree_new(sockaddr_in_cmp);
 
 	FD_SET(listener, &master);
 	fdmax = listener;
-
+	printf("%d\n", listener);
 	for (;;) {
 		read_fds = master;
 		struct timeval tv;
 		
-		/* Set tv to 1 second to check rapidly for client time outs */
+		time(&now);
+		strftime(timeF, sizeof timeF, "%FT%TZ", gmtime(&now));
+		
 		tv.tv_sec = 1;
 		tv.tv_usec = 0;
-
 		int retval = select(fdmax+1, &read_fds, NULL, NULL, &tv);
 		
 		if(retval == -1) {
@@ -169,13 +175,13 @@ int main(int argc, char **argv) {
 				if(FD_ISSET(i, &read_fds)) {
 					/* A file descriptor is active */
 					if(i == listener) {
-						printf("Connection received\n");
 						/* Handle new connections */
 						socklen_t addrlen = (socklen_t) sizeof(clientaddr);
 						if((newfd = accept(listener, (struct sockaddr *)&clientaddr, &addrlen)) == -1) {
 							perror("Server-accept()");
 						}
 						else {
+							printf("%s %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr.s_addr), clientaddr.sin_port);
 							FD_SET(newfd, &master); /* Add to master set */
 							if(newfd > fdmax) { /* Keep track of the maximum */
 								fdmax = newfd;
@@ -201,6 +207,31 @@ int main(int argc, char **argv) {
 
 						message[err] = '\0';
 						printf ("Received %d chars:'%s'\n", err, message);
+						
+						switch(message[0]) {
+						case WHO:
+							printf("who!\n");
+							break;
+						case SAY:
+							printf("say!\n");
+							break;
+						case USER:
+							printf("user!\n");
+							break;
+						case LIST:
+							printf("list!\n");
+							//g_hash_table_iter_init;
+							break;
+						case JOIN:
+							printf("join!\n");
+							break;
+						case GAME:
+							printf("game!\n");
+							break;
+						case ROLL:
+							printf("roll!\n");
+							break;
+						}
 						
 						/* Send data to the SSL client */
 						err = SSL_write(client_ssl, "This message is from the SSL server", strlen("This message is from the SSL server"));

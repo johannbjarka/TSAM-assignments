@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <signal.h>
+#include <arpa/inet.h>
 
 /* Secure socket layer headers */
 #include <openssl/ssl.h>
@@ -229,8 +230,7 @@ void readline_callback(char *line) {
 	fsync(STDOUT_FILENO);
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	int err;
 	char buf[4096];
 	char *str;
@@ -277,82 +277,35 @@ int main(int argc, char **argv)
     }
 	
 	/* Set flag in context to require peer (server) certificate verification */
-
     SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
     SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
-    /* Set up a TCP socket */
-	
+    /* Set up a TCP socket */	
 	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); /* Check if correct file descriptor*/
-
     RETURN_ERR(server_fd, "socket");
-
-    memset(&server_addr, '\0', sizeof(server_addr));
+	
+	memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family      = AF_INET;
 	server_addr.sin_addr.s_addr = inet_addr(argv[1]);   /* Server IP */
-	server_addr.sin_port        = htons(argv[2]);       /* Server Port number */
-   
-
+	server_addr.sin_port        = htons(atoi(argv[2]));       /* Server Port number */
+	
     /* Establish a TCP/IP connection to the SSL client */
 
-    err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr)); /* This results in error */
-
-    RETURN_ERR(err, "connect");
-
+	err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
+	RETURN_ERR(err, "connect");
+	
     /* An SSL structure is created */
-	
-	/* Check if the client certificate and private-key matches */
-	if (!SSL_CTX_check_private_key(ssl_ctx)) {
-		fprintf(stderr,"Private key does not match the certificate public key\n");
-		exit(1);
-	}
-	
-	/* Load the RSA CA certificate into the SSL_CTX structure
-     * This will allow this client to verify the server's     
-     * certificate.                                           
-	 */
-    if (!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
-        ERR_print_errors_fp(stderr);
-        exit(1);
-    }
-	
-	/* Set flag in context to require peer (server) certificate verification */
-
-    SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
-
-    SSL_CTX_set_verify_depth(ssl_ctx, 1);
-	
-    /* Set up a TCP socket */
-	
-	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-    RETURN_ERR(server_fd, "socket");
-
-    memset(&server_addr, '\0', sizeof(server_addr));
-    server_addr.sin_family      = AF_INET;
-	server_addr.sin_addr.s_addr = inet_addr(argv[1]);   /* Server IP */
-	server_addr.sin_port        = htons(argv[2]);       /* Server Port number */
-   
-
-    /* Establish a TCP/IP connection to the SSL client */
-
-    err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
-
-    RETURN_ERR(err, "connect");
-
-    /* An SSL structure is created */
-	
 	server_ssl = SSL_new(ssl_ctx);
-
 	RETURN_NULL(server_ssl);
-
+	
 	/* Use the socket for the SSL connection. */
-	SSL_set_fd(server_ssl, server_fd);
+	int derp = SSL_set_fd(server_ssl, server_fd);
 	
 	/* Perform SSL Handshake on the SSL client */
     err = SSL_connect(server_ssl);
 	
+	printf("shite %d\n", err);
 	RETURN_SSL(err);
 
 	/* Now we can create SSL and use them instead of the socket.
