@@ -105,16 +105,16 @@ int main(int argc, char **argv) {
     }
 	
 	/* Load the RSA CA certificate into the SSL_CTX structure */
-	if(!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
+	/*if(!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
 		ERR_print_errors_fp(stderr);
 		exit(1);
-	}
+	}*/
 
 	/* Set to require peer (client) certificate verification */
-	SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+	//SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
 	/* Set the verification depth to 1 */
-	SSL_CTX_set_verify_depth(ssl_ctx, 1);
+	//SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
 	/* Create and bind a TCP socket */
 	if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -181,13 +181,13 @@ int main(int argc, char **argv) {
 							perror("Server-accept()");
 						}
 						else {
-							printf("%s %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr.s_addr), clientaddr.sin_port);
+							printf("%s %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 							FD_SET(newfd, &master); /* Add to master set */
 							if(newfd > fdmax) { /* Keep track of the maximum */
 								fdmax = newfd;
 							}
 							/* TCP connection is ready. */
-							/* A SSL structure is created */
+							/* An SSL structure is created */
 							client_ssl = SSL_new(ssl_ctx);
 
 							RETURN_NULL(client_ssl);
