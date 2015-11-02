@@ -273,15 +273,15 @@ int main(int argc, char **argv) {
      * This will allow this client to verify the server's     
      * certificate.                                           
 	 */
-    /*if (!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
+    if (!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
         ERR_print_errors_fp(stderr);
         exit(1);
-    }*/
+    }
 	
 	/* Set flag in context to require peer (server) certificate verification */
-    //SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+    SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
-    //SSL_CTX_set_verify_depth(ssl_ctx, 1);
+    SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
     /* Set up a TCP socket */	
 	server_fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP); /* Check if correct file descriptor*/
