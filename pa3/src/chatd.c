@@ -23,9 +23,8 @@
 
 const int MAX_CONN = 10;
 static SSL *client_ssl;
-static int fdmax;
 
-enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
+enum ops { WHO, SAY, USER, LIST, JOIN, GAME, ROLL };
 
 struct user {
 	unsigned long addr;
@@ -35,6 +34,7 @@ struct user {
 	time_t time;
 };
 
+static int fdmax;
 
 /* This can be used to build instances of GTree that index on
    the address of a connection. */
@@ -60,19 +60,13 @@ int sockaddr_in_cmp(const void *addr1, const void *addr2) {
 }
 
 void closeCon(int fd, fd_set* master) {
-	// Shut down this side (server) of the connection. 
-	// Terminate communication on a socket 
-	// Free the SSL structure 
-	RETURN_SSL(SSL_shutdown(client_ssl));
-	RETURN_ERR(close(fd), "close");
-	SSL_free(client_ssl);
-	
+	printf("disconnected\n");
 	fdmax--;
 	FD_CLR(fd, master);
 }
 
 int main(int argc, char **argv) {
-	int i, listener, newfd, err, yes = 1;
+	int i, listener, newfd, nbytes, err, yes = 1;
 	fd_set master, read_fds;
 	struct sockaddr_in serveraddr, clientaddr;
 	char message[512];
@@ -107,19 +101,19 @@ int main(int argc, char **argv) {
         exit(1);
     }
 	
-	/* Load the RSA CA certificate into the SSL_CTX structure 
-	//if(!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
+	/* Load the RSA CA certificate into the SSL_CTX structure */
+	if(!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
 		ERR_print_errors_fp(stderr);
 		exit(1);
 	}
 
-	// Set to require peer (client) certificate verification 
-	//SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+	/* Set to require peer (client) certificate verification */
+	SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
-	// Set the verification depth to 1 
-	//SSL_CTX_set_verify_depth(ssl_ctx, 1);
+	/* Set the verification depth to 1 */
+	SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
-	// Create and bind a TCP socket*/
+	/* Create and bind a TCP socket */
 	if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		exit(1);
 	}
@@ -164,7 +158,7 @@ int main(int argc, char **argv) {
 		time(&now);
 		strftime(timeF, sizeof timeF, "%FT%TZ", gmtime(&now));
 		
-		tv.tv_sec = 3;
+		tv.tv_sec = 1;
 		tv.tv_usec = 0;
 		int retval = select(fdmax+1, &read_fds, NULL, NULL, &tv);
 		
@@ -191,117 +185,131 @@ int main(int argc, char **argv) {
 							/* TCP connection is ready. */
 							/* An SSL structure is created */
 							client_ssl = SSL_new(ssl_ctx);
+
 							RETURN_NULL(client_ssl);
+							
 							/* Assign the socket into the SSL structure (SSL and socket without BIO) */
 							SSL_set_fd(client_ssl, newfd);
-							
+
 							/* Perform SSL Handshake on the SSL server */
 							err = SSL_accept(client_ssl);
 							RETURN_SSL(err);
-							
-							struct user *newuser = g_new0(struct user, 1);
-							newuser->time = time(NULL);
-							newuser->addr = clientaddr.sin_addr.s_addr;
-							newuser->port = clientaddr.sin_port;
-							g_hash_table_replace(connections, GINT_TO_POINTER(newfd), newuser);
+							printf("asdf\n");
 						}
 					}
 					else {						
 						/* Receive data from the SSL client */
-						int msglen = SSL_read(client_ssl, message, sizeof(message) - 1);
-						RETURN_SSL(msglen);
-						if(msglen == 0) continue;
-						message[msglen] = '\0';
+						err = SSL_read(client_ssl, message, sizeof(message) - 1);
+						RETURN_SSL(err);
 						
-						gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
-						if(ptr == NULL) continue;
+						if(err == 0) {
+							continue;
+						}
 						
-						struct user *usr = (struct user*) ptr;
-						usr->time = time(NULL);
+						message[err] = '\0';
+						printf("Received %d chars:'%s'\n", err, message);
 						
-						char buff[2048];
-						memset(buff, 0, sizeof(buff));
-						
-						GHashTableIter iter;
-						gpointer key, value;
 						switch(message[0]) {
-						case SPEAK:
-							g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								struct user *some = (struct user*) value;
-								if(usr->room == some->room) {
-									//todo: WRITE MSG to all in room
-								}
-							}
-							strcat(buff, "spoken!\n");
-							break;
 						case WHO:
-							g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								struct user *sss = (struct user*) value;
-								printf("1\n");
-								//strcat(buff, sss->addr);
-								strcat(buff, ":");
-								printf("2\n");
-								//strcat(buff, sss->port);
-								strcat(buff, " ");
-								printf("3\n");
-								strcat(buff, (strlen(sss->name) > 0 ? sss->name : "N/A"));
-								strcat(buff, " | ");
-								printf("4\n");
-								strcat(buff, (strlen(sss->room) > 0? sss->room : "N/A"));
-								strcat(buff, "\n");
-								printf("5\n");
-							}
-							//todo: WRITE TO CLIENT HERE!
+							printf("who!\n");
 							break;
 						case SAY:
-							strcat(buff, "say!\n");
+							printf("say!\n");
 							break;
 						case USER:
-							strcat(buff, "user!\n");
+							printf("user!\n");
 							break;
 						case LIST:
-							//g_hash_table_new();
-							
-							//GHashTableIter iter;
-							//gpointer key, value;
-							/*g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								struct user *userdata = (struct user*) value;
-							}*/
-							strcat(buff, "list!\n");
+							printf("list!\n");
+							//g_hash_table_iter_init;
 							break;
 						case JOIN:
-							strcat(buff, "join!\n");
+							printf("join!\n");
 							break;
 						case GAME:
-							strcat(buff, "game!\n");
+							printf("game!\n");
 							break;
 						case ROLL:
-							strcat(buff, "roll!\n");
-							break;
-						case BYE:
-							strcat(buff, "bye!\n");
+							printf("roll!\n");
 							break;
 						}
 						
 						/* Send data to the SSL client */
-						RETURN_SSL(SSL_write(client_ssl, buff, strlen(buff)));
+						err = SSL_write(client_ssl, "This message is from the SSL server", strlen("This message is from the SSL server"));
+						RETURN_SSL(err);
+						
+						/*
+						closeCon(i, &master);
+						g_hash_table_remove(connections, GINT_TO_POINTER(i));
+						}
+						else {
+							//GString *messageCopy = g_string_new(message);
+							if(FD_ISSET(i, &master)) {
+								if(i != listener) {
+									struct user *newuser = g_new0(struct user, 1);
+									newuser->time = time(NULL);
+									newuser->addr = clientaddr.sin_addr.s_addr;
+									newuser->port = clientaddr.sin_port;
+									g_hash_table_replace(connections, GINT_TO_POINTER(i), newuser);
+
+									// TODO parse input, write appropriate functions for the input possibilities
+
+									// Send the message back. 
+
+				//---------
+						err = SSL_write(client_ssl, "This message is from the SSL server", 
+										strlen("This message is from the SSL server"));
+						RETURN_SSL(err);
+						
+						if((nbytes = recv(i, message, sizeof(message), 0)) <= 0) {
+							// Got error or connection closed by client
+							if(nbytes < 0) {
+								perror("recv()");
+							}							
+							fdmax -= 1;
+							shutdown(i, SHUT_RDWR);
+							close(i);
+							FD_CLR(i, &master);
+							gchar *key1 = g_strdup_printf("%i", i);
+							g_hash_table_remove(connections, key1);
+						}
+						else {
+							GString *messageCopy = g_string_new(message);
+							printf("%s\n", message);
+				//430b77850a4c5ef1fd14c506e372d8574f02b88e
+							if(FD_ISSET(i, &master)) {
+								if(i != listener) {
+									time_t now;
+									now = time(NULL);
+									gchar *theKey = g_strdup_printf("%i", i);
+									g_hash_table_replace(connections, theKey, (gpointer)now);
+										
+									
+									// TODO parse input, write appropriate functions for the input possibilities
+									
+									// Send the message back.
+									write(i, message, (size_t) nbytes);
+
+							}
+						}*/
 					}
 				}
 				else {
 					gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
 					if(ptr != NULL) {
 						struct user *userdata = (struct user*) ptr;
-						if(difftime(time(NULL), userdata->time) >= 15.0) {
-							// Shut down this side (server) of the connection. 
-							// Terminate communication on a socket
-							// Free the SSL structure 
-							
+						if(difftime(time(NULL), userdata->time) >= 5.0) {
+							/* Shut down this side (server) of the connection. */
+							err = SSL_shutdown(client_ssl);
+							RETURN_SSL(err);
+							/* Terminate communication on a socket */
+							err = close(i);
+							RETURN_ERR(err, "close");
+							/* Free the SSL structure */
+							SSL_free(client_ssl);
+							printf("%s : %s:%d disconnected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 							closeCon(i, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
-							printf("%s : %s:%d disconnected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 						}
 					}
 				}
@@ -312,12 +320,20 @@ int main(int argc, char **argv) {
 			g_hash_table_iter_init(&iter, connections);
 			while(g_hash_table_iter_next(&iter, &key, &value)) {
 				struct user *userdata = (struct user*) value;
-				if(difftime(time(NULL), userdata->time) >= 15.0) {
-					i = GPOINTER_TO_INT(key);
-					
-					closeCon(i, &master);
-					g_hash_table_iter_remove(&iter);
+				if(difftime(time(NULL), userdata->time) >= 5.0) {
+					/* Shut down this side (server) of the connection. */
+					err = SSL_shutdown(client_ssl);
+					RETURN_SSL(err);
+					/* Terminate communication on a socket */
+
+					err = close(GPOINTER_TO_INT(key));
+					RETURN_ERR(err, "close");
+					/* Free the SSL structure */
+					SSL_free(client_ssl);
 					printf("%s : %d:%d disconnected\n", timeF, userdata->addr, userdata->port);
+					
+					closeCon(GPOINTER_TO_INT(key), &master);
+					g_hash_table_iter_remove(&iter);
 				}
 			}
 		}
