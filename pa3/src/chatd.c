@@ -22,12 +22,12 @@
 #define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
 
 const int MAX_CONN = 10;
-static SSL *client_ssl;
 static int fdmax;
 
 enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
 
 struct user {
+	SSL *ssl;
 	unsigned long addr;
 	unsigned short port;
 	char name[40];
@@ -59,22 +59,23 @@ int sockaddr_in_cmp(const void *addr1, const void *addr2) {
 	return 0;
 }
 
-void closeCon(int fd, fd_set* master) {
+void closeCon(struct user *usr, fd_set *master) {
 	// Shut down this side (server) of the connection. 
 	// Terminate communication on a socket 
 	// Free the SSL structure 
-	RETURN_SSL(SSL_shutdown(client_ssl));
+	int fd = SSL_get_fd(usr->ssl);
+	RETURN_SSL(SSL_shutdown(usr->ssl));
 	RETURN_ERR(close(fd), "close");
-	SSL_free(client_ssl);
+	SSL_free(usr->ssl);
 	
 	fdmax--;
 	FD_CLR(fd, master);
 }
 
 int main(int argc, char **argv) {
-	int i, listener, newfd, err, yes = 1;
+	int i, listener, yes = 1;
 	fd_set master, read_fds;
-	struct sockaddr_in serveraddr, clientaddr;
+	struct sockaddr_in serveraddr;
 	char message[512];
 	time_t now;
 	char timeF[sizeof "2011-10-08T07:07:09Z"];
@@ -141,8 +142,8 @@ int main(int argc, char **argv) {
 	}
 
 	if(listen(listener, MAX_CONN) == -1) {
-		 perror("Server-listen()");
-		 exit(1);
+		perror("Server-listen()");
+		exit(1);
 	}
 
 	/* Create dictionary to keep of track of the time passed for each connection */
@@ -162,12 +163,12 @@ int main(int argc, char **argv) {
 		struct timeval tv;
 		
 		time(&now);
-		strftime(timeF, sizeof timeF, "%FT%TZ", gmtime(&now));
+		strftime(timeF, sizeof(timeF), "%FT%TZ", gmtime(&now));
 		
 		tv.tv_sec = 3;
 		tv.tv_usec = 0;
 		int retval = select(fdmax+1, &read_fds, NULL, NULL, &tv);
-		
+		//printf("%d\n", retval);
 		if(retval == -1) {
 			perror("select()");
 			exit(1);
@@ -176,48 +177,48 @@ int main(int argc, char **argv) {
 				if(FD_ISSET(i, &read_fds)) {
 					/* A file descriptor is active */
 					if(i == listener) {
+						int newfd;
+						struct sockaddr_in clientaddr;
 						/* Handle new connections */
 						socklen_t addrlen = (socklen_t) sizeof(clientaddr);
 						if((newfd = accept(listener, (struct sockaddr *)&clientaddr, &addrlen)) == -1) {
 							perror("Server-accept()");
+							continue;
 						}
-						else {
-							printf("%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+						/* TCP connection is ready. */
+						printf("%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 
-							FD_SET(newfd, &master); /* Add to master set */
-							if(newfd > fdmax) { /* Keep track of the maximum */
-								fdmax = newfd;
-							}
-							/* TCP connection is ready. */
-							/* An SSL structure is created */
-							client_ssl = SSL_new(ssl_ctx);
-							RETURN_NULL(client_ssl);
-							/* Assign the socket into the SSL structure (SSL and socket without BIO) */
-							SSL_set_fd(client_ssl, newfd);
-							
-							/* Perform SSL Handshake on the SSL server */
-							err = SSL_accept(client_ssl);
-							RETURN_SSL(err);
-							
-							struct user *newuser = g_new0(struct user, 1);
-							newuser->time = time(NULL);
-							newuser->addr = clientaddr.sin_addr.s_addr;
-							newuser->port = clientaddr.sin_port;
-							g_hash_table_replace(connections, GINT_TO_POINTER(newfd), newuser);
+						FD_SET(newfd, &master); /* Add to master set */
+						if(newfd > fdmax) { /* Keep track of the maximum */
+							fdmax = newfd;
 						}
-					}
-					else {						
-						/* Receive data from the SSL client */
-						int msglen = SSL_read(client_ssl, message, sizeof(message) - 1);
-						RETURN_SSL(msglen);
-						if(msglen == 0) continue;
-						message[msglen] = '\0';
+						/* An SSL structure is created */
+						SSL *client_ssl = SSL_new(ssl_ctx);
+						RETURN_NULL(client_ssl);
 						
+						SSL_set_fd(client_ssl, newfd);
+						/* Perform SSL Handshake on the SSL server */
+						RETURN_SSL(SSL_accept(client_ssl));
+						
+						struct user *newuser = g_new0(struct user, 1);
+						newuser->ssl = client_ssl;
+						newuser->time = now;
+						newuser->addr = clientaddr.sin_addr.s_addr;
+						newuser->port = clientaddr.sin_port;
+						g_hash_table_replace(connections, GINT_TO_POINTER(newfd), newuser);
+					}
+					else {
+						// Receive data from the SSL client
 						gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
 						if(ptr == NULL) continue;
-						
 						struct user *usr = (struct user*) ptr;
-						usr->time = time(NULL);
+						
+						int len = SSL_read(usr->ssl, message, sizeof(message) - 1);
+						RETURN_SSL(len);
+						if(len == 0) continue;
+						message[len] = '\0';
+						
+						usr->time = now;
 						
 						char buff[2048];
 						memset(buff, 0, sizeof(buff));
@@ -225,83 +226,71 @@ int main(int argc, char **argv) {
 						GHashTableIter iter;
 						gpointer key, value;
 						switch(message[0]) {
-						case SPEAK:
-							g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								struct user *some = (struct user*) value;
-								if(usr->room == some->room) {
-									//todo: WRITE MSG to all in room
+							case SPEAK:
+								g_hash_table_iter_init(&iter, connections);
+								while(g_hash_table_iter_next(&iter, &key, &value)) {
+									struct user *some = (struct user*) value;
+									if(usr->room == some->room) {
+										//todo: WRITE MSG to all in room
+									}
 								}
-							}
-							strcat(buff, "spoken!\n");
-							break;
-						case WHO:
-							g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								struct user *sss = (struct user*) value;
-								printf("1\n");
-								//strcat(buff, sss->addr);
-								strcat(buff, ":");
-								printf("2\n");
-								//strcat(buff, sss->port);
-								strcat(buff, " ");
-								printf("3\n");
-								strcat(buff, (strlen(sss->name) > 0 ? sss->name : "N/A"));
-								strcat(buff, " | ");
-								printf("4\n");
-								strcat(buff, (strlen(sss->room) > 0? sss->room : "N/A"));
-								strcat(buff, "\n");
-								printf("5\n");
-							}
-							//todo: WRITE TO CLIENT HERE!
-							break;
-						case SAY:
-							strcat(buff, "say!\n");
-							break;
-						case USER:
-							strcat(buff, "user!\n");
-							break;
-						case LIST:
-							//g_hash_table_new();
-							
-							//GHashTableIter iter;
-							//gpointer key, value;
-							/*g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								struct user *userdata = (struct user*) value;
-							}*/
-							strcat(buff, "list!\n");
-							break;
-						case JOIN:
-							strcat(buff, "join!\n");
-							break;
-						case GAME:
-							strcat(buff, "game!\n");
-							break;
-						case ROLL:
-							strcat(buff, "roll!\n");
-							break;
-						case BYE:
-							strcat(buff, "bye!\n");
-							break;
+								strcat(buff, "spoken!");
+								break;
+							case WHO:
+								g_hash_table_iter_init(&iter, connections);
+								while(g_hash_table_iter_next(&iter, &key, &value)) {
+									struct user *sss = (struct user*) value;
+									sprintf(&buff[strlen(buff)], "%d:%d ", sss->addr, sss->port);
+									strcat(buff, (strlen(sss->name) > 0 ? sss->name : "N/A"));
+									strcat(buff, " | ");
+									strcat(buff, (strlen(sss->room) > 0? sss->room : "N/A"));
+									strcat(buff, "\n");
+								}
+								//todo: WRITE TO CLIENT HERE!
+								break;
+							case SAY:
+								strcat(buff, "say!");
+								break;
+							case USER:
+								strcat(buff, "user!");
+								break;
+							case LIST:
+								//g_hash_table_new();
+								
+								//GHashTableIter iter;
+								//gpointer key, value;
+								/*g_hash_table_iter_init(&iter, connections);
+								while(g_hash_table_iter_next(&iter, &key, &value)) {
+									struct user *userdata = (struct user*) value;
+								}*/
+								strcat(buff, "list!");
+								break;
+							case JOIN:
+								strcat(buff, "join!");
+								break;
+							case GAME:
+								strcat(buff, "game!");
+								break;
+							case ROLL:
+								strcat(buff, "roll!");
+								break;
+							case BYE:
+								strcat(buff, "bye!");
+								break;
 						}
 						
 						/* Send data to the SSL client */
-						RETURN_SSL(SSL_write(client_ssl, buff, strlen(buff)));
+						RETURN_SSL(SSL_write(usr->ssl, buff, strlen(buff)));
 					}
 				}
 				else {
 					gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
 					if(ptr != NULL) {
 						struct user *userdata = (struct user*) ptr;
-						if(difftime(time(NULL), userdata->time) >= 15.0) {
-							// Shut down this side (server) of the connection. 
-							// Terminate communication on a socket
-							// Free the SSL structure 
-							
-							closeCon(i, &master);
+						if(difftime(now, userdata->time) >= 15.0) {
+							closeCon(userdata, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
-							printf("%s : %s:%d disconnected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+							printf("%s : %d:%d disconnected\n", timeF, userdata->addr, userdata->port);
 						}
 					}
 				}
@@ -312,10 +301,8 @@ int main(int argc, char **argv) {
 			g_hash_table_iter_init(&iter, connections);
 			while(g_hash_table_iter_next(&iter, &key, &value)) {
 				struct user *userdata = (struct user*) value;
-				if(difftime(time(NULL), userdata->time) >= 15.0) {
-					i = GPOINTER_TO_INT(key);
-					
-					closeCon(i, &master);
+				if(difftime(now, userdata->time) >= 15.0) {
+					closeCon(userdata, &master);
 					g_hash_table_iter_remove(&iter);
 					printf("%s : %d:%d disconnected\n", timeF, userdata->addr, userdata->port);
 				}
