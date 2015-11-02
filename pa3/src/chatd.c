@@ -102,16 +102,16 @@ int main(int argc, char **argv) {
     }
 	
 	/* Load the RSA CA certificate into the SSL_CTX structure */
-	/*if(!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
+	if(!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
 		ERR_print_errors_fp(stderr);
 		exit(1);
-	}*/
+	}
 
 	/* Set to require peer (client) certificate verification */
-	//SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+	SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
 	/* Set the verification depth to 1 */
-	//SSL_CTX_set_verify_depth(ssl_ctx, 1);
+	SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
 	/* Create and bind a TCP socket */
 	if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -195,6 +195,12 @@ int main(int argc, char **argv) {
 							err = SSL_accept(client_ssl);
 							RETURN_SSL(err);
 							printf("asdf\n");
+							
+							struct user *newuser = g_new0(struct user, 1);
+							newuser->time = time(NULL);
+							newuser->addr = clientaddr.sin_addr.s_addr;
+							newuser->port = clientaddr.sin_port;
+							g_hash_table_insert(connections, GINT_TO_POINTER(i), newuser);
 						}
 					}
 					else {						
@@ -205,13 +211,33 @@ int main(int argc, char **argv) {
 						if(err == 0) {
 							continue;
 						}
+						char buff[2048];
+						char bleh[128];
+						memset(buff, 0, sizeof(buff));
+						memset(bleh, 0, sizeof(bleh));
 						
 						message[err] = '\0';
-						printf("Received %d chars:'%s'\n", err, message);
+						strdup(bleh, message[1]);
+						
+						g_hash_table_lookup(connections, GINT_TO_POINTER(i));
 						
 						switch(message[0]) {
 						case WHO:
-							printf("who!\n");
+							GHashTableIter iter;
+							gpointer key, value;
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								struct user *userdata = (struct user*) value;
+								strcat(buff, userdata->addr);
+								strcat(buff, ":");
+								strcat(buff, userdata->port);
+								strcat(buff, " ");
+								strcat(buff, (userdata->name ? userdata->name : "N/A"));
+								strcat(buff, " | ");
+								strcat(buff, (userdata->room ? userdata->room : "N/A"));
+								strcat(buff, "\n");
+							}
+							//todo: WRITE TO CLIENT HERE!
 							break;
 						case SAY:
 							printf("say!\n");
@@ -220,8 +246,15 @@ int main(int argc, char **argv) {
 							printf("user!\n");
 							break;
 						case LIST:
-							printf("list!\n");
-							//g_hash_table_iter_init;
+							g_hash_table_new();
+							
+							GHashTableIter iter;
+							gpointer key, value;
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								struct user *userdata = (struct user*) value;
+							}
+							
 							break;
 						case JOIN:
 							printf("join!\n");
@@ -235,7 +268,7 @@ int main(int argc, char **argv) {
 						}
 						
 						/* Send data to the SSL client */
-						err = SSL_write(client_ssl, "This message is from the SSL server", strlen("This message is from the SSL server"));
+						err = SSL_write(client_ssl, buff, strlen(buff));
 						RETURN_SSL(err);
 						
 						/*
