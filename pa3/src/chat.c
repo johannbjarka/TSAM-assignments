@@ -35,7 +35,7 @@
    connection. */
 static int active = 1;
 
-enum ops { WHO, SAY, USER, LIST, JOIN, GAME, ROLL };
+enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
 
 /* To read a password without echoing it to the console.
  *
@@ -95,20 +95,19 @@ void sigint_handler(int signum) {
 /* The next two variables are used to access the encrypted stream to
  * the server. The socket file descriptor server_fd is provided for
  * select (if needed), while the encrypted communication should use
- * server_ssl and the SSL API of OpenSSL.
- */
+ * server_ssl and the SSL API of OpenSSL.*/
 static int server_fd;
 static SSL *server_ssl;
 
 /* This variable shall point to the name of the user. The initial value
    is NULL. Set this variable to the username once the user managed to be
    authenticated. */
-static char *user;
+//static char *user;
 
 /* This variable shall point to the name of the chatroom. The initial
    value is NULL (not member of a chat room). Set this variable whenever
    the user changed the chat room successfully. */
-static char *chatroom;
+//static char *chatroom;
 
 /* This prompt is used by the readline library to ask the user for
  * input. It is good style to indicate the name of the user and the
@@ -131,6 +130,9 @@ void writeOut(char *line) {
    handle the user requests in this function. The client handles the
    server messages in the loop in main(). */
 void readline_callback(char *line) {
+	char buff[1024];
+	memset(buff, 0, sizeof(buff));
+	
 	if(line == NULL) {
 		rl_callback_handler_remove();
 		active = 0;
@@ -140,43 +142,44 @@ void readline_callback(char *line) {
 		add_history(line);
 	}
 	if(strncmp("/bye", line, 4) == 0 || strncmp("/quit", line, 5) == 0) {
+		buff[0] = BYE;
 		rl_callback_handler_remove();
 		active = 0;
-		return;
 	}
-	if(strncmp("/game", line, 5) == 0) {
+	else if(strncmp("/game", line, 5) == 0) {
 		int i = skipSpaces(line, 5);
 		if(i == -1) {
 			writeOut("Usage: /game username\n");
 			return;
 		}
-		/* TODO: Start game */
-		return;
+		char *challenger = strdup(&(line[i]));
+		
+		buff[0] = GAME;
+		strcat(&buff[1], challenger);
 	}
-	if(strncmp("/roll", line, 5) == 0) {
-		/* TODO: roll dice and declare winner. */
-		return;
+	else if(strncmp("/roll", line, 5) == 0) {
+		buff[0] = ROLL;
 	}
-	if(strncmp("/join", line, 5) == 0) {
+	else if(strncmp("/join", line, 5) == 0) {
 		int i = skipSpaces(line, 5);
 		if(i == -1) {
 			writeOut("Usage: /join chatroom\n");
 			return;
 		}
-		char* chatroom = strdup(&(line[i]));
-		/* TODO: Process and send this information to the server. */
-
+		char *chatroom = strdup(&(line[i]));
+		
+		buff[0] = JOIN;
+		strcat(&buff[1], chatroom);
+		
 		/* Maybe update the prompt. */
-		free(prompt);
-		prompt = NULL; /* What should the new prompt look like? */
-		rl_set_prompt(prompt);
-		return;
+		//free(prompt);
+		//prompt = NULL; /* What should the new prompt look like? */
+		//rl_set_prompt(prompt);
 	}
-	if(strncmp("/list", line, 5) == 0) {
-		/* TODO: Query all available chat rooms */
-		return;
+	else if(strncmp("/list", line, 5) == 0) {
+		buff[0] = LIST;
 	}
-	if(strncmp("/say", line, 4) == 0) {
+	else if(strncmp("/say", line, 4) == 0) {
 		int i = skipSpaces(line, 4);
 		if(i == -1) {
 			writeOut("Usage: /say username message\n");
@@ -192,11 +195,12 @@ void readline_callback(char *line) {
 		char *receiver = strndup(&(line[i]), j - i - 1);
 		char *message = strdup(&(line[j]));
 		
-		/* TODO: Send private message to receiver. */
-
-		return;
+		buff[0] = SAY;
+		strcat(&buff[1], receiver);
+		strcat(buff, "\n");
+		strcat(buff, message);
 	}
-	if(strncmp("/user", line, 5) == 0) {
+	else if(strncmp("/user", line, 5) == 0) {
 		int i = skipSpaces(line, 5);
 		if(i == -1) {
 			writeOut("Usage: /user username\n");
@@ -205,37 +209,35 @@ void readline_callback(char *line) {
 		char *new_user = strdup(&(line[i]));
 		char passwd[48];
 		getpasswd("Password: ", passwd, 48);
+		
+		buff[0] = USER;
+		strcat(&buff[1], new_user);
+		strcat(buff, "\n");
+		strcat(buff, passwd);
 
-		/* TODO: Process and send this information to the server. */
-		//writeOut(passwd);
 		/* Maybe update the prompt. */
-		free(prompt);
-		prompt = strdup(":: "); /* What should the new prompt look like? */
-		rl_set_prompt(prompt);
-		return;
+		//free(prompt);
+		//prompt = strdup(":: "); /* What should the new prompt look like? */
+		//rl_set_prompt(prompt);
 	}
-	if(strncmp("/who", line, 4) == 0) {
-		/* TODO: Query all available users */
-		return;
+	else if(strncmp("/who", line, 4) == 0) {
+		buff[0] = WHO;
 	}
-	if(strncmp("/", line, 1) == 0) {
+	else if(strncmp("/", line, 1) == 0) {
 		writeOut("Invalid command\n");
 		return;
 	}
+	else {
+		buff[0] = SPEAK;
+		strcat(&buff[1], line);
+	}
 	/* Sent the buffer to the server. */
-	/*char buffer[256];
-	snprintf(buffer, 255, "Message: %s\n", line);
-	write(STDOUT_FILENO, buffer, strlen(buffer));
-	fsync(STDOUT_FILENO);*/
-	//char *msg = "Message to server";
-	/* Send data to the SSL server */
-	SSL_write(server_ssl, line, strlen(line));
+	SSL_write(server_ssl, buff, strlen(buff));
 }
 
 int main(int argc, char **argv) {
 	int err;
 	char buf[4096];
-	char *str;
 	struct sockaddr_in server_addr;
 	
 	if(argc < 3) {
@@ -324,49 +326,43 @@ int main(int argc, char **argv) {
 		struct timeval timeout;
 
 		FD_ZERO(&rfds);
-		FD_SET(STDIN_FILENO, &rfds);
 		FD_SET(server_fd, &rfds);
+		FD_SET(STDIN_FILENO, &rfds);
 		timeout.tv_sec = 5;
 		timeout.tv_usec = 0;
 	
 		int r = select(server_fd + 1, &rfds, NULL, NULL, &timeout);
 		if(r < 0) {
 			if (errno == EINTR) {
-				/*This should either retry the call or
+				/* This should either retry the call or
 				   exit the loop, depending on whether we
-				   received a SIGTERM.*/
+				   received a SIGTERM. */
 				continue;
 			}
-			// Not interrupted, maybe nothing we can do? 
+			/* Not interrupted, maybe nothing we can do? */
 			perror("select()");
 			break;
 		}
 		if(r == 0) {
 			//write(STDOUT_FILENO, "No message?\n", 12);
 			//fsync(STDOUT_FILENO);
-			/*Whenever you print out a message, call this
-			   to reprint the current input line.*/ 
-			rl_redisplay();
-			//char *msg = "Message to server";
-			/* Send data to the SSL server */
-			//err = SSL_write(server_ssl, msg, strlen(msg));
+			/* Whenever you print out a message, call this
+			   to reprint the current input line. 
+			rl_redisplay();*/
 			continue;
 		}
 		if(FD_ISSET(STDIN_FILENO, &rfds)) {
-			//printf("YOLO \n");
 			rl_callback_read_char();
 			continue;
 		}
-
-		RETURN_SSL(err);
-
+		
 		/* Handle messages from the server here! */
-		err = SSL_read(server_ssl, buf, sizeof(buf)-1);
+		int len; 
+		RETURN_SSL(len = SSL_read(server_ssl, buf, sizeof(buf)-1));
+		if(len == 0) continue; 
+		buf[len] = '\0';
 
-		RETURN_SSL(err);
-		buf[err] = '\0';
-
-		printf ("Received %d chars:'%s'\n", err, buf);
+		printf("%s\n", buf);
 	}
     /* Shut down the client side of the SSL connection */
 
