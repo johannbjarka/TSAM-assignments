@@ -192,8 +192,8 @@ void readline_callback(char *line) {
 			writeOut("Usage: /say username message\n");
 			return;
 		}
-		char *receiver = strndup(&(line[i]), j - i - 1);
-		char *message = strdup(&(line[j]));
+		char *receiver = strndup(&(line[i]), j - i);
+		char *message = strdup(&(line[j + 1]));
 		
 		buff[0] = SAY;
 		strcat(&buff[1], receiver);
