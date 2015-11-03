@@ -1,3 +1,4 @@
 *.o
+*.log
 pa3/src/chat
 pa3/src/chatd

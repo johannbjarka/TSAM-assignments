@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <signal.h>
 #include <glib.h>
 
 /* Secure socket layer headers */
@@ -24,6 +24,11 @@
 const int MAX_CONN = 10;
 const double LOGIN_DELAY = 8.0;
 const double TIMEOUT = 60.0;
+FILE *logFile;
+SSL_CTX *ssl_ctx;
+typedef void handler_t(int);
+handler_t *Signal(int signum, handler_t *handler);
+void unix_error(char *msg);
 
 enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
 
@@ -40,6 +45,11 @@ typedef struct client_user {
 
 static int fdmax;
 static char timeF[sizeof "2011-10-08T07:07:09Z"];
+
+/* This variable is 1 while the server is active and becomes 0 after
+   a quit command to terminate the server and to clean up the 
+   connection. */
+static int active = 1;
 
 /* This can be used to build instances of GTree that index on
    the address of a connection. */
@@ -77,11 +87,57 @@ void closeCon(user *usr, fd_set *master) {
 	//fdmax--;
 }
 
+void logAction(char *str) {
+	/* Write into the log file */
+	if(logFile != NULL) {
+		fputs(str, logFile);
+		fflush(logFile); 
+	}
+}
+
+/*
+ * Signal - wrapper for the sigaction function
+ */
+handler_t *Signal(int signum, handler_t *handler) {
+    struct sigaction action, old_action;
+
+    action.sa_handler = handler;  
+    sigemptyset(&action.sa_mask); /* block sigs of type being handled */
+    action.sa_flags = SA_RESTART; /* restart syscalls if possible */
+
+    if (sigaction(signum, &action, &old_action) < 0) {
+	unix_error("Signal error");
+    }
+    return (old_action.sa_handler);
+}
+
+/*
+ * unix_error - unix-style error routine
+ */
+void unix_error(char *msg)
+{
+    fprintf(stdout, "%s: %s\n", msg, strerror(errno));
+    exit(1);
+}
+
+void sigint_handler(int signum) {
+	char str[80];
+	int n = sprintf(str, "%s : Server closed\n", timeF);
+	str[n] = '\0';
+	logAction(str);
+	fclose(logFile);
+	
+	/* Free the SSL_CTX structure */
+    SSL_CTX_free(ssl_ctx);
+	exit(0);
+}
+
 int main(int argc, char **argv) {
-	int i, listener, yes = 1;
+	int i, listener, n, yes = 1;
 	fd_set master, read_fds;
 	struct sockaddr_in serveraddr;
 	char message[512];
+	char str[80];
 	time_t now;
 	
 	FD_ZERO(&read_fds);
@@ -91,10 +147,15 @@ int main(int argc, char **argv) {
 		exit(0);
 	}
 	
+	/* Open file stream for log file */
+	logFile = fopen ("chatd.log","a+");
+	
+	Signal(SIGINT, sigint_handler); /* ctrl-c */
+	
 	/* Initialize OpenSSL */
 	SSL_library_init();
 	SSL_load_error_strings();
-	SSL_CTX *ssl_ctx = SSL_CTX_new(TLSv1_server_method());
+	ssl_ctx = SSL_CTX_new(TLSv1_server_method());
 	
 	if(!ssl_ctx) {
         ERR_print_errors_fp(stderr);
@@ -162,7 +223,7 @@ int main(int argc, char **argv) {
 
 	FD_SET(listener, &master);
 	fdmax = listener;
-	for (;;) {
+	while(active) {
 		read_fds = master;
 		struct timeval tv;
 		
@@ -190,6 +251,9 @@ int main(int argc, char **argv) {
 						}
 						/* TCP connection is ready. */
 						printf("%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+						n = sprintf(str, "%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
+						str[n] = '\0';
+						logAction(str);
 
 						FD_SET(newfd, &master); /* Add to master set */
 						if(newfd > fdmax) { /* Keep track of the maximum */
@@ -312,14 +376,23 @@ int main(int argc, char **argv) {
 									closeCon(caller, &master);
 									g_hash_table_remove(connections, GINT_TO_POINTER(i));
 									printf("%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+									n = sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+									str[n] = '\0';
+									logAction(str);
 									break;
 								}
 								printf("%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+								n = sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+								str[n] = '\0';
+								logAction(str);
 								RETURN_SSL(SSL_write(caller->ssl, "Username or password doesn't exist!", 35));
 								break;
 							}
 							strncpy(caller->name, username, sizeof(caller->name));
 							printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+							n = sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+							str[n] = '\0';
+							logAction(str);
 							caller->login_tries = 0;
 							
 							strcat(buff, "Logged in as: ");
@@ -383,6 +456,9 @@ int main(int argc, char **argv) {
 							closeCon(caller, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
 							printf("%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
+							n = sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
+							str[n] = '\0';
+							logAction(str);
 							break;
 						}
 						caller->time = now;
@@ -397,7 +473,9 @@ int main(int argc, char **argv) {
 						closeCon(userdata, &master);
 						g_hash_table_remove(connections, GINT_TO_POINTER(i));
 						printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-						
+						n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+						str[n] = '\0';
+						logAction(str);
 					}
 				}
 			}
@@ -411,6 +489,9 @@ int main(int argc, char **argv) {
 					closeCon(userdata, &master);
 					g_hash_table_iter_remove(&iter);
 					printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+					n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+					str[n] = '\0';
+					logAction(str);
 				}
 			}
 		}
