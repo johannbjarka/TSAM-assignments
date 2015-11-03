@@ -22,19 +22,24 @@
 #define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
 
 const int MAX_CONN = 10;
-static int fdmax;
+const double LOGIN_DELAY = 8.0;
+const double TIMEOUT = 60.0;
 
 enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
 
-struct user {
+typedef struct client_user {
 	SSL *ssl;
 	unsigned long addr;
 	unsigned short port;
+	char addr_str[16];
 	char name[40];
 	char room[40];
 	time_t time;
-};
+	int login_tries;
+} user;
 
+static int fdmax;
+static char timeF[sizeof "2011-10-08T07:07:09Z"];
 
 /* This can be used to build instances of GTree that index on
    the address of a connection. */
@@ -59,17 +64,17 @@ int sockaddr_in_cmp(const void *addr1, const void *addr2) {
 	return 0;
 }
 
-void closeCon(struct user *usr, fd_set *master) {
+void closeCon(user *usr, fd_set *master) {
 	// Shut down this side (server) of the connection. 
 	// Terminate communication on a socket 
 	// Free the SSL structure 
 	int fd = SSL_get_fd(usr->ssl);
 	RETURN_SSL(SSL_shutdown(usr->ssl));
-	RETURN_ERR(close(fd), "close");
 	SSL_free(usr->ssl);
+	RETURN_ERR(close(fd), "close");
+	FD_CLR(fd, master);
 	
 	//fdmax--;
-	FD_CLR(fd, master);
 }
 
 int main(int argc, char **argv) {
@@ -78,7 +83,6 @@ int main(int argc, char **argv) {
 	struct sockaddr_in serveraddr;
 	char message[512];
 	time_t now;
-	char timeF[sizeof "2011-10-08T07:07:09Z"];
 	
 	FD_ZERO(&read_fds);
 	
@@ -148,9 +152,9 @@ int main(int argc, char **argv) {
 
 	/* Create dictionary to keep of track of the time passed for each connection */
 	GHashTable *authTable = g_hash_table_new(g_str_hash, g_str_equal);
-	g_hash_table_insert(authTable, "siggi", "asdf1");
-	g_hash_table_insert(authTable, "derp", "asdf2");
-	g_hash_table_insert(authTable, "joi", "asdf3");
+	g_hash_table_insert(authTable, "siggi", "a");
+	g_hash_table_insert(authTable, "derp", "b");
+	g_hash_table_insert(authTable, "joi", "c");
 	
 	GHashTable *connections = g_hash_table_new(g_direct_hash, g_direct_equal);
 	//GTree *nonUsers = g_tree_new(sockaddr_in_cmp);
@@ -168,7 +172,6 @@ int main(int argc, char **argv) {
 		tv.tv_sec = 3;
 		tv.tv_usec = 0;
 		int retval = select(fdmax+1, &read_fds, NULL, NULL, &tv);
-		//printf("%d\n", retval);
 		if(retval == -1) {
 			perror("select()");
 			exit(1);
@@ -200,98 +203,201 @@ int main(int argc, char **argv) {
 						/* Perform SSL Handshake on the SSL server */
 						RETURN_SSL(SSL_accept(client_ssl));
 						
-						struct user *newuser = g_new0(struct user, 1);
+						user *newuser = g_new0(user, 1);
 						newuser->ssl = client_ssl;
 						newuser->time = now;
 						newuser->addr = clientaddr.sin_addr.s_addr;
 						newuser->port = clientaddr.sin_port;
+						strcpy(newuser->addr_str, inet_ntoa(clientaddr.sin_addr));
 						g_hash_table_replace(connections, GINT_TO_POINTER(newfd), newuser);
+						
+						RETURN_SSL(SSL_write(newuser->ssl, "Welcome", 7));
 					}
 					else {
 						// Receive data from the SSL client
 						gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
 						if(ptr == NULL) continue;
-						struct user *usr = (struct user*) ptr;
+						user *caller = (user*) ptr;
 						
-						int len = SSL_read(usr->ssl, message, sizeof(message) - 1);
+						int n, len = SSL_read(caller->ssl, message, sizeof(message) - 1);
 						RETURN_SSL(len);
 						if(len == 0) continue;
 						message[len] = '\0';
 						
-						usr->time = now;
-						
 						char buff[2048];
 						memset(buff, 0, sizeof(buff));
 						
+						GHashTable *rooms;
+						SSL *ussl;
+						char *username;
 						GHashTableIter iter;
 						gpointer key, value;
-						switch(message[0]) {
-							case SPEAK:
-								g_hash_table_iter_init(&iter, connections);
-								while(g_hash_table_iter_next(&iter, &key, &value)) {
-									struct user *some = (struct user*) value;
-									if(usr->room == some->room) {
-										//todo: WRITE MSG to all in room
-									}
-								}
-								strcat(buff, "spoken!");
-								break;
-							case WHO:
-								g_hash_table_iter_init(&iter, connections);
-								while(g_hash_table_iter_next(&iter, &key, &value)) {
-									struct user *sss = (struct user*) value;
-									sprintf(&buff[strlen(buff)], "%d:%d ", sss->addr, sss->port);
-									strcat(buff, (strlen(sss->name) > 0 ? sss->name : "N/A"));
-									strcat(buff, " | ");
-									strcat(buff, (strlen(sss->room) > 0? sss->room : "N/A"));
-									strcat(buff, "\n");
-								}
-								//todo: WRITE TO CLIENT HERE!
-								break;
-							case SAY:
-								strcat(buff, "say!");
-								break;
-							case USER:
-								strcat(buff, "user!");
-								break;
-							case LIST:
-								//g_hash_table_new();
-								
-								//GHashTableIter iter;
-								//gpointer key, value;
-								/*g_hash_table_iter_init(&iter, connections);
-								while(g_hash_table_iter_next(&iter, &key, &value)) {
-									struct user *userdata = (struct user*) value;
-								}*/
-								strcat(buff, "list!");
-								break;
-							case JOIN:
-								strcat(buff, "join!");
-								break;
-							case GAME:
-								strcat(buff, "game!");
-								break;
-							case ROLL:
-								strcat(buff, "roll!");
-								break;
-							case BYE:
-								strcat(buff, "bye!");
-								break;
+						
+						if(strcmp(caller->name, "") == 0 && message[0] != USER) {
+							RETURN_SSL(SSL_write(caller->ssl, "Please authorize you're self!(/user name)", 46));
+							break;
 						}
 						
 						/* Send data to the SSL client */
-						RETURN_SSL(SSL_write(usr->ssl, buff, strlen(buff)));
+						switch(message[0]) {
+						case SPEAK:
+							if(strcmp(caller->room, "") == 0) {
+								RETURN_SSL(SSL_write(caller->ssl, "Please join a room!", 19));
+								break;
+							}
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								if(strcmp(caller->room, aUser->room) == 0) {
+									strcat(buff, caller->name);
+									strcat(buff, ": ");
+									strcat(buff, &message[1]);
+									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+								}
+							}
+							break;
+						case WHO:
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								sprintf(&buff[strlen(buff)], "%s:%d ", aUser->addr_str, aUser->port);
+								strcat(buff, (strlen(aUser->name) > 0 ? aUser->name : "N/A"));
+								strcat(buff, " | ");
+								strcat(buff, (strlen(aUser->room) > 0 ? aUser->room : "N/A"));
+								strcat(buff, "\n");
+							}
+							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							break;
+						case SAY:
+							for(n = 1; !isspace(message[n]) && n < 41; n++);
+							username = strndup(&message[1], n-1);
+							char *usermessage = strndup(&message[n+1], 40);
+							ussl = NULL;
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								if(strcmp(aUser->name, username) == 0) {
+									ussl = aUser->ssl;
+									break;
+								}
+							}
+							if(ussl == NULL) {
+								RETURN_SSL(SSL_write(caller->ssl, "No known user with that name", 28));
+								break;
+							}
+							if(ussl == caller->ssl) {
+								RETURN_SSL(SSL_write(caller->ssl, "Can't send private message to self", 34));
+								break;
+							}
+							strcat(buff, "PM from ");
+							strcat(buff, caller->name);
+							strcat(buff, ": ");
+							strcat(buff, usermessage);
+							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
+							break;
+						case USER:
+							for(n = 1; !isspace(message[n]) && n < 41; n++);
+							username = strndup(&message[1], n-1);
+							char *password = strndup(&message[n+1], 40);
+							gpointer authPtr = g_hash_table_lookup(authTable, username);
+							if(authPtr == NULL || strcmp(authPtr, password) != 0) {
+								if(difftime(now, caller->time) < LOGIN_DELAY) {
+									RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
+									break;
+								}
+								
+								caller->login_tries++;
+								if(caller->login_tries == 3) {
+									RETURN_SSL(SSL_write(caller->ssl, "KICKED!", 7));
+									closeCon(caller, &master);
+									g_hash_table_remove(connections, GINT_TO_POINTER(i));
+									printf("%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+									break;
+								}
+								printf("%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+								RETURN_SSL(SSL_write(caller->ssl, "Username or password doesn't exist!", 35));
+								break;
+							}
+							strncpy(caller->name, username, sizeof(caller->name));
+							printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+							caller->login_tries = 0;
+							
+							strcat(buff, "Logged in as: ");
+							strcat(buff, caller->name);
+							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							break;
+						case LIST:
+							rooms = g_hash_table_new(g_str_hash, g_str_equal);
+							
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								if(strlen(aUser->room) == 0) continue;
+								if(!g_hash_table_contains(rooms, aUser->room)) {
+									g_hash_table_add(rooms, aUser->room);
+								}
+							
+							}
+							g_hash_table_iter_init(&iter, rooms);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								strcat(buff, (char *)key);
+								strcat(buff, "\n");
+							}
+							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							break;
+						case JOIN:
+							strncpy(caller->room, &message[1], sizeof(caller->room));
+							strcat(buff, "Joined room: ");
+							strcat(buff, caller->room);
+							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							break;
+						case GAME:
+						
+							username = strndup(&message[1], 40);
+							ussl = NULL;
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								if(strcmp(aUser->name, username) == 0) {
+									ussl = aUser->ssl;
+									break;
+								}
+							}
+							if(ussl == NULL) {
+								RETURN_SSL(SSL_write(caller->ssl, "No known user with that name", 28));
+								break;
+							}
+							if(ussl == caller->ssl) {
+								RETURN_SSL(SSL_write(caller->ssl, "Can't challenge yourself", 34));
+								break;
+							}
+							strcat(buff, caller->name);
+							strcat(buff, " has challenged you to a of a game of dice!(/roll)");
+							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
+							//todo: add more game logic!
+							break;
+						case ROLL:
+							strcat(buff, "ROLL NOT IMPLEMENTED!");
+							break;
+						case BYE:
+							closeCon(caller, &master);
+							g_hash_table_remove(connections, GINT_TO_POINTER(i));
+							printf("%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
+							break;
+						}
+						caller->time = now;
 					}
 				}
 				else {
 					gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
-					if(ptr != NULL) {
-						struct user *userdata = (struct user*) ptr;
-						if(difftime(now, userdata->time) >= 15.0) {
-							closeCon(userdata, &master);
-							g_hash_table_remove(connections, GINT_TO_POINTER(i));
-							printf("%s : %d:%d disconnected\n", timeF, userdata->addr, userdata->port);
-						}
+					if(ptr == NULL) continue;
+					user *userdata = (user*) ptr;
+					
+					if(difftime(now, userdata->time) >= TIMEOUT) {
+						closeCon(userdata, &master);
+						g_hash_table_remove(connections, GINT_TO_POINTER(i));
+						printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+						
 					}
 				}
 			}
@@ -300,11 +406,11 @@ int main(int argc, char **argv) {
 			gpointer key, value;
 			g_hash_table_iter_init(&iter, connections);
 			while(g_hash_table_iter_next(&iter, &key, &value)) {
-				struct user *userdata = (struct user*) value;
-				if(difftime(now, userdata->time) >= 15.0) {
+				user *userdata = (user*) value;
+				if(difftime(now, userdata->time) >= TIMEOUT) {
 					closeCon(userdata, &master);
 					g_hash_table_iter_remove(&iter);
-					printf("%s : %d:%d disconnected\n", timeF, userdata->addr, userdata->port);
+					printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 				}
 			}
 		}
