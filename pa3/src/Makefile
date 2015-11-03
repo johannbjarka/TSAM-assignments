@@ -7,7 +7,7 @@ chat: chat.o
 	$(CC) $(CFLAGS) -o $@ $^ -lreadline $(shell pkg-config glib-2.0 openssl --libs)
 
 chatd: chatd.o
-	$(CC) $(CFLAGS) -o $@ $^ $(shell pkg-config glib-2.0 openssl --libs)
+	$(CC) $(CFLAGS) -lm -o $@ $^ $(shell pkg-config glib-2.0 openssl --libs)
 
 clean:
 	rm -f *.o *~

@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -22,7 +23,7 @@
 #define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
 
 const int MAX_CONN = 10;
-const double LOGIN_DELAY = 8.0;
+const double LOGIN_DELAY = 2.0;
 const double TIMEOUT = 60.0;
 
 enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
@@ -227,6 +228,7 @@ int main(int argc, char **argv) {
 						char buff[2048];
 						memset(buff, 0, sizeof(buff));
 						
+						int roll;
 						GHashTable *rooms;
 						SSL *ussl;
 						char *username;
@@ -322,7 +324,7 @@ int main(int argc, char **argv) {
 							printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
 							caller->login_tries = 0;
 							
-							strcat(buff, "Logged in as: ");
+							strcpy(buff, "Logged in as: ");
 							strcat(buff, caller->name);
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
@@ -338,6 +340,7 @@ int main(int argc, char **argv) {
 								}
 							
 							}
+							buff[0] = '\0';
 							g_hash_table_iter_init(&iter, rooms);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								strcat(buff, (char *)key);
@@ -352,7 +355,6 @@ int main(int argc, char **argv) {
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
 						case GAME:
-						
 							username = strndup(&message[1], 40);
 							ussl = NULL;
 							g_hash_table_iter_init(&iter, connections);
@@ -371,13 +373,25 @@ int main(int argc, char **argv) {
 								RETURN_SSL(SSL_write(caller->ssl, "Can't challenge yourself", 34));
 								break;
 							}
-							strcat(buff, caller->name);
+							strcpy(buff, caller->name);
 							strcat(buff, " has challenged you to a of a game of dice!(/roll)");
 							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
 							//todo: add more game logic!
 							break;
 						case ROLL:
-							strcat(buff, "ROLL NOT IMPLEMENTED!");
+							roll = (int)(floor(drand48() * 6.0) + 1);
+							sprintf(buff, "%s rolled %d", caller->name, roll);
+							if(strcmp(caller->room, "") == 0) {
+								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+								break;
+							}
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								if(strcmp(caller->room, aUser->room) == 0) {
+									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+								}
+							}
 							break;
 						case BYE:
 							closeCon(caller, &master);
