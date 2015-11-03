@@ -68,7 +68,7 @@ void closeCon(struct user *usr, fd_set *master) {
 	RETURN_ERR(close(fd), "close");
 	SSL_free(usr->ssl);
 	
-	fdmax--;
+	//fdmax--;
 	FD_CLR(fd, master);
 }
 
@@ -108,17 +108,17 @@ int main(int argc, char **argv) {
         exit(1);
     }
 	
-	/* Load the RSA CA certificate into the SSL_CTX structure 
-	//if(!SSL_CTX_load_verify_locations(ssl_ctx, "certd.pem", NULL)) {
+	/* Load the RSA CA certificate into the SSL_CTX structure */
+	if(!SSL_CTX_load_verify_locations(ssl_ctx, "cert.pem", NULL)) {
 		ERR_print_errors_fp(stderr);
 		exit(1);
 	}
 
 	// Set to require peer (client) certificate verification 
-	//SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
+	SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
 	// Set the verification depth to 1 
-	//SSL_CTX_set_verify_depth(ssl_ctx, 1);
+	SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
 	// Create and bind a TCP socket*/
 	if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
