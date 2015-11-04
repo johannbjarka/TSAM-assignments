@@ -1,4 +1,5 @@
 ../*.o
 ../*.log
+../*.ini
 pa3/src/chat
 pa3/src/chatd

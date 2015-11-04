@@ -16,6 +16,7 @@
 /* Secure socket layer headers */
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/evp.h>
 
 #define RETURN_NULL(x) if ((x)==NULL) exit(1)
 #define RETURN_ERR(err,s) if ((err)==-1) { perror(s); exit(1); }
@@ -211,12 +212,9 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	/* Create dictionary to keep of track of the time passed for each connection */
-	GHashTable *authTable = g_hash_table_new(g_str_hash, g_str_equal);
-	g_hash_table_insert(authTable, "siggi", "a");
-	g_hash_table_insert(authTable, "derp", "b");
-	g_hash_table_insert(authTable, "joi", "c");
-	
+	/* Create dictionary to keep track of active usernames */
+	GHashTable *usernames = g_hash_table_new(g_str_hash, g_str_equal);
+	/* Create dictionary to keep of track of connected users */
 	GHashTable *connections = g_hash_table_new(g_direct_hash, g_direct_equal);
 	//GTree *nonUsers = g_tree_new(sockaddr_in_cmp);
 	//GTree *authUsers = g_tree_new(sockaddr_in_cmp);
@@ -363,32 +361,104 @@ int main(int argc, char **argv) {
 							for(n = 1; !isspace(message[n]) && n < 41; n++);
 							username = strndup(&message[1], n-1);
 							char *password = strndup(&message[n+1], 40);
-							gpointer authPtr = g_hash_table_lookup(authTable, username);
-							if(authPtr == NULL || strcmp(authPtr, password) != 0) {
-								if(difftime(now, caller->time) < LOGIN_DELAY) {
-									RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
-									break;
-								}
-								
-								caller->login_tries++;
-								if(caller->login_tries == 3) {
-									RETURN_SSL(SSL_write(caller->ssl, "KICKED!", 7));
-									closeCon(caller, &master);
-									g_hash_table_remove(connections, GINT_TO_POINTER(i));
-									printf("%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
-									n = sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
-									str[n] = '\0';
-									logAction(str);
-									break;
-								}
-								printf("%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
-								n = sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
-								str[n] = '\0';
-								logAction(str);
-								RETURN_SSL(SSL_write(caller->ssl, "Username or password doesn't exist!", 35));
+							gchar *password64 = g_base64_encode((guchar*)password, strlen(password));
+							
+							if(g_hash_table_contains(usernames, username)) {
+								strcat(buff, "User: ");
+								strcat(buff, username);
+								strcat(buff, "Is already logged in!");
+								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 								break;
 							}
+							
+							/* Initialize hash structures */
+							EVP_MD_CTX *mdctx;
+							const EVP_MD *md;
+							unsigned char md_value[EVP_MAX_MD_SIZE];
+							unsigned int md_len;
+							md = EVP_sha256();
+							mdctx = EVP_MD_CTX_create();
+							
+							GKeyFile *keyfile = g_key_file_new();
+							if(g_key_file_load_from_file(keyfile, "passwords.ini", G_KEY_FILE_NONE, NULL)) {
+								char *salt = g_key_file_get_string(keyfile, "salts", username, NULL);
+								if(salt != NULL) {
+									/* Prepend salt to the password and hash it */								
+									EVP_DigestInit_ex(mdctx, md, NULL);
+									EVP_DigestUpdate(mdctx, salt, strlen(salt));
+									EVP_DigestUpdate(mdctx, password64, strlen(password64));
+									EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+									EVP_MD_CTX_destroy(mdctx);
+									EVP_cleanup();
+
+									/* Compare the result to the stored password */
+									gchar *passwd64 = g_base64_encode(md_value, md_len);
+									char *stored_passwd = g_key_file_get_string(keyfile, "passwords", username, NULL);
+									if(strcmp(stored_passwd, passwd64) != 0) {
+										if(difftime(now, caller->time) < LOGIN_DELAY) {
+											RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
+											break;
+										}
+										
+										caller->login_tries++;
+										if(caller->login_tries == 3) {
+											RETURN_SSL(SSL_write(caller->ssl, "KICKED!", 7));
+											closeCon(caller, &master);
+											g_hash_table_remove(connections, GINT_TO_POINTER(i));
+											printf("%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+											n = sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+											str[n] = '\0';
+											logAction(str);
+											break;
+										}
+										printf("%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+										n = sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+										str[n] = '\0';
+										logAction(str);
+										RETURN_SSL(SSL_write(caller->ssl, "Wrong password!", 15));
+										break;
+									} else {
+										/* Password matches */
+										strncpy(caller->name, username, sizeof(caller->name));
+										printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+										n = sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+										str[n] = '\0';
+										logAction(str);
+										caller->login_tries = 0;
+										
+										g_hash_table_replace(usernames, username, NULL);
+										strcat(buff, "Logged in as: ");
+										strcat(buff, caller->name);
+										RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+										break;
+									} 
+								}								
+							}
+							/* If no file or salt exists, then we have a new user. We create a new random salt and store it */
+							char salt[33];
+							size_t j, len = 32;
+							srand(time(NULL));
+							for(j = 0; j < len; j++) {
+								salt[j] = '0' + rand() % 72;
+							}
+							salt[len] = '\0';							
+							g_key_file_set_string(keyfile, "salts", username, salt);
+							
+							/* Prepend salt to the password and hash it */								
+							EVP_DigestInit_ex(mdctx, md, NULL);
+							EVP_DigestUpdate(mdctx, salt, strlen(salt));
+							EVP_DigestUpdate(mdctx, password64, strlen(password64));
+							EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+							EVP_MD_CTX_destroy(mdctx);
+							EVP_cleanup();
+							
+							/* Store the resulting string and save changes to file */
+							gchar *passwd64 = g_base64_encode(md_value, md_len);
+							g_key_file_set_string(keyfile, "passwords", username, passwd64);
+							g_key_file_save_to_file(keyfile, "passwords.ini", NULL);
+
 							strncpy(caller->name, username, sizeof(caller->name));
+							g_hash_table_replace(usernames, username, NULL);
 							printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
 							n = sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
 							str[n] = '\0';
@@ -455,6 +525,7 @@ int main(int argc, char **argv) {
 						case BYE:
 							closeCon(caller, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
+							g_hash_table_remove(usernames, caller->name);
 							printf("%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
 							n = sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
 							str[n] = '\0';
@@ -472,6 +543,7 @@ int main(int argc, char **argv) {
 					if(difftime(now, userdata->time) >= TIMEOUT) {
 						closeCon(userdata, &master);
 						g_hash_table_remove(connections, GINT_TO_POINTER(i));
+						g_hash_table_remove(usernames, userdata->name);
 						printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 						n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 						str[n] = '\0';
@@ -488,6 +560,7 @@ int main(int argc, char **argv) {
 				if(difftime(now, userdata->time) >= TIMEOUT) {
 					closeCon(userdata, &master);
 					g_hash_table_iter_remove(&iter);
+					g_hash_table_remove(usernames, userdata->name);
 					printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 					n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 					str[n] = '\0';
