@@ -36,7 +36,7 @@
    connection. */
 static int active = 1;
 
-enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
+enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE };
 
 /* To read a password without echoing it to the console.
  *
@@ -175,13 +175,15 @@ void readline_callback(char *line) {
 			writeOut("Usage: /game username\n");
 			return;
 		}
-		char *challenger = strdup(&(line[i]));
-		
 		buff[0] = GAME;
-		strcat(&buff[1], challenger);
+		strncat(&buff[1], &line[i], sizeof(buff)-2);
 	}
 	else if(strncmp("/roll", line, 5) == 0) {
+		int i = skipSpaces(line, 5);
 		buff[0] = ROLL;
+		if(i != -1) {
+			strncat(&buff[1], &line[i], sizeof(buff)-2);
+		}
 	}
 	else if(strncmp("/join", line, 5) == 0) {
 		int i = skipSpaces(line, 5);
@@ -189,10 +191,8 @@ void readline_callback(char *line) {
 			writeOut("Usage: /join chatroom\n");
 			return;
 		}
-		char *chatroom = strdup(&(line[i]));
-		
 		buff[0] = JOIN;
-		strcat(&buff[1], chatroom);
+		strncat(&buff[1], &line[i], sizeof(buff)-2);
 		
 		/* Maybe update the prompt. */
 		//free(prompt);
@@ -215,8 +215,8 @@ void readline_callback(char *line) {
 			writeOut("Usage: /say username message\n");
 			return;
 		}
-		char *receiver = strndup(&(line[i]), j - i);
-		char *message = strdup(&(line[j + 1]));
+		char *receiver = strndup(&line[i], j - i);
+		char *message = strndup(&line[j + 1], sizeof(buff) - j - 2);
 		
 		buff[0] = SAY;
 		strcat(&buff[1], receiver);
@@ -261,6 +261,16 @@ void readline_callback(char *line) {
 		//prompt = strdup(":: "); /* What should the new prompt look like? */
 		//rl_set_prompt(prompt);
 	}
+	else if(strncmp("/nick", line, 5) == 0) {
+		int i = skipSpaces(line, 5);
+		if(i == -1) {
+			writeOut("Usage: /nick nickname\n");
+			return;
+		}
+		buff[0] = NICK;
+		strncat(&buff[1], &line[i], sizeof(buff)-2);
+
+	}
 	else if(strncmp("/who", line, 4) == 0) {
 		buff[0] = WHO;
 	}
@@ -270,14 +280,13 @@ void readline_callback(char *line) {
 	}
 	else {
 		buff[0] = SPEAK;
-		strcat(&buff[1], line);
+		strncat(&buff[1], line, sizeof(buff)-2);
 	}
 	/* Sent the buffer to the server. */
 	SSL_write(server_ssl, buff, strlen(buff));
 }
 
 int main(int argc, char **argv) {
-	int err;
 	char buf[4096];
 	struct sockaddr_in server_addr;
 	
@@ -297,9 +306,7 @@ int main(int argc, char **argv) {
 	 * a private key can be loaded using
 	 * SSL_CTX_use_PrivateKey_file(). The use of private keys with
 	 * a server side key data base can be used to authenticate the
-	 * client.
-	 */
-	
+	 * client. */
 	int result = SSL_CTX_use_certificate_file(ssl_ctx, "cert.pem", SSL_FILETYPE_PEM);
 
 	SSL_CTX_use_PrivateKey_file(ssl_ctx, "key.pem", SSL_FILETYPE_PEM);
@@ -337,8 +344,7 @@ int main(int argc, char **argv) {
 	
     /* Establish a TCP/IP connection to the SSL client */
 
-	err = connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
-	RETURN_ERR(err, "connect");
+	RETURN_ERR(connect(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr)), "connect");
 	
     /* An SSL structure is created */
 	server_ssl = SSL_new(ssl_ctx);
@@ -348,8 +354,7 @@ int main(int argc, char **argv) {
 	SSL_set_fd(server_ssl, server_fd);
 	
 	/* Perform SSL Handshake on the SSL client */
-    err = SSL_connect(server_ssl);
-	RETURN_SSL(err);
+	RETURN_SSL(SSL_connect(server_ssl));
 	
 	/* Now we can create SSL and use them instead of the socket.
 	 * The SSL is responsible for maintaining the state of the
@@ -365,6 +370,7 @@ int main(int argc, char **argv) {
 	while(active) {
 		fd_set rfds;
 		struct timeval timeout;
+		int len; 
 
 		FD_ZERO(&rfds);
 		FD_SET(server_fd, &rfds);
@@ -385,11 +391,6 @@ int main(int argc, char **argv) {
 			break;
 		}
 		if(r == 0) {
-			//write(STDOUT_FILENO, "No message?\n", 12);
-			//fsync(STDOUT_FILENO);
-			/* Whenever you print out a message, call this
-			   to reprint the current input line. 
-			rl_redisplay();*/
 			continue;
 		}
 		if(FD_ISSET(STDIN_FILENO, &rfds)) {
@@ -398,7 +399,6 @@ int main(int argc, char **argv) {
 		}
 		
 		/* Handle messages from the server here! */
-		int len; 
 		RETURN_SSL(len = SSL_read(server_ssl, buf, sizeof(buf)-1));
 		if(len == 0) continue; 
 		buf[len] = '\0';
@@ -406,14 +406,10 @@ int main(int argc, char **argv) {
 		printf("%s\n", buf);
 	}
     /* Shut down the client side of the SSL connection */
-
-    err = SSL_shutdown(server_ssl);
-    RETURN_SSL(err);
+    RETURN_SSL(SSL_shutdown(server_ssl));
 
     /* Terminate communication on a socket */
-    err = close(server_fd);
-
-    RETURN_ERR(err, "close");
+    RETURN_ERR(close(server_fd), "close");
 
     /* Free the SSL structure */
     SSL_free(server_ssl);

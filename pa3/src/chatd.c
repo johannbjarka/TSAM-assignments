@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
@@ -22,7 +23,7 @@
 #define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
 
 const int MAX_CONN = 10;
-const double LOGIN_DELAY = 8.0;
+const double LOGIN_DELAY = 2.0;
 const double TIMEOUT = 60.0;
 FILE *logFile;
 SSL_CTX *ssl_ctx;
@@ -30,7 +31,7 @@ typedef void handler_t(int);
 handler_t *Signal(int signum, handler_t *handler);
 void unix_error(char *msg);
 
-enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
+enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE };
 
 typedef struct client_user {
 	SSL *ssl;
@@ -38,10 +39,16 @@ typedef struct client_user {
 	unsigned short port;
 	char addr_str[16];
 	char name[40];
+	char nick[40];
 	char room[40];
 	time_t time;
 	int login_tries;
 } user;
+
+typedef struct challenger_user {
+	SSL *ssl;
+	char name[40];
+} challenger;
 
 static int fdmax;
 static char timeF[sizeof "2011-10-08T07:07:09Z"];
@@ -89,6 +96,7 @@ void closeCon(user *usr, fd_set *master) {
 
 void logAction(char *str) {
 	/* Write into the log file */
+	printf("%s", str);
 	if(logFile != NULL) {
 		fputs(str, logFile);
 		fflush(logFile); 
@@ -122,8 +130,7 @@ void unix_error(char *msg)
 
 void sigint_handler(int signum) {
 	char str[80];
-	int n = sprintf(str, "%s : Server closed\n", timeF);
-	str[n] = '\0';
+	sprintf(str, "%s : Server closed\n", timeF);
 	logAction(str);
 	fclose(logFile);
 	
@@ -133,7 +140,7 @@ void sigint_handler(int signum) {
 }
 
 int main(int argc, char **argv) {
-	int i, listener, n, yes = 1;
+	int i, listener, yes = 1;
 	fd_set master, read_fds;
 	struct sockaddr_in serveraddr;
 	char message[512];
@@ -211,15 +218,14 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	/* Create dictionary to keep of track of the time passed for each connection */
+	// Create dictionary to keep of track of each connection
+	GHashTable *connections = g_hash_table_new(g_direct_hash, g_direct_equal);
 	GHashTable *authTable = g_hash_table_new(g_str_hash, g_str_equal);
+	GHashTable *gameChallengers =  g_hash_table_new(g_str_hash, g_str_equal);
 	g_hash_table_insert(authTable, "siggi", "a");
 	g_hash_table_insert(authTable, "derp", "b");
 	g_hash_table_insert(authTable, "joi", "c");
 	
-	GHashTable *connections = g_hash_table_new(g_direct_hash, g_direct_equal);
-	//GTree *nonUsers = g_tree_new(sockaddr_in_cmp);
-	//GTree *authUsers = g_tree_new(sockaddr_in_cmp);
 
 	FD_SET(listener, &master);
 	fdmax = listener;
@@ -250,9 +256,7 @@ int main(int argc, char **argv) {
 							continue;
 						}
 						/* TCP connection is ready. */
-						printf("%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
-						n = sprintf(str, "%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
-						str[n] = '\0';
+						sprintf(str, "%s : %s:%d connected\n", timeF, inet_ntoa(clientaddr.sin_addr), clientaddr.sin_port);
 						logAction(str);
 
 						FD_SET(newfd, &master); /* Add to master set */
@@ -291,9 +295,10 @@ int main(int argc, char **argv) {
 						char buff[2048];
 						memset(buff, 0, sizeof(buff));
 						
-						GHashTable *rooms;
+						int roll;
 						SSL *ussl;
-						char *username;
+						GHashTable *rooms;
+						char *username, *name;
 						GHashTableIter iter;
 						gpointer key, value;
 						
@@ -302,7 +307,6 @@ int main(int argc, char **argv) {
 							break;
 						}
 						
-						/* Send data to the SSL client */
 						switch(message[0]) {
 						case SPEAK:
 							if(strcmp(caller->room, "") == 0) {
@@ -313,7 +317,7 @@ int main(int argc, char **argv) {
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
 								if(strcmp(caller->room, aUser->room) == 0) {
-									strcat(buff, caller->name);
+									strcat(buff, caller->nick);
 									strcat(buff, ": ");
 									strcat(buff, &message[1]);
 									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
@@ -325,7 +329,7 @@ int main(int argc, char **argv) {
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
 								sprintf(&buff[strlen(buff)], "%s:%d ", aUser->addr_str, aUser->port);
-								strcat(buff, (strlen(aUser->name) > 0 ? aUser->name : "N/A"));
+								strcat(buff, (strlen(aUser->nick) > 0 ? aUser->nick : "N/A"));
 								strcat(buff, " | ");
 								strcat(buff, (strlen(aUser->room) > 0 ? aUser->room : "N/A"));
 								strcat(buff, "\n");
@@ -335,12 +339,12 @@ int main(int argc, char **argv) {
 						case SAY:
 							for(n = 1; !isspace(message[n]) && n < 41; n++);
 							username = strndup(&message[1], n-1);
-							char *usermessage = strndup(&message[n+1], 40);
+							char *usermessage = strndup(&message[n+1], sizeof(buff)-n-1);
 							ussl = NULL;
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
-								if(strcmp(aUser->name, username) == 0) {
+								if(strcmp(aUser->nick, username) == 0) {
 									ussl = aUser->ssl;
 									break;
 								}
@@ -354,7 +358,7 @@ int main(int argc, char **argv) {
 								break;
 							}
 							strcat(buff, "PM from ");
-							strcat(buff, caller->name);
+							strcat(buff, caller->nick);
 							strcat(buff, ": ");
 							strcat(buff, usermessage);
 							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
@@ -362,55 +366,48 @@ int main(int argc, char **argv) {
 						case USER:
 							for(n = 1; !isspace(message[n]) && n < 41; n++);
 							username = strndup(&message[1], n-1);
-							char *password = strndup(&message[n+1], 40);
+							char *password = strndup(&message[n+1], 39);
 							gpointer authPtr = g_hash_table_lookup(authTable, username);
 							if(authPtr == NULL || strcmp(authPtr, password) != 0) {
 								if(difftime(now, caller->time) < LOGIN_DELAY) {
 									RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
 									break;
 								}
-								
-								caller->login_tries++;
 								if(caller->login_tries == 3) {
 									RETURN_SSL(SSL_write(caller->ssl, "KICKED!", 7));
 									closeCon(caller, &master);
 									g_hash_table_remove(connections, GINT_TO_POINTER(i));
-									printf("%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
-									n = sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
-									str[n] = '\0';
+									sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
 									logAction(str);
 									break;
 								}
-								printf("%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
-								n = sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
-								str[n] = '\0';
+								caller->login_tries++;
+								sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
 								logAction(str);
 								RETURN_SSL(SSL_write(caller->ssl, "Username or password doesn't exist!", 35));
 								break;
 							}
 							strncpy(caller->name, username, sizeof(caller->name));
-							printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
-							n = sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
-							str[n] = '\0';
+							strncpy(caller->nick, username, sizeof(caller->nick));
+							sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->nick);
 							logAction(str);
 							caller->login_tries = 0;
 							
-							strcat(buff, "Logged in as: ");
-							strcat(buff, caller->name);
+							strcpy(buff, "Logged in as: ");
+							strcat(buff, caller->nick);
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
 						case LIST:
 							rooms = g_hash_table_new(g_str_hash, g_str_equal);
-							
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
 								if(strlen(aUser->room) == 0) continue;
 								if(!g_hash_table_contains(rooms, aUser->room)) {
 									g_hash_table_add(rooms, aUser->room);
-								}
-							
+								}				
 							}
+							buff[0] = '\0';
 							g_hash_table_iter_init(&iter, rooms);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								strcat(buff, (char *)key);
@@ -425,14 +422,15 @@ int main(int argc, char **argv) {
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
 						case GAME:
-						
-							username = strndup(&message[1], 40);
+							username = strndup(&message[1], sizeof(caller->nick)-1);
 							ussl = NULL;
+							name = NULL;
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
-								if(strcmp(aUser->name, username) == 0) {
+								if(strcmp(aUser->nick, username) == 0) {
 									ussl = aUser->ssl;
+									name = aUser->name;
 									break;
 								}
 							}
@@ -444,20 +442,45 @@ int main(int argc, char **argv) {
 								RETURN_SSL(SSL_write(caller->ssl, "Can't challenge yourself", 34));
 								break;
 							}
-							strcat(buff, caller->name);
+							challenger *chall = g_new(challenger, 1);
+							chall->ssl = ussl;
+							strcpy(chall->name, name);
+							g_hash_table_replace(gameChallengers, name, chall);
+							
 							strcat(buff, " has challenged you to a of a game of dice!(/roll)");
+							strcpy(buff, caller->nick);
 							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
-							//todo: add more game logic!
 							break;
 						case ROLL:
-							strcat(buff, "ROLL NOT IMPLEMENTED!");
+							
+							username = strndup(&message[1], sizeof(caller->nick)-1);
+							printf("%d\n", strlen(username));
+							gpointer ptr = g_hash_table_lookup(gameChallengers, username);
+							
+							roll = (int)(floor(drand48() * 6.0) + 1);
+							sprintf(buff, "%s rolled %d", caller->nick, roll);
+							if(strcmp(caller->room, "") == 0) {
+								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+								break;
+							}
+							g_hash_table_iter_init(&iter, connections);
+							while(g_hash_table_iter_next(&iter, &key, &value)) {
+								user *aUser = (user*) value;
+								if(strcmp(caller->room, aUser->room) == 0) {
+									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+								}
+							}
+							break;
+						case NICK:
+							strncpy(caller->nick, &message[1], sizeof(caller->nick));
+							strcat(buff, "Nickname change too: ");
+							strcat(buff, caller->nick);
+							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
 						case BYE:
 							closeCon(caller, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
-							printf("%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
-							n = sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
-							str[n] = '\0';
+							sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
 							logAction(str);
 							break;
 						}
@@ -472,9 +495,7 @@ int main(int argc, char **argv) {
 					if(difftime(now, userdata->time) >= TIMEOUT) {
 						closeCon(userdata, &master);
 						g_hash_table_remove(connections, GINT_TO_POINTER(i));
-						printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-						n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-						str[n] = '\0';
+						sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 						logAction(str);
 					}
 				}
@@ -488,9 +509,7 @@ int main(int argc, char **argv) {
 				if(difftime(now, userdata->time) >= TIMEOUT) {
 					closeCon(userdata, &master);
 					g_hash_table_iter_remove(&iter);
-					printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-					n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-					str[n] = '\0';
+					sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 					logAction(str);
 				}
 			}
