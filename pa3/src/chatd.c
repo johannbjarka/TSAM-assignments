@@ -25,7 +25,7 @@
 
 const int MAX_CONN = 10;
 const double LOGIN_DELAY = 2.0;
-const double TIMEOUT = 12.0;
+const double TIMEOUT = 300.0;
 FILE *logFile;
 SSL_CTX *ssl_ctx;
 typedef void handler_t(int);
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
 	}
 	
 	/* Open file stream for log file */
-	logFile = fopen ("chatd.log","a+");
+	logFile = fopen("chatd.log","a+");
 	
 	Signal(SIGINT, sigint_handler); /* ctrl-c */
 	
@@ -301,33 +301,30 @@ int main(int argc, char **argv) {
 						int roll, hasLeft = 0;
 						SSL *ussl;
 						GHashTable *rooms;
-						gchar *username, *name;
 						GHashTableIter iter;
 						gpointer key, value;
 						
+						
 						if(strcmp(caller->name, "") == 0 && message[0] != USER) {
 							RETURN_SSL(SSL_write(caller->ssl, "Please authorize yourself!(/user name)", 38));
-							break;
 						}
-						
-						switch(message[0]) {
-						case SPEAK:
+						else if(SPEAK == message[0]) {
 							if(strcmp(caller->room, "") == 0) {
 								RETURN_SSL(SSL_write(caller->ssl, "Please join a room!", 19));
-								break;
-							}
-							strcat(buff, caller->nick);
-							strcat(buff, ": ");
-							strcat(buff, &message[1]);
-							g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								user *aUser = (user*) value;
-								if(strcmp(caller->room, aUser->room) == 0) {
-									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+							} else {
+								strcat(buff, caller->nick);
+								strcat(buff, ": ");
+								strncat(buff, &message[1], sizeof(buff) - 45);
+								g_hash_table_iter_init(&iter, connections);
+								while(g_hash_table_iter_next(&iter, &key, &value)) {
+									user *aUser = (user*) value;
+									if(strcmp(caller->room, aUser->room) == 0) {
+										RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+									}
 								}
 							}
-							break;
-						case WHO:
+						}
+						else if(WHO == message[0]) {
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
@@ -337,13 +334,20 @@ int main(int argc, char **argv) {
 								strcat(buff, (strlen(aUser->room) > 0 ? aUser->room : "N/A"));
 								strcat(buff, "\n");
 							}
+							buff[strlen(buff)-1] = '\0'; // Removing last newline
+							//possible overflow, not handled.
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-							break;
-						case SAY:
-							for(n = 1; !isspace(message[n]) && n < sizeof(caller->nick); n++);
-							username = strndup(&message[1], n-1);
-							gchar *usermessage = strndup(&message[n+1], sizeof(buff)-n-1);
+						} 
+						else if(SAY == message[0]) {
+							char username[40];
+							char usermsg[1024];
+							for(n = 0; !isspace(message[n+1]) && n < sizeof(caller->nick); n++);
+							strncpy(username, &message[1], n);
+							username[sizeof(username)-1] = '\0';
+							strncpy(usermsg, &message[n+1], sizeof(usermsg));
+							usermsg[sizeof(usermsg)-1] = '\0';
 							ussl = NULL;
+							
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
@@ -352,25 +356,23 @@ int main(int argc, char **argv) {
 									break;
 								}
 							}
-							g_free(username);
 							if(ussl == NULL) {
 								RETURN_SSL(SSL_write(caller->ssl, "No known user with that name", 28));
-								break;
 							}
-							if(ussl == caller->ssl) {
+							else if(ussl == caller->ssl) {
 								RETURN_SSL(SSL_write(caller->ssl, "Can't send private message to self", 34));
-								break;
 							}
-							strcat(buff, "PM from ");
-							strcat(buff, caller->nick);
-							strcat(buff, ": ");
-							strcat(buff, usermessage);
-							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
-							g_free(usermessage);
-							break;
-						case USER:
+							else {
+								strcat(buff, "PM from ");
+								strcat(buff, caller->nick);
+								strcat(buff, ": ");
+								strcat(buff, usermsg);
+								RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
+							}
+						}
+						else if(USER == message[0]) {
 							for(n = 1; !isspace(message[n]) && n < sizeof(caller->name); n++);
-							username = strndup(&message[1], n-1);
+							gchar *username = strndup(&message[1], n-1);
 							gchar *password = strndup(&message[n+1], 32);
 							gchar *password64 = g_base64_encode((guchar*)password, strlen(password));
 							g_free(password);
@@ -380,115 +382,159 @@ int main(int argc, char **argv) {
 								strcat(buff, " is already logged in!");
 								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 								g_free(username);
-								break;
 							}
-							
-							/* Initialize hash structures */
-							EVP_MD_CTX *mdctx;
-							const EVP_MD *md;
-							unsigned char md_value[EVP_MAX_MD_SIZE];
-							unsigned int md_len;
-							md = EVP_sha256();
-							mdctx = EVP_MD_CTX_create();
-							
-							GKeyFile *keyfile = g_key_file_new();
-							if(g_key_file_load_from_file(keyfile, "passwords.ini", G_KEY_FILE_NONE, NULL)) {
-								gchar *salt = g_key_file_get_string(keyfile, "salts", username, NULL);
-								if(salt != NULL) {
-									/* Prepend salt to the password and hash it */								
-									EVP_DigestInit_ex(mdctx, md, NULL);
-									EVP_DigestUpdate(mdctx, salt, strlen(salt));
-									EVP_DigestUpdate(mdctx, password64, strlen(password64));
-									g_free(salt);
-									g_free(password64);
-									EVP_DigestFinal_ex(mdctx, md_value, &md_len);
-									EVP_MD_CTX_destroy(mdctx);
-									EVP_cleanup();
+							else {
+								/* Initialize hash structures */
+								EVP_MD_CTX *mdctx;
+								const EVP_MD *md;
+								unsigned char md_value[EVP_MAX_MD_SIZE];
+								unsigned int md_len;
+								md = EVP_sha256();
+								mdctx = EVP_MD_CTX_create();
+								GKeyFile *keyfile = g_key_file_new();
+								
+								if(g_key_file_load_from_file(keyfile, "passwords.ini", G_KEY_FILE_NONE, NULL)) {
+									gchar *salt = g_key_file_get_string(keyfile, "salts", username, NULL);
+									if(salt != NULL) {
+										/* Prepend salt to the password and hash it */								
+										EVP_DigestInit_ex(mdctx, md, NULL);
+										EVP_DigestUpdate(mdctx, salt, strlen(salt));
+										EVP_DigestUpdate(mdctx, password64, strlen(password64));
+										g_free(salt);
+										g_free(password64);
+										EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+										EVP_MD_CTX_destroy(mdctx);
+										EVP_cleanup();
 
-									/* Compare the result to the stored password */
-									gchar *passwd64 = g_base64_encode(md_value, md_len);
-									gchar *stored_passwd = g_key_file_get_string(keyfile, "passwords", username, NULL);
-									g_key_file_free(keyfile);
-									if(strcmp(stored_passwd, passwd64) != 0) {
-										if(difftime(now, caller->time) < LOGIN_DELAY) {
-											RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
-											break;
-										}
-										
-										caller->login_tries++;
-										if(caller->login_tries == 3) {
-											RETURN_SSL(SSL_write(caller->ssl, "KICKED!", 7));
-											closeCon(caller, &master);
-											g_hash_table_remove(connections, GINT_TO_POINTER(i));
-											sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+										/* Compare the result to the stored password */
+										gchar *passwd64 = g_base64_encode(md_value, md_len);
+										gchar *stored_passwd = g_key_file_get_string(keyfile, "passwords", username, NULL);
+										g_key_file_free(keyfile);
+										if(strcmp(stored_passwd, passwd64) != 0) {
+											if(difftime(now, caller->time) < LOGIN_DELAY) {
+												RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
+												g_free(passwd64);
+												g_free(stored_passwd);
+											}
+											else {
+												caller->login_tries++;
+												if(caller->login_tries == 3) {
+													RETURN_SSL(SSL_write(caller->ssl, "KICKED!", 7));
+													closeCon(caller, &master);
+													g_hash_table_remove(connections, GINT_TO_POINTER(i));
+													sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+													logAction(str);
+													g_free(passwd64);
+													g_free(stored_passwd);
+												}
+												sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+												logAction(str);
+												RETURN_SSL(SSL_write(caller->ssl, "Wrong password!", 15));
+												g_free(passwd64);
+												g_free(stored_passwd);
+											}
+										} 
+										else {
+											/* Password matches */
+											strncpy(caller->name, username, sizeof(caller->name));
+											strncpy(caller->nick, username, sizeof(caller->nick));
+											sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
 											logAction(str);
-											break;
+											caller->login_tries = 0;
+											
+											g_hash_table_add(usernames, caller->name);
+											strcat(buff, "Logged in as: ");
+											strcat(buff, caller->name);
+											RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+											g_free(passwd64);
+											g_free(stored_passwd);
+											g_free(username);
 										}
-										sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
-										logAction(str);
-										RETURN_SSL(SSL_write(caller->ssl, "Wrong password!", 15));
+									}
+									else {
+										/* If no file or salt exists, then we have a new user. We create a new random salt and store it */
+										char salt[33];
+										size_t j, len = 32;
+										srand(time(NULL));
+										for(j = 0; j < len; j++) {
+											salt[j] = '0' + rand() % 72;
+										}
+										salt[len] = '\0';							
+										g_key_file_set_string(keyfile, "salts", username, salt);
+										
+										/* Prepend salt to the password and hash it */								
+										EVP_DigestInit_ex(mdctx, md, NULL);
+										EVP_DigestUpdate(mdctx, salt, strlen(salt));
+										EVP_DigestUpdate(mdctx, password64, strlen(password64));
+										g_free(password64);
+										EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+										EVP_MD_CTX_destroy(mdctx);
+										EVP_cleanup();
+										
+										/* Store the resulting string and save changes to file */
+										gchar *passwd64 = g_base64_encode(md_value, md_len);
+										g_key_file_set_string(keyfile, "passwords", username, passwd64);
+										g_key_file_save_to_file(keyfile, "passwords.ini", NULL);
+										g_key_file_free(keyfile);
 										g_free(passwd64);
-										g_free(stored_passwd);
-										break;
-									} else {
-										/* Password matches */
+										
 										strncpy(caller->name, username, sizeof(caller->name));
 										strncpy(caller->nick, username, sizeof(caller->nick));
+										g_hash_table_replace(usernames, username, NULL);
+										
 										sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
 										logAction(str);
 										caller->login_tries = 0;
 										
-										g_hash_table_add(usernames, caller->name);
-										strcat(buff, "Logged in as: ");
+										strcpy(buff, "Logged in as: ");
 										strcat(buff, caller->name);
 										RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-										g_free(passwd64);
-										g_free(stored_passwd);
 										g_free(username);
-										break;
-									}									
-								}								
+									}
+								}
+								else {
+									/* If no file or salt exists, then we have a new user. We create a new random salt and store it */
+									char salt[33];
+									size_t j, len = 32;
+									srand(time(NULL));
+									for(j = 0; j < len; j++) {
+										salt[j] = '0' + rand() % 72;
+									}
+									salt[len] = '\0';							
+									g_key_file_set_string(keyfile, "salts", username, salt);
+									
+									/* Prepend salt to the password and hash it */								
+									EVP_DigestInit_ex(mdctx, md, NULL);
+									EVP_DigestUpdate(mdctx, salt, strlen(salt));
+									EVP_DigestUpdate(mdctx, password64, strlen(password64));
+									g_free(password64);
+									EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+									EVP_MD_CTX_destroy(mdctx);
+									EVP_cleanup();
+									
+									/* Store the resulting string and save changes to file */
+									gchar *passwd64 = g_base64_encode(md_value, md_len);
+									g_key_file_set_string(keyfile, "passwords", username, passwd64);
+									g_key_file_save_to_file(keyfile, "passwords.ini", NULL);
+									g_key_file_free(keyfile);
+									g_free(passwd64);
+									
+									strncpy(caller->name, username, sizeof(caller->name));
+									strncpy(caller->nick, username, sizeof(caller->nick));
+									g_hash_table_replace(usernames, username, NULL);
+									
+									sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+									logAction(str);
+									caller->login_tries = 0;
+									
+									strcpy(buff, "Logged in as: ");
+									strcat(buff, caller->name);
+									RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+									g_free(username);
+								}
 							}
-							/* If no file or salt exists, then we have a new user. We create a new random salt and store it */
-							char salt[33];
-							size_t j, len = 32;
-							srand(time(NULL));
-							for(j = 0; j < len; j++) {
-								salt[j] = '0' + rand() % 72;
-							}
-							salt[len] = '\0';							
-							g_key_file_set_string(keyfile, "salts", username, salt);
-							
-							/* Prepend salt to the password and hash it */								
-							EVP_DigestInit_ex(mdctx, md, NULL);
-							EVP_DigestUpdate(mdctx, salt, strlen(salt));
-							EVP_DigestUpdate(mdctx, password64, strlen(password64));
-							g_free(password64);
-							EVP_DigestFinal_ex(mdctx, md_value, &md_len);
-							EVP_MD_CTX_destroy(mdctx);
-							EVP_cleanup();
-							
-							/* Store the resulting string and save changes to file */
-							gchar *passwd64 = g_base64_encode(md_value, md_len);
-							g_key_file_set_string(keyfile, "passwords", username, passwd64);
-							g_key_file_save_to_file(keyfile, "passwords.ini", NULL);
-							g_key_file_free(keyfile);
-							g_free(passwd64);
-							
-							strncpy(caller->name, username, sizeof(caller->name));
-							strncpy(caller->nick, username, sizeof(caller->nick));
-							g_hash_table_replace(usernames, username, NULL);
-							
-							sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
-							logAction(str);
-							caller->login_tries = 0;
-							
-							strcpy(buff, "Logged in as: ");
-							strcat(buff, caller->name);
-							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-							g_free(username);
-							break;
-						case LIST:
+						} 
+						else if(LIST == message[0]) {
 							rooms = g_hash_table_new(g_str_hash, g_str_equal);
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
@@ -498,114 +544,143 @@ int main(int argc, char **argv) {
 									g_hash_table_add(rooms, aUser->room);
 								}				
 							}
-							buff[0] = '\0';
 							g_hash_table_iter_init(&iter, rooms);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								strcat(buff, (char *)key);
 								strcat(buff, "\n");
 							}
+							buff[strlen(buff)-1] = '\0'; // Removing last newline
+							//possible overflow, not handled.
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							g_hash_table_destroy(rooms);
-							break;
-						case JOIN:
+						} 
+						else if(JOIN == message[0]) {
 							strncpy(caller->room, &message[1], sizeof(caller->room));
+							caller->room[sizeof(caller->room)-1] = '\0';
+							
 							strcat(buff, "Joined room: ");
 							strcat(buff, caller->room);
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-							break;
-						case GAME:
-							for(n = 1; !isspace(message[n]) && n < sizeof(caller->nick); n++);
-							username = strndup(&message[1], n-1);
+						} 
+						else if(GAME == message[0]) {
+							char username[40];
+							char usernick[40];
+							for(n = 0; !isspace(message[n+1]) && n < sizeof(caller->nick); n++);
+							strncpy(usernick, &message[1], n);
+							usernick[sizeof(usernick)-1] = '\0';
 							ussl = NULL;
-							name = NULL;
+							
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
-								if(strcmp(aUser->nick, username) == 0) {
+								if(strcmp(aUser->nick, usernick) == 0) {
 									ussl = aUser->ssl;
-									name = aUser->name;
+									strcpy(username, aUser->name);
 									break;
 								}
 							}
-							g_free(username);
 							if(ussl == NULL) {
 								RETURN_SSL(SSL_write(caller->ssl, "No known user with that name", 28));
-								break;
-							}
-							if(ussl == caller->ssl) {
+							} else if(ussl == caller->ssl) {
 								RETURN_SSL(SSL_write(caller->ssl, "Can't challenge yourself", 34));
-								break;
+							} else {
+								challenger *chall = g_new(challenger, 1);
+								chall->ssl = ussl;
+								strcpy(chall->name, username);
+								g_hash_table_replace(gameChallengers, caller->name, chall);
+								
+								strcpy(buff, caller->nick);
+								strcat(buff, " has challenged you too a game of dice!(/roll ");
+								strcat(buff, caller->nick);
+								strcat(buff, ") to challenge him!");
+								RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
 							}
-							challenger *chall = g_new(challenger, 1);
-							chall->ssl = ussl;
-							strcpy(chall->name, name);
-							g_hash_table_replace(gameChallengers, name, chall);
-							g_free(chall);
-							
-							strcpy(buff, caller->nick);
-							strcat(buff, " has challenged you too a game of dice!(/roll ");
-							strcat(buff, caller->nick);
-							strcat(buff, ") to challenge him!");
-							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
-							break;
-						case ROLL:
-							for(n = 1; !isspace(message[n]) && n < sizeof(caller->nick); n++);
-							username = strndup(&message[1], n-1);
-							
+						} 
+						else if(ROLL == message[0]) {
+							char username[40];		
+							char usernick[40];
+							for(n = 0; !isspace(message[n+1]) && n < sizeof(caller->nick); n++);
+							strncpy(usernick, &message[1], n);
+							usernick[sizeof(usernick)-1] = '\0';
 							roll = (int)(floor(drand48() * 6.0) + 1);
 							sprintf(buff, "%s rolled %d", caller->nick, roll);
-							if(strlen(username) > 0) {
+							if(strlen(usernick) > 0) {
 								ussl = NULL;
 								g_hash_table_iter_init(&iter, connections);
 								while(g_hash_table_iter_next(&iter, &key, &value)) {
 									user *aUser = (user*) value;
-									if(strcmp(aUser->nick, username) == 0) {
-										ussl = aUser->ssl;										
+									if(strcmp(aUser->nick, usernick) == 0) {
+										ussl = aUser->ssl;
+										strcpy(username, aUser->name);
 										break;
 									}
 								}
 							
 								gpointer ptr = g_hash_table_lookup(gameChallengers, username);
-								if(ptr) {
-									int s_roll = (int)(floor(drand48() * 6.0) + 1);
-									sprintf(buff, "\n%s rolled %d\n", username, s_roll);
-									if(roll == s_roll) {
-										strcat(buff, "It's a tie.");
-									} else {
-										strcat(buff, roll > s_roll ? caller->nick : username);
-										strcat(buff, " wins!");
-									}
-									RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-									RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
-									g_hash_table_remove(gameChallengers, username);
-								} else {
+								if(ptr == 0) {
 									RETURN_SSL(SSL_write(caller->ssl, "No user by that name has challenged you", 39));
 								}
-								g_free(username);
-								break;
+								else {
+									challenger *userdata = (challenger*) ptr;
+									if(userdata->ssl == ussl) {
+										int s_roll = (int)(floor(drand48() * 6.0) + 1);
+										sprintf(buff, "\n%s rolled %d", usernick, s_roll);
+										if(roll == s_roll) {
+											strcat(buff, "It's a tie.");
+										} else {
+											strcat(buff, (roll > s_roll ? caller->nick : usernick));
+											strcat(buff, " wins!");
+										}
+										RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+										RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
+										g_free(ptr);
+										g_hash_table_remove(gameChallengers, username);
+									}
+									else {
+										RETURN_SSL(SSL_write(caller->ssl, "No user by that name has challenged you", 39));
+									}
+								}
 							}
-							
-							if(strcmp(caller->room, "") == 0) {
+							else if(strcmp(caller->room, "") == 0) {
 								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-								g_free(username);
-								break;
 							}
+							else {
+								g_hash_table_iter_init(&iter, connections);
+								while(g_hash_table_iter_next(&iter, &key, &value)) {
+									user *aUser = (user*) value;
+									if(strcmp(caller->room, aUser->room) == 0) {
+										RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+									}
+								}
+							}
+						} 
+						else if(NICK == message[0]) {
+							char usernick[40];
+							for(n = 0; !isspace(message[n+1]) && n < sizeof(caller->nick); n++);
+							strncpy(usernick, &message[1], n);
+							usernick[sizeof(usernick)-1] = '\0';
+							
+							int nickExists = 0;
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								user *aUser = (user*) value;
-								if(strcmp(caller->room, aUser->room) == 0) {
-									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
+								if(strcmp(aUser->nick, usernick) == 0) {
+									nickExists = 1;
+									break;
 								}
 							}
-							g_free(username);
-							break;
-						case NICK:
-							strncpy(caller->nick, &message[1], sizeof(caller->nick));
-							strcat(buff, "Nickname changed to: ");
-							strcat(buff, caller->nick);
-							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-							break;
-						case BYE:
+							if(!nickExists) {
+								strcpy(caller->nick, usernick);
+								strcat(buff, "Nickname changed to: ");
+								strcat(buff, caller->nick);
+								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							}
+							else {
+								RETURN_SSL(SSL_write(caller->ssl, "Someone is already using that nick!", 35));
+							}
+							
+						} 
+						else if(BYE == message[0]) {
 							closeCon(caller, &master);
 							sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
 							logAction(str);
@@ -613,7 +688,6 @@ int main(int argc, char **argv) {
 							g_free(g_hash_table_lookup(connections, GINT_TO_POINTER(i)));
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
 							hasLeft = 1;
-							break;
 						}
 						if(!hasLeft) {
 							caller->time = now;
