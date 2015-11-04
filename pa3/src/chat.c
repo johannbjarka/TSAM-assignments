@@ -21,6 +21,7 @@
 /* Secure socket layer headers */
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/evp.h>
 
 /* For nicer interaction, we use the GNU readline library. */
 #include <readline/readline.h>
@@ -125,6 +126,28 @@ void writeOut(char *line) {
 	rl_redisplay();
 }
 
+int validate(char *passwd) {
+	int onlyChars = 1, onlyDigits = 1;
+	size_t i, len = strlen(passwd);
+	if(len < 8) {
+		writeOut("Your password must be at least 8 characters\n");
+		return 1;
+	}
+	for(i = 0; i < len; i++) {
+		if(isalpha(passwd[i])) {
+			onlyDigits = 0;
+		}
+		if(isdigit(passwd[i])) {
+			onlyChars = 0;
+		}
+	}
+	if(onlyChars || onlyDigits) {
+		writeOut("Your password must include both letters and numbers\n");
+		return 1;
+	}
+	return 0;
+}
+
 /* When a line is entered using the readline library, this function
    gets called to handle the entered line. Implement the code to
    handle the user requests in this function. The client handles the
@@ -208,12 +231,30 @@ void readline_callback(char *line) {
 		}
 		char *new_user = strdup(&(line[i]));
 		char passwd[48];
-		getpasswd("Password: ", passwd, 48);
+		int unValidated = 1;
+		while(unValidated) {
+			getpasswd("Password: ", passwd, 48);
+			unValidated = validate(passwd);
+		}
+		
+		/* Hash the password */
+		EVP_MD_CTX *mdctx;
+		const EVP_MD *md;
+		unsigned char md_value[EVP_MAX_MD_SIZE];
+		unsigned int md_len;
+		md = EVP_sha256();
+		
+		mdctx = EVP_MD_CTX_create();
+		EVP_DigestInit_ex(mdctx, md, NULL);
+		EVP_DigestUpdate(mdctx, passwd, strlen(passwd));
+		EVP_DigestFinal_ex(mdctx, md_value, &md_len);
+		EVP_MD_CTX_destroy(mdctx);
+		EVP_cleanup();
 		
 		buff[0] = USER;
 		strcat(&buff[1], new_user);
 		strcat(buff, "\n");
-		strcat(buff, passwd);
+		strcat(buff, (char *)md_value);
 
 		/* Maybe update the prompt. */
 		//free(prompt);

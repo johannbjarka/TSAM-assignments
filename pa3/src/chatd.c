@@ -8,7 +8,6 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
@@ -23,7 +22,7 @@
 #define RETURN_SSL(err) if ((err)==-1) { ERR_print_errors_fp(stderr); exit(1); }
 
 const int MAX_CONN = 10;
-const double LOGIN_DELAY = 2.0;
+const double LOGIN_DELAY = 8.0;
 const double TIMEOUT = 60.0;
 FILE *logFile;
 SSL_CTX *ssl_ctx;
@@ -31,7 +30,7 @@ typedef void handler_t(int);
 handler_t *Signal(int signum, handler_t *handler);
 void unix_error(char *msg);
 
-enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE };
+enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, BYE };
 
 typedef struct client_user {
 	SSL *ssl;
@@ -292,7 +291,6 @@ int main(int argc, char **argv) {
 						char buff[2048];
 						memset(buff, 0, sizeof(buff));
 						
-						int roll;
 						GHashTable *rooms;
 						SSL *ussl;
 						char *username;
@@ -300,7 +298,7 @@ int main(int argc, char **argv) {
 						gpointer key, value;
 						
 						if(strcmp(caller->name, "") == 0 && message[0] != USER) {
-							RETURN_SSL(SSL_write(caller->ssl, "Please authorize you're self!(/user name)", 46));
+							RETURN_SSL(SSL_write(caller->ssl, "Please authorize yourself!(/user name)", 38));
 							break;
 						}
 						
@@ -379,11 +377,13 @@ int main(int argc, char **argv) {
 									g_hash_table_remove(connections, GINT_TO_POINTER(i));
 									printf("%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
 									n = sprintf(str, "%s : %s:%d kicked, failed to authenticate\n", timeF, caller->addr_str, caller->port);
+									str[n] = '\0';
 									logAction(str);
 									break;
 								}
 								printf("%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
 								n = sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
+								str[n] = '\0';
 								logAction(str);
 								RETURN_SSL(SSL_write(caller->ssl, "Username or password doesn't exist!", 35));
 								break;
@@ -391,10 +391,11 @@ int main(int argc, char **argv) {
 							strncpy(caller->name, username, sizeof(caller->name));
 							printf("%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
 							n = sprintf(str, "%s : %s:%d %s authenticated\n", timeF, caller->addr_str, caller->port, caller->name);
+							str[n] = '\0';
 							logAction(str);
 							caller->login_tries = 0;
 							
-							strcpy(buff, "Logged in as: ");
+							strcat(buff, "Logged in as: ");
 							strcat(buff, caller->name);
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
@@ -410,7 +411,6 @@ int main(int argc, char **argv) {
 								}
 							
 							}
-							buff[0] = '\0';
 							g_hash_table_iter_init(&iter, rooms);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
 								strcat(buff, (char *)key);
@@ -425,6 +425,7 @@ int main(int argc, char **argv) {
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
 						case GAME:
+						
 							username = strndup(&message[1], 40);
 							ussl = NULL;
 							g_hash_table_iter_init(&iter, connections);
@@ -443,31 +444,20 @@ int main(int argc, char **argv) {
 								RETURN_SSL(SSL_write(caller->ssl, "Can't challenge yourself", 34));
 								break;
 							}
-							strcpy(buff, caller->name);
+							strcat(buff, caller->name);
 							strcat(buff, " has challenged you to a of a game of dice!(/roll)");
 							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
 							//todo: add more game logic!
 							break;
 						case ROLL:
-							roll = (int)(floor(drand48() * 6.0) + 1);
-							sprintf(buff, "%s rolled %d", caller->name, roll);
-							if(strcmp(caller->room, "") == 0) {
-								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
-								break;
-							}
-							g_hash_table_iter_init(&iter, connections);
-							while(g_hash_table_iter_next(&iter, &key, &value)) {
-								user *aUser = (user*) value;
-								if(strcmp(caller->room, aUser->room) == 0) {
-									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
-								}
-							}
+							strcat(buff, "ROLL NOT IMPLEMENTED!");
 							break;
 						case BYE:
 							closeCon(caller, &master);
 							g_hash_table_remove(connections, GINT_TO_POINTER(i));
 							printf("%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
 							n = sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
+							str[n] = '\0';
 							logAction(str);
 							break;
 						}
@@ -484,6 +474,7 @@ int main(int argc, char **argv) {
 						g_hash_table_remove(connections, GINT_TO_POINTER(i));
 						printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 						n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+						str[n] = '\0';
 						logAction(str);
 					}
 				}
@@ -499,6 +490,7 @@ int main(int argc, char **argv) {
 					g_hash_table_iter_remove(&iter);
 					printf("%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
 					n = sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+					str[n] = '\0';
 					logAction(str);
 				}
 			}
