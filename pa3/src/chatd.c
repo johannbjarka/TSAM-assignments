@@ -168,10 +168,17 @@ int main(int argc, char **argv) {
         exit(1);
     }
 	
-	int result = SSL_CTX_use_certificate_file(ssl_ctx, "certd.pem", SSL_FILETYPE_PEM);
-	printf("certificate result %d\n", result);
+	/* Load the server certificate into the SSL_CTX structure */
+	if (SSL_CTX_use_certificate_file(ssl_ctx, "certd.pem", SSL_FILETYPE_PEM) <= 0) {
+		ERR_print_errors_fp(stderr);
+		exit(1);
+	}
 
-	SSL_CTX_use_PrivateKey_file(ssl_ctx,"keyd.pem", SSL_FILETYPE_PEM);
+	/* Load the private-key corresponding to the server certificate */
+	if (SSL_CTX_use_PrivateKey_file(ssl_ctx, "keyd.pem", SSL_FILETYPE_PEM) <= 0) {
+		ERR_print_errors_fp(stderr);
+		exit(1);
+	}
 
 	/* Check if the server certificate and private-key matches */
     if(!SSL_CTX_check_private_key(ssl_ctx)) {
@@ -294,7 +301,7 @@ int main(int argc, char **argv) {
 						int roll;
 						SSL *ussl;
 						GHashTable *rooms;
-						char *username, *name;
+						gchar *username, *name;
 						GHashTableIter iter;
 						gpointer key, value;
 						
@@ -335,7 +342,7 @@ int main(int argc, char **argv) {
 						case SAY:
 							for(n = 1; !isspace(message[n]) && n < sizeof(caller->nick); n++);
 							username = strndup(&message[1], n-1);
-							char *usermessage = strndup(&message[n+1], sizeof(buff)-n-1);
+							gchar *usermessage = strndup(&message[n+1], sizeof(buff)-n-1);
 							ussl = NULL;
 							g_hash_table_iter_init(&iter, connections);
 							while(g_hash_table_iter_next(&iter, &key, &value)) {
@@ -345,6 +352,7 @@ int main(int argc, char **argv) {
 									break;
 								}
 							}
+							g_free(username);
 							if(ussl == NULL) {
 								RETURN_SSL(SSL_write(caller->ssl, "No known user with that name", 28));
 								break;
@@ -358,17 +366,20 @@ int main(int argc, char **argv) {
 							strcat(buff, ": ");
 							strcat(buff, usermessage);
 							RETURN_SSL(SSL_write(ussl, buff, strlen(buff)));
+							g_free(usermessage);
 							break;
 						case USER:
 							for(n = 1; !isspace(message[n]) && n < sizeof(caller->name); n++);
 							username = strndup(&message[1], n-1);
-							char *password = strndup(&message[n+1], 32);
-							char *password64 = g_base64_encode((guchar*)password, strlen(password));
+							gchar *password = strndup(&message[n+1], 32);
+							gchar *password64 = g_base64_encode((guchar*)password, strlen(password));
+							g_free(password);
 							if(g_hash_table_contains(usernames, username)) {
 								strcat(buff, "User: ");
 								strcat(buff, username);
 								strcat(buff, " is already logged in!");
 								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+								g_free(username);
 								break;
 							}
 							
@@ -382,19 +393,22 @@ int main(int argc, char **argv) {
 							
 							GKeyFile *keyfile = g_key_file_new();
 							if(g_key_file_load_from_file(keyfile, "passwords.ini", G_KEY_FILE_NONE, NULL)) {
-								char *salt = g_key_file_get_string(keyfile, "salts", username, NULL);
+								gchar *salt = g_key_file_get_string(keyfile, "salts", username, NULL);
 								if(salt != NULL) {
 									/* Prepend salt to the password and hash it */								
 									EVP_DigestInit_ex(mdctx, md, NULL);
 									EVP_DigestUpdate(mdctx, salt, strlen(salt));
 									EVP_DigestUpdate(mdctx, password64, strlen(password64));
+									g_free(salt);
+									g_free(password64);
 									EVP_DigestFinal_ex(mdctx, md_value, &md_len);
 									EVP_MD_CTX_destroy(mdctx);
 									EVP_cleanup();
 
 									/* Compare the result to the stored password */
-									char *passwd64 = g_base64_encode(md_value, md_len);
-									char *stored_passwd = g_key_file_get_string(keyfile, "passwords", username, NULL);
+									gchar *passwd64 = g_base64_encode(md_value, md_len);
+									gchar *stored_passwd = g_key_file_get_string(keyfile, "passwords", username, NULL);
+									g_key_file_free(keyfile);
 									if(strcmp(stored_passwd, passwd64) != 0) {
 										if(difftime(now, caller->time) < LOGIN_DELAY) {
 											RETURN_SSL(SSL_write(caller->ssl, "DELAYED!", 8));
@@ -413,6 +427,8 @@ int main(int argc, char **argv) {
 										sprintf(str, "%s : %s:%d %s authentication error\n", timeF, caller->addr_str, caller->port, username);
 										logAction(str);
 										RETURN_SSL(SSL_write(caller->ssl, "Wrong password!", 15));
+										g_free(passwd64);
+										g_free(stored_passwd);
 										break;
 									} else {
 										/* Password matches */
@@ -422,12 +438,15 @@ int main(int argc, char **argv) {
 										logAction(str);
 										caller->login_tries = 0;
 										
-										g_hash_table_add(usernames, username);
+										g_hash_table_add(usernames, caller->name);
 										strcat(buff, "Logged in as: ");
 										strcat(buff, caller->name);
 										RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+										g_free(passwd64);
+										g_free(stored_passwd);
+										g_free(username);
 										break;
-									} 
+									}									
 								}								
 							}
 							/* If no file or salt exists, then we have a new user. We create a new random salt and store it */
@@ -444,14 +463,17 @@ int main(int argc, char **argv) {
 							EVP_DigestInit_ex(mdctx, md, NULL);
 							EVP_DigestUpdate(mdctx, salt, strlen(salt));
 							EVP_DigestUpdate(mdctx, password64, strlen(password64));
+							g_free(password64);
 							EVP_DigestFinal_ex(mdctx, md_value, &md_len);
 							EVP_MD_CTX_destroy(mdctx);
 							EVP_cleanup();
 							
 							/* Store the resulting string and save changes to file */
-							char *passwd64 = g_base64_encode(md_value, md_len);
+							gchar *passwd64 = g_base64_encode(md_value, md_len);
 							g_key_file_set_string(keyfile, "passwords", username, passwd64);
 							g_key_file_save_to_file(keyfile, "passwords.ini", NULL);
+							g_key_file_free(keyfile);
+							g_free(passwd64);
 							
 							strncpy(caller->name, username, sizeof(caller->name));
 							strncpy(caller->nick, username, sizeof(caller->nick));
@@ -464,6 +486,7 @@ int main(int argc, char **argv) {
 							strcpy(buff, "Logged in as: ");
 							strcat(buff, caller->name);
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							g_free(username);
 							break;
 						case LIST:
 							rooms = g_hash_table_new(g_str_hash, g_str_equal);
@@ -482,6 +505,7 @@ int main(int argc, char **argv) {
 								strcat(buff, "\n");
 							}
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+							g_hash_table_destroy(rooms);
 							break;
 						case JOIN:
 							strncpy(caller->room, &message[1], sizeof(caller->room));
@@ -503,6 +527,7 @@ int main(int argc, char **argv) {
 									break;
 								}
 							}
+							g_free(username);
 							if(ussl == NULL) {
 								RETURN_SSL(SSL_write(caller->ssl, "No known user with that name", 28));
 								break;
@@ -515,6 +540,7 @@ int main(int argc, char **argv) {
 							chall->ssl = ussl;
 							strcpy(chall->name, name);
 							g_hash_table_replace(gameChallengers, name, chall);
+							g_free(chall);
 							
 							strcpy(buff, caller->nick);
 							strcat(buff, " has challenged you too a game of dice!(/roll ");
@@ -534,7 +560,7 @@ int main(int argc, char **argv) {
 								while(g_hash_table_iter_next(&iter, &key, &value)) {
 									user *aUser = (user*) value;
 									if(strcmp(aUser->nick, username) == 0) {
-										ussl = aUser->ssl;
+										ussl = aUser->ssl;										
 										break;
 									}
 								}
@@ -555,11 +581,13 @@ int main(int argc, char **argv) {
 								} else {
 									RETURN_SSL(SSL_write(caller->ssl, "No user by that name has challenged you", 39));
 								}
+								g_free(username);
 								break;
 							}
 							
 							if(strcmp(caller->room, "") == 0) {
 								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
+								g_free(username);
 								break;
 							}
 							g_hash_table_iter_init(&iter, connections);
@@ -569,6 +597,7 @@ int main(int argc, char **argv) {
 									RETURN_SSL(SSL_write(aUser->ssl, buff, strlen(buff)));
 								}
 							}
+							g_free(username);
 							break;
 						case NICK:
 							strncpy(caller->nick, &message[1], sizeof(caller->nick));
