@@ -255,6 +255,7 @@ void readline_callback(char *line) {
 		strcat(&buff[1], new_user);
 		strcat(buff, "\n");
 		strcat(buff, (char *)md_value);
+		free(new_user);
 	}
 	else if(strncmp("/nick", line, 5) == 0) {
 		int i = skipSpaces(line, 5);
@@ -413,4 +414,7 @@ int main(int argc, char **argv) {
 
     /* Free the SSL_CTX structure */
     SSL_CTX_free(ssl_ctx);
+	
+	/* Remove line handler and restore the terminal */
+	rl_callback_handler_remove();
 }
