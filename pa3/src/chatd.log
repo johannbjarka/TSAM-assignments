@@ -4,3 +4,39 @@
 2015-11-04T06:07:25Z : 127.0.0.1:47840 time out
 2015-11-04T06:07:35Z : 127.0.0.1:48096 time out
 2015-11-04T06:15:39Z : Server closed
+2015-11-04T06:41:46Z : 127.0.0.1:55264 connected
+2015-11-04T06:42:17Z : 127.0.0.1:55264 siggi authenticated
+2015-11-04T06:42:41Z : 127.0.0.1:55520 connected
+2015-11-04T06:43:00Z : 127.0.0.1:55520 whowho authenticated
+2015-11-04T06:44:33Z : Server closed
+2015-11-04T06:48:02Z : 127.0.0.1:55776 connected
+2015-11-04T06:48:12Z : 127.0.0.1:55776 siggi authentication error
+2015-11-04T06:48:31Z : 127.0.0.1:55776 siggi authentication error
+2015-11-04T06:48:38Z : 127.0.0.1:55776 kicked, failed to authenticate
+2015-11-04T06:48:50Z : 127.0.0.1:56032 connected
+2015-11-04T06:49:22Z : 127.0.0.1:56032 whowho authenticated
+2015-11-04T06:49:56Z : Server closed
+2015-11-04T07:09:24Z : 127.0.0.1:58592 connected
+2015-11-04T07:09:36Z : 127.0.0.1:58592 asdf authenticated
+2015-11-04T07:09:47Z : 127.0.0.1:59360 connected
+2015-11-04T07:09:55Z : 127.0.0.1:59360 donkey authenticated
+2015-11-04T07:11:38Z : 127.0.0.1:59360 time out
+2015-11-04T07:11:46Z : 127.0.0.1:60128 connected
+2015-11-04T07:11:58Z : 127.0.0.1:60128 donkey authentication error
+2015-11-04T07:12:04Z : 127.0.0.1:60128 donkey authentication error
+2015-11-04T07:12:08Z : 127.0.0.1:60128 kicked, failed to authenticate
+2015-11-04T07:12:17Z : 127.0.0.1:60384 connected
+2015-11-04T07:12:35Z : 127.0.0.1:60384 dali authenticated
+2015-11-04T07:13:49Z : 127.0.0.1:60384 time out
+2015-11-04T07:13:55Z : 127.0.0.1:58592 time out
+2015-11-04T07:15:13Z : Server closed
+2015-11-04T07:15:51Z : 127.0.0.1:63200 connected
+2015-11-04T07:15:54Z : 127.0.0.1:63456 connected
+2015-11-04T07:15:57Z : 127.0.0.1:63712 connected
+2015-11-04T07:16:03Z : 127.0.0.1:63712 asdf1 authenticated
+2015-11-04T07:16:10Z : 127.0.0.1:63200 asdf2 authenticated
+2015-11-04T07:16:29Z : 127.0.0.1:63456 asfd3 authenticated
+2015-11-04T07:19:15Z : 127.0.0.1:63456 time out
+2015-11-04T07:19:38Z : 127.0.0.1:63712 time out
+2015-11-04T07:19:54Z : 127.0.0.1:63200 time out
+2015-11-04T07:20:17Z : Server closed
