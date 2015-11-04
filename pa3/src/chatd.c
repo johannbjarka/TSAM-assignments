@@ -25,14 +25,14 @@
 
 const int MAX_CONN = 10;
 const double LOGIN_DELAY = 2.0;
-const double TIMEOUT = 60.0;
+const double TIMEOUT = 120.0;
 FILE *logFile;
 SSL_CTX *ssl_ctx;
 typedef void handler_t(int);
 handler_t *Signal(int signum, handler_t *handler);
 void unix_error(char *msg);
 
-enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE };
+enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE, CLOSE };
 
 typedef struct client_user {
 	SSL *ssl;
@@ -622,6 +622,11 @@ int main(int argc, char **argv) {
 					user *userdata = (user*) ptr;
 					
 					if(difftime(now, userdata->time) >= TIMEOUT) {
+						char buff[30];
+						buff[0] = CLOSE;
+						strcat(&buff[1], "Kicked due to timing out!");
+						printf("%s \n", buff);
+						RETURN_SSL(SSL_write(userdata->ssl, buff, strlen(buff)));
 						closeCon(userdata, &master);
 						g_hash_table_remove(connections, GINT_TO_POINTER(i));
 						g_hash_table_remove(usernames, userdata->name);
@@ -637,6 +642,11 @@ int main(int argc, char **argv) {
 			while(g_hash_table_iter_next(&iter, &key, &value)) {
 				user *userdata = (user*) value;
 				if(difftime(now, userdata->time) >= TIMEOUT) {
+					char buff[30];
+					buff[0] = CLOSE;
+					strcat(&buff[1], "Kicked due to timing out!");
+					printf("%s \n", buff);
+					RETURN_SSL(SSL_write(userdata->ssl, buff, strlen(buff)));
 					closeCon(userdata, &master);
 					g_hash_table_iter_remove(&iter);
 					g_hash_table_remove(usernames, userdata->name);

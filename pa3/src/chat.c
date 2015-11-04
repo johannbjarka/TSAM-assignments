@@ -36,7 +36,7 @@
    connection. */
 static int active = 1;
 
-enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE };
+enum ops { SPEAK = 1, WHO, SAY, USER, LIST, JOIN, GAME, ROLL, NICK, BYE, CLOSE };
 
 /* To read a password without echoing it to the console.
  *
@@ -255,11 +255,6 @@ void readline_callback(char *line) {
 		strcat(&buff[1], new_user);
 		strcat(buff, "\n");
 		strcat(buff, (char *)md_value);
-
-		/* Maybe update the prompt. */
-		//free(prompt);
-		//prompt = strdup(":: "); /* What should the new prompt look like? */
-		//rl_set_prompt(prompt);
 	}
 	else if(strncmp("/nick", line, 5) == 0) {
 		int i = skipSpaces(line, 5);
@@ -282,7 +277,7 @@ void readline_callback(char *line) {
 		buff[0] = SPEAK;
 		strncat(&buff[1], line, sizeof(buff)-2);
 	}
-	/* Sent the buffer to the server. */
+	/* Send the buffer to the server. */
 	SSL_write(server_ssl, buff, strlen(buff));
 }
 
@@ -361,7 +356,6 @@ int main(int argc, char **argv) {
 	 * writes to sock_fd will insert unencrypted data into the
 	 * stream, which even may crash the server. */
 
-	/* Set up secure connection to the chatd server. */
 
 	/* Read characters from the keyboard while waiting for input. */
 	prompt = strdup("> ");
@@ -399,11 +393,15 @@ int main(int argc, char **argv) {
 		
 		/* Handle messages from the server here! */
 		RETURN_SSL(len = SSL_read(server_ssl, buf, sizeof(buf)-1));
-		if(len == 0) continue; 
+		if(len == 0) continue;
+		if(buf[0] == CLOSE) {
+			active = 0;
+		}
 		buf[len] = '\0';
 
 		printf("%s\n", buf);
 	}
+	
     /* Shut down the client side of the SSL connection */
     RETURN_SSL(SSL_shutdown(server_ssl));
 
