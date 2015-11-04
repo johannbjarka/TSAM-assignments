@@ -1,6 +1,56 @@
-
+#Secure chat server and client using SSL
 
 Protocol
 ========
 
-Explain your protocol here.
+Our protocol uses the TCP/IP network protocol. It uses SSL for an encrypted and secure connection. It is based around opcodes, similiar to the TFTP protocol we implemented earlier this semester.
+The opcode is the first part of the buffer sent from the client to the server. The server only sends an opcode to the client when the client times out, then the server sends the CLOSE opcode.
+
+The Following opcodes have the following meaning:
+
+1 SPEAK - When a user is in a chatroom and he issues no commands, this means he is sending a message to the room.
+2 WHO - Corresponds to the /who command. Gives a list of connected users, their ip addresses, port numbers and current chatroom.
+3 SAY - Corresponds to the /say command. Enables users to send each other a private message. A user can send any logged in user a private message, they don't have to be in the same chatroom.
+4 USER - Corresponds to the /user command. When a client joins the server he must authenticate himself before he can do anything else. He selects a username by inputting /user username with his desired name instead of username. The client is then prompted to input a password, if he is registering for the first time he must choose a password at least 8 characters long and it must include at least one letter and one digit. 
+5 LIST - Corresponds to the /list command. Gives a list of all the current chatrooms. 
+6 JOIN - Corresponds to the /join command. Allows the user to join a chatroom. If the chatroom doesn't exist prior, it is created.
+7 GAME - Corresponds to the /game command. Allows a the user to challenge another user to a game of dice.
+8 ROLL - Corresponds to the /roll command. Allows the user to roll a die. If the player is not in a game, the result of the roll is messaged to his current chatroom.
+9 NICK - Corresponds to the /nick command. Enables the user to change his nick which identifies him to other users. The user can change his nick as often as he likes. A nick must be unique.
+10 BYE - Corresponds to the /bye or /quit command. Notifies the server that the client has left.
+11 CLOSE - When a client times out, the server sends the client this opcode to notify it, the client then shuts down.
+
+Answers to questions in the pdf
+===============================
+
+Q: Where are the passwords stored?
+
+A: The passwords are stored in a .ini file accessible by a keyfile in the server code. They are stored there after having been prepended by a unique (to each user) random salt string and hashed. 
+
+Q: Where are the salt strings stored? 
+
+A: They are a stored in the same .ini file as the passwords, they are linked to the user there. The salt strings must be stored on the server side since they are unique to each user and we must have access to them when we authenticate the users. The salt strings are randomly generated and 32 bytes long. They don't need to be secret as by hashing the password with the salt string we can defend against lookup tables, reverse lookup tables, and rainbow tables attacks. 
+
+Q: Why do you send the plain text password/hashed password? 
+
+A: We send hashed passwords from the client to the server. The passwords are hashed so that the server never knows the passwords which it doesn't need to know to be able to authenticate users. The connection is encrypted so there's little risk of eavesdropping but we feel that sending hashed passwords is more secure for the users. 
+
+Q: What are the security implications of your decision?
+
+A: We think doing it this way is pretty secure as this should offer protection against lookup tables, reverse lookup tables, and rainbow tables attacks.
+
+Q: Should private messages be logged? If so, what should be logged about private messages? What are the consequences of your decisions?
+
+A: No, the private messages shouldn't be logged and we don't log them. If servers were to log private messages it would be unethical and could present a risk to the users if they have sensitive information in the private messages.
+
+Q: Explain the possible attacks or how one might try to cheat at dice. Explain how you defend against those attacks.
+
+A: A possible risk could be a buffer overflow attack. We defend against that by bounds checking our buffers.
+
+ 
+Special features
+================
+
+We implemented a time out feature, which kicks clients from the server when they have been idle for 5 minutes, that is they haven't made any commands or sent any messages for 5 straight minutes.
+
+We also implemented the dice game feature in the following way: A user issues a challenge to another user by inputting the /game username command, with username being the name of the challenged player. The player who was challenged then has 10 seconds to accept the challenge by inputting the command /roll username, with username being the name of the user who challenged him. If the player accepts the challenge then the game rolls for both players and declares the winner of the game (or a tie).
