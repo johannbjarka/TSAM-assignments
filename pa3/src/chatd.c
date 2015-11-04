@@ -82,17 +82,15 @@ int sockaddr_in_cmp(const void *addr1, const void *addr2) {
 	return 0;
 }
 
+/* Shut down this side (server) of the connection. Terminate 
+ * communication on a socket and free the SSL structure.
+ */
 void closeCon(user *usr, fd_set *master) {
-	// Shut down this side (server) of the connection. 
-	// Terminate communication on a socket 
-	// Free the SSL structure 
 	int fd = SSL_get_fd(usr->ssl);
 	RETURN_SSL(SSL_shutdown(usr->ssl));
 	SSL_free(usr->ssl);
 	RETURN_ERR(close(fd), "close");
 	FD_CLR(fd, master);
-	
-	//fdmax--;
 }
 
 void logAction(char *str) {
@@ -187,13 +185,13 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
-	// Set to require peer (client) certificate verification 
+	/* Set to require peer (client) certificate verification */
 	SSL_CTX_set_verify(ssl_ctx, SSL_VERIFY_PEER, NULL);
 
-	// Set the verification depth to 1 
+	/* Set the verification depth to 1 */
 	SSL_CTX_set_verify_depth(ssl_ctx, 1);
 	
-	// Create and bind a TCP socket*/
+	/* Create and bind a TCP socket */
 	if((listener = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
 		exit(1);
 	}
@@ -280,7 +278,7 @@ int main(int argc, char **argv) {
 						RETURN_SSL(SSL_write(newuser->ssl, "Welcome", 7));
 					}
 					else {
-						// Receive data from the SSL client
+						/* Receive data from the SSL client */
 						gpointer ptr = g_hash_table_lookup(connections, GINT_TO_POINTER(i));
 						if(ptr == NULL) continue;
 						user *caller = (user*) ptr;
@@ -364,13 +362,12 @@ int main(int argc, char **argv) {
 						case USER:
 							for(n = 1; !isspace(message[n]) && n < sizeof(caller->name); n++);
 							username = strndup(&message[1], n-1);
-							char *password = strndup(&message[n+1], 39);
-							gchar *password64 = g_base64_encode((guchar*)password, strlen(password));
-							
+							char *password = strndup(&message[n+1], 32);
+							char *password64 = g_base64_encode((guchar*)password, strlen(password));
 							if(g_hash_table_contains(usernames, username)) {
 								strcat(buff, "User: ");
 								strcat(buff, username);
-								strcat(buff, "Is already logged in!");
+								strcat(buff, " is already logged in!");
 								RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 								break;
 							}
@@ -396,7 +393,7 @@ int main(int argc, char **argv) {
 									EVP_cleanup();
 
 									/* Compare the result to the stored password */
-									gchar *passwd64 = g_base64_encode(md_value, md_len);
+									char *passwd64 = g_base64_encode(md_value, md_len);
 									char *stored_passwd = g_key_file_get_string(keyfile, "passwords", username, NULL);
 									if(strcmp(stored_passwd, passwd64) != 0) {
 										if(difftime(now, caller->time) < LOGIN_DELAY) {
@@ -452,7 +449,7 @@ int main(int argc, char **argv) {
 							EVP_cleanup();
 							
 							/* Store the resulting string and save changes to file */
-							gchar *passwd64 = g_base64_encode(md_value, md_len);
+							char *passwd64 = g_base64_encode(md_value, md_len);
 							g_key_file_set_string(keyfile, "passwords", username, passwd64);
 							g_key_file_save_to_file(keyfile, "passwords.ini", NULL);
 							
@@ -575,7 +572,7 @@ int main(int argc, char **argv) {
 							break;
 						case NICK:
 							strncpy(caller->nick, &message[1], sizeof(caller->nick));
-							strcat(buff, "Nickname change too: ");
+							strcat(buff, "Nickname changed to: ");
 							strcat(buff, caller->nick);
 							RETURN_SSL(SSL_write(caller->ssl, buff, strlen(buff)));
 							break;
