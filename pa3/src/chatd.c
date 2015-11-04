@@ -25,7 +25,7 @@
 
 const int MAX_CONN = 10;
 const double LOGIN_DELAY = 2.0;
-const double TIMEOUT = 120.0;
+const double TIMEOUT = 12.0;
 FILE *logFile;
 SSL_CTX *ssl_ctx;
 typedef void handler_t(int);
@@ -298,7 +298,7 @@ int main(int argc, char **argv) {
 						char buff[2048];
 						memset(buff, 0, sizeof(buff));
 						
-						int roll;
+						int roll, hasLeft = 0;
 						SSL *ussl;
 						GHashTable *rooms;
 						gchar *username, *name;
@@ -607,13 +607,17 @@ int main(int argc, char **argv) {
 							break;
 						case BYE:
 							closeCon(caller, &master);
-							g_hash_table_remove(connections, GINT_TO_POINTER(i));
-							g_hash_table_remove(usernames, caller->name);
 							sprintf(str, "%s : %s:%d disconnected\n", timeF, caller->addr_str, caller->port);
 							logAction(str);
+							g_hash_table_remove(usernames, caller->name);	
+							g_free(g_hash_table_lookup(connections, GINT_TO_POINTER(i)));
+							g_hash_table_remove(connections, GINT_TO_POINTER(i));
+							hasLeft = 1;
 							break;
 						}
-						caller->time = now;
+						if(!hasLeft) {
+							caller->time = now;
+						}
 					}
 				}
 				else {
@@ -622,16 +626,16 @@ int main(int argc, char **argv) {
 					user *userdata = (user*) ptr;
 					
 					if(difftime(now, userdata->time) >= TIMEOUT) {
+						sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+						logAction(str);
 						char buff[30];
 						buff[0] = CLOSE;
 						strcat(&buff[1], "Kicked due to timing out!");
-						printf("%s \n", buff);
 						RETURN_SSL(SSL_write(userdata->ssl, buff, strlen(buff)));
 						closeCon(userdata, &master);
-						g_hash_table_remove(connections, GINT_TO_POINTER(i));
 						g_hash_table_remove(usernames, userdata->name);
-						sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-						logAction(str);
+						g_free(g_hash_table_lookup(connections, GINT_TO_POINTER(i)));
+						g_hash_table_remove(connections, GINT_TO_POINTER(i));
 					}
 				}
 			}
@@ -642,16 +646,16 @@ int main(int argc, char **argv) {
 			while(g_hash_table_iter_next(&iter, &key, &value)) {
 				user *userdata = (user*) value;
 				if(difftime(now, userdata->time) >= TIMEOUT) {
+					sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
+					logAction(str);
 					char buff[30];
 					buff[0] = CLOSE;
 					strcat(&buff[1], "Kicked due to timing out!");
-					printf("%s \n", buff);
 					RETURN_SSL(SSL_write(userdata->ssl, buff, strlen(buff)));
 					closeCon(userdata, &master);
-					g_hash_table_iter_remove(&iter);
 					g_hash_table_remove(usernames, userdata->name);
-					sprintf(str, "%s : %s:%d time out\n", timeF, userdata->addr_str, userdata->port);
-					logAction(str);
+					g_free(g_hash_table_lookup(connections, &iter));
+					g_hash_table_iter_remove(&iter);
 				}
 			}
 		}
